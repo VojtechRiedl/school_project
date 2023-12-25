@@ -2,11 +2,10 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 
-from .models.settings import AppSettings
-from .models.settings import PostgresqlSettings
+from .schemas.settings import AppSettings
 
 app_settings = AppSettings()
-postgresql_settings = PostgresqlSettings()
+
 
 app = FastAPI(
     debug=True,
@@ -23,3 +22,4 @@ app.add_middleware(
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
+

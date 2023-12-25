@@ -94,6 +94,175 @@
 | `id`      | `string` | **Required**. Id of song to update |
 
 
+### ideas
+
+#### get ideas
+
+```http
+  GET /ideas/
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+
+#### get idea
+
+```http
+  GET /ideas/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+| `id`      | `string` | **Required**. Id of idea to get |
+
+#### update idea
+
+```http
+  PATCH /ideas/update/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+| `id`      | `string` | **Required**. Id of idea to update |
+
+#### update idea
+
+```http
+  DELETE /ideas/remove/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+| `id`      | `string` | **Required**. Id of idea to remove |
+
+#### add idea
+
+```http
+  POST /ideas/add
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+
+### plans
+
+#### get plans
+
+```http
+  GET /plans/
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+
+#### get plan
+
+```http
+  GET /plans/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+| `id`      | `string` | **Required**. Id of plan to get |
+
+#### update plan
+
+```http
+  PATCH /plans/update/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+| `id`      | `string` | **Required**. Id of plan to update |
+
+#### update plan
+
+```http
+  DELETE /plans/remove/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+| `id`      | `string` | **Required**. Id of plan to remove |
+
+#### add plan
+
+```http
+  POST /plans/add
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+
+### plans
+
+#### get plans
+
+```http
+  GET /plans/
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+
+#### get plan
+
+```http
+  GET /plans/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+| `id`      | `string` | **Required**. Id of plan to get |
+
+#### update plan
+
+```http
+  PATCH /plans/update/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+| `id`      | `string` | **Required**. Id of plan to update |
+
+#### update plan
+
+```http
+  DELETE /plans/remove/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+| `id`      | `string` | **Required**. Id of plan to remove |
+
+#### add plan
+
+```http
+  POST /plans/add
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+
+
+
+
+
 
 
 

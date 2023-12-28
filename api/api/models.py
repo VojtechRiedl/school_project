@@ -14,7 +14,7 @@ class Users(Base):
     image_path = Column(String, default="default.png")
     active = Column(Boolean, default=True)
 
-    ideas = relationship("Ideas", back_populates="user")
+    ideas = relationship("Ideas", back_populates="users")
 
 class Ideas(Base):
     __tablename__ = "ideas"

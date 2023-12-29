@@ -131,18 +131,18 @@
 #### update idea
 
 ```http
-  DELETE /ideas/remove/${id}
+  DELETE /ideas/delete/${id}
 ```
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `api_key` | `string` | **Required**. Your API key |
-| `id`      | `string` | **Required**. Id of idea to remove |
+| `id`      | `string` | **Required**. Id of idea to delete |
 
 #### add idea
 
 ```http
-  POST /ideas/add
+  POST /ideas/create
 ```
 
 | Parameter | Type     | Description                       |

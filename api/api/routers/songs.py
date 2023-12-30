@@ -15,7 +15,7 @@ def read_song(id: int = Path(..., title="ID songu"), db: Session = Depends(get_d
     return None
 
 @router.post("/create", response_model=Song, summary="Create an song")
-def create_song(idea: Song, db: Session = Depends(get_db)):
+def create_song(song: Song, db: Session = Depends(get_db)):
     return None
 
 

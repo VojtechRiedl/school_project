@@ -16,6 +16,7 @@ class Users(Base):
 
     ideas = relationship("Ideas", back_populates="users")
     votes = relationship("Votes", back_populates="users")
+    plans = relationship("Plans", back_populates="users")
 
 class Votes(Base):
     __tablename__ = "votes"
@@ -48,3 +49,21 @@ class Ideas(Base):
         self.created = created
         self.user_id = user_id
 
+class Plans(Base):
+    __tablename__ = "plans"
+    
+    plan_id = Column(Integer, primary_key=True, index=True,autoincrement=True)
+    name = Column(String, nullable=False)
+    date = Column(DateTime, nullable=False)
+    description = Column(Text, nullable=True)
+
+    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
+    
+    users = relationship("Users", back_populates="plans")
+    
+    def __init__(self, name, date, description, user_id):
+        self.name = name
+        self.date = date
+        self.description = description
+        self.user_id = user_id
+    

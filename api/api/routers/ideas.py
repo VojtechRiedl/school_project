@@ -2,15 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException, Path
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..schemas.idea import IdeaCreate, Idea, IdeaUpdate, IdeaSuccessResponse
+from ..schemas.ideas import IdeaCreate, Idea, IdeaUpdate, IdeaSuccessResponse
 from .. import crud
 
 router = APIRouter(prefix="/ideas", tags=["Ideas"])
 
 @router.get("/", response_model=list[Idea], summary="Get all ideas")
-def read_ideas(db: Session = Depends(get_db)):
-    print(crud.get_ideas(db))
-    
+def read_ideas(db: Session = Depends(get_db)):    
     return crud.get_ideas(db)
 
 @router.get("/{id}", response_model=Idea, summary="Get an idea by id")

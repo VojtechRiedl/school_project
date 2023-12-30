@@ -46,19 +46,5 @@ class Song(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     
     
-class Plan(BaseModel):
-    id: int = Field(description="ID plánu", examples=[1,8])
-    name: str = Field(description="Název plánu", examples=["Plán 1"])
-    plan_date: date = Field(description="Datum plánu", examples=["2021-01-01"])
-    description: str | None = Field(description="Popis plánu", examples=["Popis plánu 1"])
-    userInfo: UserInfo = Field(description="Tvůrce plánu", examples=[
-        UserInfo(
-            username="Pepa Dlouhý",
-            created="2021-01-01 12:00:00",
-            last_login="2021-01-01 12:00:00",
-            image_path="/static/images/default.png"
-        ).model_dump()
-    ])
-    
-    model_config = ConfigDict(from_attributes=True)
+
     

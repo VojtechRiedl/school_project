@@ -204,63 +204,6 @@
 | :-------- | :------- | :-------------------------------- |
 | `api_key` | `string` | **Required**. Your API key |
 
-### plans
-
-#### get plans
-
-```http
-  GET /plans/
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-
-#### get plan
-
-```http
-  GET /plans/${id}
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-| `id`      | `string` | **Required**. Id of plan to get |
-
-#### update plan
-
-```http
-  PATCH /plans/update/${id}
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-| `id`      | `string` | **Required**. Id of plan to update |
-
-#### update plan
-
-```http
-  DELETE /plans/remove/${id}
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-| `id`      | `string` | **Required**. Id of plan to remove |
-
-#### add plan
-
-```http
-  POST /plans/add
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-
-
-
 
 
 

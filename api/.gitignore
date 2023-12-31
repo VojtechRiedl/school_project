@@ -162,3 +162,5 @@ cython_debug/
 # Custom
 poetry.lock
 properties.json
+static/sounds/*
+static/videos/*

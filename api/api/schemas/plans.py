@@ -1,9 +1,6 @@
-from datetime import datetime, date, time
+from datetime import datetime
 
 from pydantic import BaseModel, Field, ConfigDict
-
-from .users import UserInfo
-
 
 
 class Plan(BaseModel):
@@ -11,14 +8,7 @@ class Plan(BaseModel):
     name: str = Field(description="Název plánu", examples=["Plán 1"])
     plan_date: datetime = Field(description="Datum plánu", examples=["2021-01-01 12:00:00"])
     description: str | None = Field(description="Popis plánu", examples=["Popis plánu 1"])
-    userInfo: UserInfo = Field(description="Tvůrce plánu", examples=[
-        UserInfo(
-            username="Pepa Dlouhý",
-            created="2021-01-01 12:00:00",
-            last_login="2021-01-01 12:00:00",
-            image_path="/static/images/default.png"
-        ).model_dump()
-    ])
+    user: str = Field(description="Tvůrce plánu", examples=["Pepa Dlouhý"])
     
     model_config = ConfigDict(from_attributes=True)
 

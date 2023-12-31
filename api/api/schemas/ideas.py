@@ -1,8 +1,6 @@
-from datetime import datetime, date, time
+from datetime import date
+from pydantic import BaseModel, Field, ConfigDict
 
-from pydantic import BaseModel, Field, field_serializer, field_validator, ConfigDict
-
-from .users import UserInfo
 
 class Idea(BaseModel):
     idea_id: int = Field(description="ID nápadu", examples=[1,8])
@@ -10,14 +8,7 @@ class Idea(BaseModel):
     active: bool = Field(description="Aktivní nápad", examples=[True])
     description: str | None = Field(description="Popis nápadu", examples=["Popis nápadu 1"])
     created: date = Field(description="Datum vytvoření nápadu", examples=["2021-01-01"])
-    userInfo: UserInfo = Field(description="Tvůrce nápadu", examples=[
-        UserInfo(
-            username="Pepa Dlouhý",
-            created="2021-01-01 12:00:00",
-            last_login="2021-01-01 12:00:00",
-            image_path="/static/images/default.png",
-        ).model_dump()
-    ],)
+    user: str  = Field(description="Tvůrce nápadu", examples=["Pepa Dlouhý"])
     accepted: int = Field(description="Počet pro", examples=[1])
     declined: int = Field(description="Počet proti", examples=[1])
     

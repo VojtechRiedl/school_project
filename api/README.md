@@ -15,6 +15,38 @@
 | :-------- | :------- | :------------------------- |
 | `api_key` | `string` | **Required**. Your API key |
 
+
+##### Request Body
+
+```json
+{
+  "username": "string",
+  "password": "string",
+}
+```
+
+##### Response Body
+
+###### Success
+```json
+{
+  "id": "int",
+  "username": "string",
+  "created": "datetime",
+  "last_login": "datetime",
+  "white_mode": "boolean",
+}
+```
+###### Fail
+```json
+{
+  "username": "string",
+  "password": "string",
+  "error": "string"
+}
+```
+
+
 #### login user
 
 ```http
@@ -25,18 +57,98 @@
 | :-------- | :------- | :------------------------- |
 | `api_key` | `string` | **Required**. Your API key |
 
+
+##### Request Body
+
+```json
+{
+  "username": "string",
+  "password": "string",
+}
+```
+
+##### Response Body
+
+###### Success
+```json
+{
+  "id": "int",
+  "username": "string",
+  "created": "datetime",
+  "last_login": "datetime",
+  "white_mode": "boolean",
+}
+```
+###### Fail
+```json
+{
+  "username": "string",
+  "password": "string",
+  "error": "string"
+}
+```
+
 ### USER
 
-#### update user information
+#### get users
 
 ```http
-  PATCH /user/update/${id}
+  GET /users/
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+
+#### get user
+
+```http
+  GET /users/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+| `id`      | `string` | **Required**. Id of user to get |
+
+
+#### update user
+
+```http
+  PATCH /users/update/${id}
 ```
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `api_key` | `string` | **Required**. Your API key |
 | `id`      | `string` | **Required**. Id of user to update |
+
+##### Request Body
+
+```json
+{
+  "username": "string",
+  "white_mode": "boolean",
+} 
+```
+
+##### Response Body
+
+###### Success
+```json
+{
+  "id": "int",
+  "message": "string"
+}
+```
+###### Fail
+```json
+{
+  "id": "int",
+  "error": "string"
+}
+```
+
 
 ### SONGS
 
@@ -203,63 +315,6 @@
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `api_key` | `string` | **Required**. Your API key |
-
-### plans
-
-#### get plans
-
-```http
-  GET /plans/
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-
-#### get plan
-
-```http
-  GET /plans/${id}
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-| `id`      | `string` | **Required**. Id of plan to get |
-
-#### update plan
-
-```http
-  PATCH /plans/update/${id}
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-| `id`      | `string` | **Required**. Id of plan to update |
-
-#### update plan
-
-```http
-  DELETE /plans/remove/${id}
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-| `id`      | `string` | **Required**. Id of plan to remove |
-
-#### add plan
-
-```http
-  POST /plans/add
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-
-
 
 
 

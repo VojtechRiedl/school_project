@@ -1,8 +1,8 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .schemas.settings import AppSettings
-from .routers import ideas, plans, songs, authorization
+from .routers import ideas, plans, songs, authorization, users
 from .database import engine
 from . import models
 
@@ -28,6 +28,7 @@ app.add_middleware(
 
 
 app.include_router(authorization.router)
+app.include_router(users.router)
 app.include_router(ideas.router)
 app.include_router(plans.router)
 app.include_router(songs.router)

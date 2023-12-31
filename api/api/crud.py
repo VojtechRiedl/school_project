@@ -1,12 +1,95 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from sqlalchemy.sql import text
+from fastapi import UploadFile
+from datetime import datetime
+
 from . import models
 from .database import engine
-from .models import Ideas
 from .schemas.ideas import IdeaCreate, Idea, IdeaUpdate, IdeaSuccessResponse
 from .schemas.plans import Plan, PlanCreate, PlanUpdate, PlanSuccessResponse
 from .schemas.songs import Song, SongCreate, SongUpdate, SongSuccessResponse
+from .schemas.users import Authorization, AuthorizationFailed, User, UserUpdate, UserSuccessResponse
+
+from . import files
+
+
+def register(db: Session, authorization: Authorization):
+    registered_user = db.query(models.Users).filter(models.Users.username == authorization.username).first()
+    if registered_user:
+        return AuthorizationFailed(
+            username=authorization.username,
+            error="Uživatel již existuje"
+        )
+    
+    db_user = models.Users(
+        username=authorization.username,
+        password=authorization.password
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return User(
+        id=db_user.user_id,
+        username=db_user.username,
+        created=db_user.created,
+        last_login=db_user.last_login,
+        white_mode=db_user.white_mode
+    )
+
+def login(db: Session, authorization: Authorization):
+    logged_user = db.query(models.Users).filter(models.Users.username == authorization.username, models.Users.password == authorization.password).first()
+    if logged_user:
+        db.query(models.Users).filter(models.Users.username == authorization.username).update({models.Users.last_login: func.now()})
+        db.commit()
+        db.refresh(logged_user)
+        return User(
+            id=logged_user.user_id,
+            username=logged_user.username,
+            created=logged_user.created,
+            last_login=logged_user.last_login,
+            white_mode=logged_user.white_mode
+        )
+    
+    return AuthorizationFailed(
+            username=authorization.username,
+            error="Špatné jméno nebo heslo"
+        )
+
+def get_users(db: Session):
+    users = db.query(models.Users).all()
+    response_users = []
+    if users:
+        for user in users:
+            response_users.append(User(
+                id=user.user_id,
+                username=user.username,
+                created=user.created,
+                last_login=user.last_login,
+                white_mode=user.white_mode
+            ))
+        return response_users
+    return response_users
+    
+def get_user(db: Session, user_id: int):
+    user = db.query(models.Users).filter(models.Users.user_id == user_id).first()
+    if user:
+        return User(
+            id=user.user_id,
+            username=user.username,
+            created=user.created,
+            last_login=user.last_login,
+            white_mode=user.white_mode
+        )
+    return None
+
+def update_user(db: Session, user_id: int, user: UserUpdate):
+    updated_user = db.query(models.Users).filter(models.Users.user_id == user_id).update({models.Users.white_mode: user.white_mode})
+    db.commit()
+    return UserSuccessResponse(
+        user_id=user_id,
+        rows_affacted=updated_user,
+        message="Uživatel byl úspěšně aktualizován",
+    )
 
 
 def get_ideas(db: Session): 
@@ -22,7 +105,7 @@ def get_ideas(db: Session):
             active=idea.active,
             description=idea.description,
             created=idea.created,
-            userInfo=idea.users,
+            user=idea.users.username,
             accepted=accepted,
             declined=declined
         ))
@@ -40,7 +123,7 @@ def get_idea(db: Session, idea_id: int):
             active=idea.active,
             description=idea.description,
             created=idea.created,
-            userInfo=idea.users,
+            user=idea.users.username,
             accepted=accepted,
             declined=declined
         )
@@ -88,7 +171,7 @@ def get_plans(db: Session):
                 name=plan.name,
                 date=plan.date,
                 description=plan.description,
-                userInfo=plan.users
+                user=plan.users.username,
             ))
         return response_plans
     return response_plans
@@ -101,7 +184,7 @@ def get_plan(db: Session, plan_id: int):
             name=plan.name,
             date=plan.date,
             description=plan.description,
-            userInfo=plan.users
+            user=plan.users.username,
         )
     return None 
 
@@ -148,7 +231,7 @@ def get_songs(db: Session):
                 video_path=song.video_path,
                 yt_link=song.yt_link,
                 description=song.description,
-                userInfo=song.users
+                user=song.users.username,
             ))
         return response_songs
     return response_songs
@@ -164,12 +247,60 @@ def get_song(db: Session, song_id: int):
             video_path=song.video_path,
             yt_link=song.yt_link,
             description=song.description,
-            userInfo=song.users
+            user=song.users.username,
         )
     return None
 
+def create_song(db: Session, song_create: SongCreate):
+    db_song = models.Songs(
+        name=song_create.name,
+        duration=song_create.duration,
+        yt_link=song_create.yt_link,
+        description=song_create.description,
+        user_id=song_create.user_id
+    )
+    db.add(db_song)
+    db.commit()
+    db.refresh(db_song)
+    return song_create
+
+def upload_sound(db: Session, song_id: int, sound_file : UploadFile):    
+    song = db.query(models.Songs).filter(models.Songs.song_id == song_id).first()
+    
+    if song is None:
+        return None
+    
+    path = files.save_sound_file("song_" + str(song.song_id), sound_file)
+    
+    affected_rows = db.query(models.Songs).filter(models.Songs.song_id == song_id).update({models.Songs.song_path: path})
+    db.commit()
+    
+    return SongSuccessResponse(
+        song_id=song_id,
+        message="Song byl úspěšně nahrán",
+        rows_affacted=affected_rows
+    )
+
+def upload_video(db: Session, song_id: int, video_file : UploadFile):
+    song = db.query(models.Songs).filter(models.Songs.song_id == song_id).first()
+    
+    db.commit()
+    if song is None:
+        return None
+    
+    path = files.save_video_file("video_" + str(song.song_id), video_file)
+    
+    affected_rows = db.query(models.Songs).filter(models.Songs.song_id == song_id).update({models.Songs.video_path: path})
+    db.commit()
+    
+    return SongSuccessResponse(
+        song_id=song_id,
+        message="Video bylo úspěšně nahráno",
+        rows_affacted=affected_rows
+    )
+
 def update_song(db: Session, song_id: int, song: SongUpdate):
-    updated_song = db.query(models.Songs).filter(models.Songs.song_id == song_id).update({models.Songs.name: song.name, models.Songs.duration: song.duration, models.Songs.song_path: song.song_path, models.Songs.video_path: song.video_path, models.Songs.yt_link: song.yt_link, models.Songs.description: song.description})
+    updated_song = db.query(models.Songs).filter(models.Songs.song_id == song_id).update({models.Songs.name: song.name, models.Songs.duration: song.duration, models.Songs.yt_link: song.yt_link, models.Songs.description: song.description})
     db.commit()
     return SongSuccessResponse(
         song_id=song_id,

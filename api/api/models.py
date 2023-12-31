@@ -1,5 +1,6 @@
 from sqlalchemy import Column,Text, TIMESTAMP,DateTime,Date, Float, ForeignKey, Integer, String, Boolean,Time
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 
 from .database import Base
 
@@ -9,9 +10,8 @@ class Users(Base):
     user_id = Column(Integer, primary_key=True, index=True)
     username = Column(String, nullable=False)
     password = Column(String, nullable=False)
-    created = Column(DateTime, default=TIMESTAMP, nullable=False)
-    last_login = Column(DateTime, default=TIMESTAMP, nullable=False)
-    image_path = Column(String, default="default.png", nullable=False)
+    created = Column(DateTime(timezone=True), default=func.now(), nullable=False)
+    last_login = Column(DateTime(timezone=True), default=func.now(), nullable=False)
     white_mode = Column(Boolean, default=True, nullable=False)
 
     ideas = relationship("Ideas", back_populates="users")

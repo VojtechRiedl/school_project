@@ -1,8 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, Path
+from fastapi import APIRouter, Depends, HTTPException, Path, File, UploadFile, Form
 from sqlalchemy.orm import Session
+from pydantic import Json
 
 from ..database import get_db
 from ..schemas.songs import Song, SongCreate, SongSuccessResponse, SongUpdate
+from typing import Annotated
+
 
 from .. import crud
 
@@ -21,12 +24,30 @@ def read_song(id: int = Path(..., title="ID songu"), db: Session = Depends(get_d
     return song
 
 @router.post("/create", response_model=SongCreate, summary="Create an song")
-def create_song(song: SongCreate, db: Session = Depends(get_db)):
+def create_song(song: SongCreate, db: Session = Depends(get_db)):    
     if song is None:
-        raise HTTPException(status_code=404, detail="Plan not found")
+        raise HTTPException(status_code=404, detail="Song not found")
     
-    return crud.create_plan(db, song)
+    return crud.create_song(db, song)
 
+@router.post("/upload/video/{id}", response_model=SongSuccessResponse, summary="Upload an video by id")
+def upload_video(video_file: UploadFile = None, id: int = Path(..., title="ID songu"), db: Session = Depends(get_db)):
+    response = crud.upload_video(db, id, video_file)
+    
+    if response is None:
+        raise HTTPException(status_code=404, detail="Song not found")
+    
+    return response
+    
+
+@router.post("/upload/sound/{id}", response_model=SongSuccessResponse, summary="Upload an sound by id")
+def upload_song(sound_file: UploadFile = None, id: int = Path(..., title="ID songu"), db: Session = Depends(get_db)):
+    response = crud.upload_sound(db, id, sound_file)
+    
+    if response is None:
+        raise HTTPException(status_code=404, detail="Song not found")
+    
+    return response
 
 @router.patch("/update/{id}", response_model=SongSuccessResponse, summary="Update an song by id")
 def update_song(song: SongUpdate, id: int = Path(..., title="ID songu"), db: Session = Depends(get_db)):

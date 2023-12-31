@@ -2,7 +2,7 @@ from datetime import datetime, date, time
 
 from pydantic import BaseModel, Field, ConfigDict
 
-from .schemas import UserInfo
+from .users import UserInfo
 
 
 

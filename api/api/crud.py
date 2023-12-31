@@ -6,6 +6,7 @@ from .database import engine
 from .models import Ideas
 from .schemas.ideas import IdeaCreate, Idea, IdeaUpdate, IdeaSuccessResponse
 from .schemas.plans import Plan, PlanCreate, PlanUpdate, PlanSuccessResponse
+from .schemas.songs import Song, SongCreate, SongUpdate, SongSuccessResponse
 
 
 def get_ideas(db: Session): 
@@ -59,7 +60,6 @@ def create_idea(db: Session, idea_create: IdeaCreate):
     return idea_create
 
 def update_idea(db: Session, idea_id: int, idea: IdeaUpdate):
-    print(idea.model_dump())
     updated_idea = db.query(models.Ideas).filter(models.Ideas.idea_id == idea_id).update({models.Ideas.name: idea.name, models.Ideas.active: idea.active, models.Ideas.description: idea.description})
     db.commit()
     return IdeaSuccessResponse(
@@ -134,3 +134,56 @@ def delete_plan(db: Session, plan_id: int):
         rows_affacted=deleted_idea,
         message="Nápad byl úspěšně smazán",
     )
+
+def get_songs(db: Session):
+    songs = db.query(models.Songs).all()
+    response_songs = []
+    if songs:
+        for song in songs:
+            response_songs.append(Song(
+                song_id=song.song_id,
+                name=song.name,
+                duration=song.duration,
+                song_path=song.song_path,
+                video_path=song.video_path,
+                yt_link=song.yt_link,
+                description=song.description,
+                userInfo=song.users
+            ))
+        return response_songs
+    return response_songs
+
+def get_song(db: Session, song_id: int):
+    song = db.query(models.Songs).filter(models.Songs.song_id == song_id).first()
+    if song:
+        return Song(
+            song_id=song.song_id,
+            name=song.name,
+            duration=song.duration,
+            song_path=song.song_path,
+            video_path=song.video_path,
+            yt_link=song.yt_link,
+            description=song.description,
+            userInfo=song.users
+        )
+    return None
+
+def update_song(db: Session, song_id: int, song: SongUpdate):
+    updated_song = db.query(models.Songs).filter(models.Songs.song_id == song_id).update({models.Songs.name: song.name, models.Songs.duration: song.duration, models.Songs.song_path: song.song_path, models.Songs.video_path: song.video_path, models.Songs.yt_link: song.yt_link, models.Songs.description: song.description})
+    db.commit()
+    return SongSuccessResponse(
+        song_id=song_id,
+        rows_affacted=updated_song,
+        message="Song byl úspěšně aktualizován",
+    )
+
+def delete_song(db: Session, song_id: int):
+    deleted_song = db.query(models.Songs).filter(models.Songs.song_id == song_id).delete()
+    db.commit()
+    return SongSuccessResponse(
+        song_id=song_id,
+        rows_affacted=deleted_song,
+        message="Song byl úspěšně smazán",
+    )   
+    
+    

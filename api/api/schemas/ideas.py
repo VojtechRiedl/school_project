@@ -2,7 +2,7 @@ from datetime import datetime, date, time
 
 from pydantic import BaseModel, Field, field_serializer, field_validator, ConfigDict
 
-from .schemas import UserInfo
+from .users import UserInfo
 
 class Idea(BaseModel):
     idea_id: int = Field(description="ID nápadu", examples=[1,8])

@@ -1,4 +1,4 @@
-from sqlalchemy import Column,Text, TIMESTAMP,DateTime,Date, Float, ForeignKey, Integer, String, Boolean
+from sqlalchemy import Column,Text, TIMESTAMP,DateTime,Date, Float, ForeignKey, Integer, String, Boolean,Time
 from sqlalchemy.orm import relationship
 
 from .database import Base
@@ -17,6 +17,8 @@ class Users(Base):
     ideas = relationship("Ideas", back_populates="users")
     votes = relationship("Votes", back_populates="users")
     plans = relationship("Plans", back_populates="users")
+    songs = relationship("Songs", back_populates="users")
+
 
 class Votes(Base):
     __tablename__ = "votes"
@@ -66,4 +68,17 @@ class Plans(Base):
         self.date = date
         self.description = description
         self.user_id = user_id
+
+class Songs(Base):
+    __tablename__ = "songs"
     
+    song_id = Column(Integer, primary_key=True, index=True,autoincrement=True)
+    name = Column(String, nullable=False)
+    duration = Column(Time, nullable=False)
+    song_path = Column(String, nullable=True)
+    video_path = Column(String, nullable=True)
+    yt_link = Column(String, nullable=True)
+    description = Column(Text, nullable=True)
+    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
+    
+    users = relationship("Users", back_populates="songs")

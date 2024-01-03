@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field, ConfigDict
 
 
 class Plan(BaseModel):
-    id: int = Field(description="ID plánu", examples=[1,8])
+    plan_id: int = Field(description="ID plánu", examples=[1,8])
     name: str = Field(description="Název plánu", examples=["Plán 1"])
     plan_date: datetime = Field(description="Datum plánu", examples=["2021-01-01 12:00:00"])
     description: str | None = Field(description="Popis plánu", examples=["Popis plánu 1"])

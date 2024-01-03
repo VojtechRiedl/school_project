@@ -169,7 +169,7 @@ def get_plans(db: Session):
             response_plans.append(Plan(
                 plan_id=plan.plan_id,
                 name=plan.name,
-                date=plan.date,
+                plan_date=plan.date,
                 description=plan.description,
                 user=plan.users.username,
             ))
@@ -182,7 +182,7 @@ def get_plan(db: Session, plan_id: int):
         return Plan(
             plan_id=plan.plan_id,
             name=plan.name,
-            date=plan.date,
+            plan_date=plan.date,
             description=plan.description,
             user=plan.users.username,
         )

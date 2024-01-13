@@ -18,5 +18,4 @@ class Palette{
 
   static const Color decline = Color(0xFFD80032);
 
-
 }

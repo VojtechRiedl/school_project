@@ -4,14 +4,14 @@ class AuthorizationModel extends AuthorizationEntity {
 
   const AuthorizationModel({
     required String username,
-    required hashedPassword,
+    required String hashedPassword,
   }) : super (
     username: username,
     hashedPassword: hashedPassword,
   );
 
 
-  Map<String, dynamic> toJson() =>{
+  Map<String, dynamic> toJson() => {
     'username': username,
     'password': hashedPassword,
   };

@@ -1,9 +1,8 @@
-import 'package:band_app/core/constatns/environment.dart';
-import 'package:band_app/core/constatns/palette.dart';
+import 'package:band_app/core/constants/palette.dart';
 import 'package:band_app/features/login/presentation/bloc/register/register_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/register/register_event.dart';
 import 'package:band_app/features/login/presentation/bloc/register/register_state.dart';
-import 'package:band_app/features/login/presentation/widgets/Input.dart';
+import 'package:band_app/features/login/presentation/widgets/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -22,6 +21,14 @@ class _RegisterViewState extends State<RegisterView> {
   final _confirmPasswordController = TextEditingController();
 
   @override
+  void dispose() {
+    _passwordController.dispose();
+    _usernameController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -33,7 +40,9 @@ class _RegisterViewState extends State<RegisterView> {
   Widget _buildBody(BuildContext context){
     return BlocConsumer<RegisterBloc, RegisterState>(
       listener: (context, state) {
-
+        if(state is RegisterSuccess){
+          GoRouter.of(context).pushReplacementNamed('home');
+        }
       },
       builder: (BuildContext context, RegisterState state) {
         return Padding(

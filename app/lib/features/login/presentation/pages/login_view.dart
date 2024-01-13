@@ -1,7 +1,8 @@
-import 'package:band_app/core/constatns/palette.dart';
+import 'package:band_app/core/constants/palette.dart';
 import 'package:band_app/features/login/presentation/bloc/login/login_bloc.dart';
+import 'package:band_app/features/login/presentation/bloc/login/login_event.dart';
 import 'package:band_app/features/login/presentation/bloc/login/login_state.dart';
-import 'package:band_app/features/login/presentation/widgets/Input.dart';
+import 'package:band_app/features/login/presentation/widgets/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -19,6 +20,13 @@ class _LoginViewState extends State<LoginView> {
   final _passwordController = TextEditingController();
 
   @override
+  void dispose() {
+    _passwordController.dispose();
+    _usernameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.white,
@@ -29,7 +37,9 @@ class _LoginViewState extends State<LoginView> {
   Widget _buildBody(BuildContext context){
     return BlocConsumer<LoginBloc, LoginState>(
       listener: (BuildContext context, LoginState state) {
-
+        if(state is LoginSuccess){
+          GoRouter.of(context).pushReplacementNamed('home');
+        }
       },
       builder: (BuildContext context, LoginState state) {
         return Padding(
@@ -47,12 +57,13 @@ class _LoginViewState extends State<LoginView> {
                         const SizedBox(height: 40),
                         Input(label: "Uživatelské jméno", obscured: false, controller: _usernameController, errorText: null),
                         const SizedBox(height: 10),
-                        Input(label: "Heslo", obscured: true, controller: _passwordController, errorText: null),
+                        Input(label: "Heslo", obscured: true, controller: _passwordController, errorText: state is PasswordError ? state.message : null),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
+                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(Palette.white)),
                                 onPressed: (){
                                   GoRouter.of(context).pushNamed('register');
                                 },
@@ -69,7 +80,14 @@ class _LoginViewState extends State<LoginView> {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                       title: const Text("Přihlásit se", textAlign: TextAlign.center, style: TextStyle(color: Palette.white, fontSize: 16, fontWeight: FontWeight.bold)),
-                      onTap: (){},
+                      onTap: (){
+                        context.read<LoginBloc>().add(
+                            LoginUser(
+                                username: _usernameController.text,
+                                password: _passwordController.text
+                            )
+                        );
+                      },
                     ),
                   ),
                   const Spacer(flex: 1),

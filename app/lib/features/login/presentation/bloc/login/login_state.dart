@@ -10,3 +10,16 @@ class LoginState extends Equatable{
 class LoginInitial extends LoginState{
   const LoginInitial();
 }
+
+class PasswordError extends LoginState{
+  final String ? message;
+
+  const PasswordError(this.message);
+
+  @override
+  List<Object> get props => [message!];
+}
+
+class LoginSuccess extends LoginState{
+  const LoginSuccess();
+}

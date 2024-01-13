@@ -1,5 +1,6 @@
-import 'package:band_app/core/constatns/palette.dart';
+import 'package:band_app/core/constants/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Input extends StatefulWidget{
   final String label;
@@ -18,6 +19,7 @@ class _InputState extends State<Input> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      maxLines: 1,
       controller: widget.controller,
       obscureText: widget.obscured,
       obscuringCharacter: '*',

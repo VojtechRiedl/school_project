@@ -21,9 +21,19 @@ class UserModel extends UserEntity{
       return UserModel(
         id: map['id'],
         username: map['username'],
-        createdAt: DateFormat("yyyy-MM-dd HH:mm:ss").parse(map['created']),
-        lastLogin: DateFormat("yyyy-MM-dd HH:mm:ss").parse(map['last_login']),
+        createdAt: DateFormat("yyyy-MM-ddTHH:mm:ss").parse(map['created']),
+        lastLogin: DateFormat("yyyy-MM-ddTHH:mm:ss").parse(map['last_login']),
         whiteMode: map['white_mode'],
+      );
+    }
+
+    factory UserModel.fromEntity(UserEntity entity){
+      return UserModel(
+        id: entity.id,
+        username: entity.username,
+        createdAt: entity.createdAt,
+        lastLogin: entity.lastLogin,
+        whiteMode: entity.whiteMode,
       );
     }
 }

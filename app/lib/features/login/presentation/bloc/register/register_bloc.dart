@@ -1,15 +1,20 @@
+import 'dart:convert';
+
 import 'package:band_app/core/resources/data_state.dart';
 import 'package:band_app/features/login/data/models/Authorization.dart';
 import 'package:band_app/features/login/domain/usecases/register.dart';
 import 'package:band_app/features/login/presentation/bloc/register/register_event.dart';
 import 'package:band_app/features/login/presentation/bloc/register/register_state.dart';
+import 'package:band_app/features/user/domain/usecases/save_user.dart';
 import 'package:bcrypt/bcrypt.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState>{
-  final RegisterUseCase registerUseCase;
+  final RegisterUseCase _registerUseCase;
+  final SaveUserUseCase _saveUserUseCase;
 
-  RegisterBloc(this.registerUseCase) : super(const RegisterInitial()){
+  RegisterBloc(this._registerUseCase, this._saveUserUseCase) : super(const RegisterInitial()){
     on<RegisterUser>(_onRegisterUser);
   }
 
@@ -31,21 +36,21 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState>{
       emit(const PasswordError("Hesla se neschodují"));
     }
     else{
+      //final password = BCrypt.hashpw(event.password, BCrypt.gensalt());
 
-      final password = BCrypt.hashpw(event.password, BCrypt.gensalt());
+      final password = sha512.convert(utf8.encode(event.password)).toString();
 
       AuthorizationModel authorizationModel = AuthorizationModel(
         username: event.username,
         hashedPassword: password,
       );
 
-      final result = await registerUseCase(params: authorizationModel);
+      final result = await _registerUseCase(params: authorizationModel);
 
       if (result is DataSuccess){
+        await _saveUserUseCase(params: result.data);
         emit(const RegisterSuccess());
-        print(result.data);
       }else {
-        print(result.error);
         emit(const UsernameError("Tento uživatel již existuje"));
       }
 

@@ -1,12 +1,23 @@
 
 
-import 'package:band_app/core/constatns/environment.dart';
+import 'package:band_app/core/constants/environment.dart';
 import 'package:band_app/features/login/data/data_sources/remote/authorization_api_service.dart';
 import 'package:band_app/features/login/data/repository/authorization_repository_impl.dart';
 import 'package:band_app/features/login/domain/repository/authorization_repository.dart';
+import 'package:band_app/features/login/domain/usecases/login.dart';
 import 'package:band_app/features/login/domain/usecases/register.dart';
 import 'package:band_app/features/login/presentation/bloc/login/login_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/register/register_bloc.dart';
+import 'package:band_app/features/song/data/data_sources/remote/song_api_service.dart';
+import 'package:band_app/features/song/data/repository/song_repository_impl.dart';
+import 'package:band_app/features/song/domain/repository/song_repository.dart';
+import 'package:band_app/features/song/domain/usecases/create_song.dart';
+import 'package:band_app/features/song/domain/usecases/get_songs.dart';
+import 'package:band_app/features/song/presentation/bloc/song/songs_bloc.dart';
+import 'package:band_app/features/user/data/repository/user_repository_impl.dart';
+import 'package:band_app/features/user/domain/repository/user_repository.dart';
+import 'package:band_app/features/user/domain/usecases/get_user.dart';
+import 'package:band_app/features/user/domain/usecases/save_user.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
@@ -28,11 +39,29 @@ Future<void> initializeDependencies() async{
     ),
   );
 
+  sl.registerSingleton<SongApiService>(
+    SongApiService(
+      sl(),
+      baseUrl: Environment.apiUrl,
+    ),
+  );
+
   sl.registerSingleton<AuthorizationRepository>(
     AuthorizationRepositoryImpl(
       apiService: sl(),
     ),
   );
+
+  sl.registerSingleton<SongRepository>(
+    SongRepositoryImpl(
+      sl(),
+    ),
+  );
+
+  sl.registerSingleton<UserRepository>(
+    UserRepositoryImpl(),
+  );
+
 
   //UseCases
 
@@ -42,12 +71,52 @@ Future<void> initializeDependencies() async{
     ),
   );
 
-  //Blocs
+  sl.registerSingleton<LoginUseCase>(
+    LoginUseCase(
+      sl(),
+    ),
+  );
 
-  sl.registerFactory<RegisterBloc>(() => RegisterBloc(sl()));
+  sl.registerSingleton<SaveUserUseCase>(
+    SaveUserUseCase(
+      sl(),
+    ),
+  );
+
+  sl.registerSingleton<GetUserUseCase>(
+    GetUserUseCase(
+      sl(),
+    ),
+  );
+
+  sl.registerSingleton<GetSongsUseCase>(
+    GetSongsUseCase(
+      sl(),
+    ),
+  );
+
+  sl.registerSingleton<CreateSongUseCase>(
+    CreateSongUseCase(
+      sl(),
+    ),
+  );
+
+  //Blocs
+  sl.registerFactory<RegisterBloc>(
+    () => RegisterBloc(
+        sl(), sl()
+    ),
+  );
 
   sl.registerFactory<LoginBloc>(
     () => LoginBloc(
+      sl(), sl()
+    ),
+  );
+
+  sl.registerFactory<SongsBloc>(
+    () => SongsBloc(
+      sl(), sl(), sl()
     ),
   );
 

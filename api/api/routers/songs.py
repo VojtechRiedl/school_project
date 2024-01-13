@@ -31,7 +31,7 @@ def get_video(db: Session = Depends(get_db)):
 def get_sound(db: Session = Depends(get_db)):
     pass
 
-@router.post("/create", response_model=SongCreate, summary="Create an song")
+@router.post("/create", response_model=Song, summary="Create an song")
 def create_song(song: SongCreate, db: Session = Depends(get_db)):    
     if song is None:
         raise HTTPException(status_code=404, detail="Song not found")

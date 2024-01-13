@@ -226,11 +226,9 @@ def get_songs(db: Session):
             response_songs.append(Song(
                 song_id=song.song_id,
                 name=song.name,
-                duration=song.duration,
-                song_path=song.song_path,
-                video_path=song.video_path,
+                created=song.created,
                 yt_link=song.yt_link,
-                description=song.description,
+                text=song.text,
                 user=song.users.username,
             ))
         return response_songs
@@ -242,11 +240,9 @@ def get_song(db: Session, song_id: int):
         return Song(
             song_id=song.song_id,
             name=song.name,
-            duration=song.duration,
-            song_path=song.song_path,
-            video_path=song.video_path,
+            created=song.created,
             yt_link=song.yt_link,
-            description=song.description,
+            text=song.text,
             user=song.users.username,
         )
     return None
@@ -254,15 +250,21 @@ def get_song(db: Session, song_id: int):
 def create_song(db: Session, song_create: SongCreate):
     db_song = models.Songs(
         name=song_create.name,
-        duration=song_create.duration,
         yt_link=song_create.yt_link,
-        description=song_create.description,
+        text=song_create.text,
         user_id=song_create.user_id
     )
     db.add(db_song)
     db.commit()
     db.refresh(db_song)
-    return song_create
+    return Song(
+        song_id=db_song.song_id,
+        name=db_song.name,
+        created=db_song.created,
+        yt_link=db_song.yt_link,
+        text=db_song.text,
+        user=db_song.users.username,
+    )
 
 def upload_sound(db: Session, song_id: int, sound_file : UploadFile):    
     song = db.query(models.Songs).filter(models.Songs.song_id == song_id).first()

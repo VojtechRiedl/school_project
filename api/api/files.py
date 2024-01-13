@@ -21,4 +21,9 @@ def save_video_file(file_name: str, file: UploadFile):
     with open(path, 'wb') as buffer:
         shutil.copyfileobj(file.file, buffer)
     return path
+
+def stream_video_file(path: str):
+    yield from open(path, mode="rb")
     
+def stream_sound_file(path: str):
+    yield from open(path, mode="rb")

@@ -20,7 +20,6 @@ def register(db: Session, authorization: Authorization):
             username=authorization.username,
             error="Uživatel již existuje"
         )
-    
     db_user = models.Users(
         username=authorization.username,
         password=authorization.password
@@ -301,6 +300,25 @@ def upload_video(db: Session, song_id: int, video_file : UploadFile):
         rows_affacted=affected_rows
     )
 
+def get_video(db: Session, song_id: int):
+    song = db.query(models.Songs).filter(models.Songs.song_id == song_id).first()
+    if song is None:
+        return None
+    
+    if song.video_path is None:
+        return None
+    
+    return files.stream_video_file(song.video_path)
+
+def get_sound(db: Session, song_id: int):
+    song = db.query(models.Songs).filter(models.Songs.song_id == song_id).first()
+    if song is None:
+        return None
+    
+    if song.song_path is None:
+        return None
+    return files.stream_sound_file(song.song_path)
+
 def update_song(db: Session, song_id: int, song: SongUpdate):
     updated_song = db.query(models.Songs).filter(models.Songs.song_id == song_id).first()
     if updated_song is None:
@@ -340,5 +358,4 @@ def delete_song(db: Session, song_id: int):
     query.delete()
     db.commit()
     return deleted_song
-    
     

@@ -10,8 +10,8 @@ class Users(Base):
     user_id = Column(Integer, primary_key=True, index=True)
     username = Column(String, nullable=False)
     password = Column(String, nullable=False)
-    created = Column(DateTime(timezone=True), default=func.now(), nullable=False)
-    last_login = Column(DateTime(timezone=True), default=func.now(), nullable=False)
+    created = Column(DateTime(timezone=False), default=func.now(), nullable=False)
+    last_login = Column(DateTime(timezone=False), default=func.now(), nullable=False)
     white_mode = Column(Boolean, default=True, nullable=False)
 
     ideas = relationship("Ideas", back_populates="users")
@@ -74,11 +74,11 @@ class Songs(Base):
     
     song_id = Column(Integer, primary_key=True, index=True,autoincrement=True)
     name = Column(String, nullable=False)
-    duration = Column(Time, nullable=False)
+    created = Column(DateTime(timezone=False), default=func.now(), nullable=False)
     song_path = Column(String, nullable=True)
     video_path = Column(String, nullable=True)
     yt_link = Column(String, nullable=True)
-    description = Column(Text, nullable=True)
+    text = Column(Text, nullable=True)
     user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     
     users = relationship("Users", back_populates="songs")

@@ -226,11 +226,9 @@ def get_songs(db: Session):
             response_songs.append(Song(
                 song_id=song.song_id,
                 name=song.name,
-                duration=song.duration,
-                song_path=song.song_path,
-                video_path=song.video_path,
+                created=song.created,
                 yt_link=song.yt_link,
-                description=song.description,
+                text=song.text,
                 user=song.users.username,
             ))
         return response_songs
@@ -242,11 +240,9 @@ def get_song(db: Session, song_id: int):
         return Song(
             song_id=song.song_id,
             name=song.name,
-            duration=song.duration,
-            song_path=song.song_path,
-            video_path=song.video_path,
+            created=song.created,
             yt_link=song.yt_link,
-            description=song.description,
+            text=song.text,
             user=song.users.username,
         )
     return None
@@ -254,15 +250,21 @@ def get_song(db: Session, song_id: int):
 def create_song(db: Session, song_create: SongCreate):
     db_song = models.Songs(
         name=song_create.name,
-        duration=song_create.duration,
         yt_link=song_create.yt_link,
-        description=song_create.description,
+        text=song_create.text,
         user_id=song_create.user_id
     )
     db.add(db_song)
     db.commit()
     db.refresh(db_song)
-    return song_create
+    return Song(
+        song_id=db_song.song_id,
+        name=db_song.name,
+        created=db_song.created,
+        yt_link=db_song.yt_link,
+        text=db_song.text,
+        user=db_song.users.username,
+    )
 
 def upload_sound(db: Session, song_id: int, sound_file : UploadFile):    
     song = db.query(models.Songs).filter(models.Songs.song_id == song_id).first()
@@ -300,21 +302,43 @@ def upload_video(db: Session, song_id: int, video_file : UploadFile):
     )
 
 def update_song(db: Session, song_id: int, song: SongUpdate):
-    updated_song = db.query(models.Songs).filter(models.Songs.song_id == song_id).update({models.Songs.name: song.name, models.Songs.duration: song.duration, models.Songs.yt_link: song.yt_link, models.Songs.description: song.description})
+    updated_song = db.query(models.Songs).filter(models.Songs.song_id == song_id).first()
+    if updated_song is None:
+        return None
+    
+    updated_song.name = song.name
+    updated_song.yt_link = song.yt_link
+    updated_song.text = song.text
+    
     db.commit()
-    return SongSuccessResponse(
-        song_id=song_id,
-        rows_affacted=updated_song,
-        message="Song byl úspěšně aktualizován",
+    db.refresh(updated_song)
+    return Song(
+        song_id=updated_song.song_id,
+        name=updated_song.name,
+        created=updated_song.created,
+        yt_link=updated_song.yt_link,
+        text=updated_song.text,
+        user=updated_song.users.username,
     )
 
 def delete_song(db: Session, song_id: int):
-    deleted_song = db.query(models.Songs).filter(models.Songs.song_id == song_id).delete()
+    query = db.query(models.Songs).filter(models.Songs.song_id == song_id)
+    song = query.first()
+    
+    if song is None:
+        return None
+    
+    deleted_song = Song(
+        song_id=song.song_id,
+        name=song.name,
+        created=song.created,
+        yt_link=song.yt_link,
+        text=song.text,
+        user=song.users.username,
+    )
+    
+    query.delete()
     db.commit()
-    return SongSuccessResponse(
-        song_id=song_id,
-        rows_affacted=deleted_song,
-        message="Song byl úspěšně smazán",
-    )   
+    return deleted_song
     
     

@@ -31,7 +31,7 @@ def get_video(db: Session = Depends(get_db)):
 def get_sound(db: Session = Depends(get_db)):
     pass
 
-@router.post("/create", response_model=SongCreate, summary="Create an song")
+@router.post("/create", response_model=Song, summary="Create an song")
 def create_song(song: SongCreate, db: Session = Depends(get_db)):    
     if song is None:
         raise HTTPException(status_code=404, detail="Song not found")
@@ -57,20 +57,20 @@ def upload_song(sound_file: UploadFile | None = None, id: int = Path(..., title=
     
     return response
 
-@router.patch("/update/{id}", response_model=SongSuccessResponse, summary="Update an song by id")
+@router.patch("/update/{id}", response_model=Song, summary="Update an song by id")
 def update_song(song: SongUpdate, id: int = Path(..., title="ID songu"), db: Session = Depends(get_db)):
     response = crud.update_song(db, id, song)
     
-    if response.rows_affacted == 0:
+    if response is None:
         raise HTTPException(status_code=404, detail="Song not found")
     
     return response
 
-@router.delete("/delete/{id}", response_model=SongSuccessResponse, summary="Delete an song by id")
+@router.delete("/delete/{id}", response_model=Song, summary="Delete an song by id")
 def delete_song(id: int = Path(..., title="ID songu"), db: Session = Depends(get_db)):
     response = crud.delete_song(db, id)
     
-    if response.rows_affacted == 0:
+    if response is None:
         raise HTTPException(status_code=404, detail="Song not found")
     
     return response

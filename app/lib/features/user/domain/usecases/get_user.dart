@@ -9,7 +9,7 @@ class GetUserUseCase extends UseCase<UserModel, void>{
 
 
   @override
-  Future<UserModel> call({void  params}) {
+  Future<UserModel> call({void params}) {
     return _userRepository.getUser();
   }
 

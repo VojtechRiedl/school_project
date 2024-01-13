@@ -6,6 +6,7 @@ import 'package:band_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,10 +34,15 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        title: 'Band',
+        title: 'Art Of The Crooked',
         routeInformationProvider: router.routeInformationProvider,
         routerDelegate: router.routerDelegate,
         routeInformationParser: router.routeInformationParser,
+        theme: ThemeData(
+          textTheme: GoogleFonts.montserratTextTheme(
+            Theme.of(context).textTheme,
+          ),
+        )
       ),
     );
   }

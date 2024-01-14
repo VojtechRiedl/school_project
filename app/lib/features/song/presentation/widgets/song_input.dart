@@ -8,17 +8,17 @@ class SongInput extends StatelessWidget{
 
   final bool multiLine;
 
-  final String label;
+  final String ? label;
 
   final TextEditingController controller;
 
-  const SongInput({super.key, required this.multiLine, required this.label, required this.controller});
+  final String ? errorText;
+
+  const SongInput({super.key, required this.multiLine, required this.label, required this.controller, this.errorText});
 
 
   @override
   Widget build(BuildContext context) {
-    final FocusNode focusNode = FocusNode();
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: SizedBox(
@@ -28,9 +28,9 @@ class SongInput extends StatelessWidget{
           minLines: multiLine ? 10 : 1,
           maxLines: multiLine ? null : 1,
           keyboardType: multiLine ? TextInputType.multiline : TextInputType.text,
-          focusNode: focusNode,
           decoration: InputDecoration(
-            hintText: focusNode.hasFocus ? null : label,
+            labelText: multiLine ? null : label,
+            hintText: multiLine ? label : null,
             focusedBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
               borderSide: BorderSide(
@@ -47,6 +47,17 @@ class SongInput extends StatelessWidget{
             ),
             labelStyle: const TextStyle(
               color: Palette.second,
+            ),
+            errorText: errorText,
+            errorBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              borderSide: BorderSide(
+                color: Palette.decline,
+                width: 2,
+              ),
+            ),
+            errorStyle: const TextStyle(
+              color: Palette.decline,
             ),
           )
         ),

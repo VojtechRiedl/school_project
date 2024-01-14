@@ -3,6 +3,8 @@ import 'package:band_app/features/song/data/models/song_create.dart';
 import 'package:band_app/features/song/domain/entites/song.dart';
 import 'package:band_app/features/song/domain/usecases/create_song.dart';
 import 'package:band_app/features/song/domain/usecases/get_songs.dart';
+import 'package:band_app/features/song/domain/usecases/upload_sound.dart';
+import 'package:band_app/features/song/domain/usecases/upload_video.dart';
 import 'package:band_app/features/song/presentation/bloc/song/songs_event.dart';
 import 'package:band_app/features/song/presentation/bloc/song/songs_state.dart';
 import 'package:band_app/features/user/domain/usecases/get_user.dart';
@@ -10,14 +12,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SongsBloc extends Bloc<SongsEvent, SongsState>{
   final GetSongsUseCase _getSongsUseCase;
-  final CreateSongUseCase _createSongUseCase;
-  final GetUserUseCase _getUserUseCase;
 
-
-  SongsBloc(this._getSongsUseCase, this._getUserUseCase, this._createSongUseCase) : super(SongsInitial()){
+  SongsBloc(this._getSongsUseCase) : super(SongsInitial()){
     on<LoadSongs>(_onSongsLoading);
     on<SearchSongs>(_onSongSearch);
-    on<CreateSong>(_onSongCreate);
+    on<AddSong>(_onSongCreate);
 
   }
 
@@ -40,31 +39,9 @@ class SongsBloc extends Bloc<SongsEvent, SongsState>{
     emit(SongsSearched(event.query, suggestions, event.suggestions));
   }
 
-  void _onSongCreate(CreateSong event, Emitter<SongsState> emit) async {
-    final user = await _getUserUseCase();
+  void _onSongCreate(AddSong event, Emitter<SongsState> emit) async {
+    List<SongEntity> songs = List.from(state.songs)..add(event.song);
 
-    final newSong = SongCreateModel(
-      title: event.title,
-      youtubeLink: event.youtubeLink,
-      text: event.text,
-      user: user.id,
-    );
-
-    final dataState = await _createSongUseCase(params: newSong);
-
-    if(dataState is DataSuccess){
-      List<SongEntity> songs = List.from(state.songs)..add(dataState.data!);
-
-      print("added");
-      //emit(SongsLoaded(state.songs));
-      emit(SongCreated(songs));
-    }else{
-      print("error");
-      //TODO handle error
-      emit(SongCreated(state.songs));
-
-    }
-
-
+    emit(SongCreated(songs));
   }
 }

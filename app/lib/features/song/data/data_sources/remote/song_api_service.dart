@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:band_app/features/song/data/models/song.dart';
 import 'package:band_app/features/song/data/models/song_create.dart';
 import 'package:dio/dio.dart';
@@ -22,4 +24,17 @@ abstract class SongApiService {
     @Body() required SongCreateModel song,
   });
 
+  @POST("/songs/video/upload/{id}")
+  @MultiPart()
+  Future<HttpResponse<SongModel>> uploadVideo({
+    @Path('id') required int id,
+    @Part(name: "video_file") required File file,
+  });
+
+  @POST("/songs/sound/upload/{id}")
+  @MultiPart()
+  Future<HttpResponse<SongModel>> uploadSound({
+    @Path('id') required int id,
+    @Part(name: "sound_file") required File file,
+  });
 }

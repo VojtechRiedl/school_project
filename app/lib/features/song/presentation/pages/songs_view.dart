@@ -42,7 +42,16 @@ class _SongsViewState extends State<SongsView> {
   }
 
   _buildBody() {
-    return BlocBuilder<SongsBloc, SongsState>(
+    return BlocConsumer<SongsBloc, SongsState>(
+        listener: (BuildContext context, SongsState state) {
+          if (state is SongCreated){
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Písnička byla úspěšně vytvořena"),
+              ),
+            );
+          }
+        },
         builder: (BuildContext context, state) {
           if (state is SongsInitial) {
             return const Center(

@@ -1,5 +1,6 @@
 import 'package:band_app/features/song/domain/entites/song.dart';
 import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
 
 abstract class SongsEvent extends Equatable {
   const SongsEvent();
@@ -26,13 +27,12 @@ class SearchSongs extends SongsEvent {
   List<Object> get props => [query, suggestions];
 }
 
-class CreateSong extends SongsEvent {
-  final String title;
-  final String ? youtubeLink;
-  final String ? text;
+class AddSong extends SongsEvent {
+  final SongEntity song;
 
-  const CreateSong(this.title, this.youtubeLink, this.text);
+
+  const AddSong(this.song);
 
   @override
-  List<Object> get props => [title, youtubeLink!, text!];
+  List<Object> get props => [song];
 }

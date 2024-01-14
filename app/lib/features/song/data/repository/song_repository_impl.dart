@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:band_app/core/resources/data_state.dart';
 import 'package:band_app/features/song/data/data_sources/remote/song_api_service.dart';
 import 'package:band_app/features/song/data/models/song_create.dart';
@@ -85,13 +87,46 @@ class SongRepositoryImpl extends SongRepository{
   }
 
   @override
-  Future<DataState<SongEntity>> uploadSong() {
-    return uploadSong(); // TODO: implement uploadSong
+  Future<DataState<SongEntity>> uploadSong(SongEntity song, File file) async {
+    try{
+
+      final response = await _songApiService.uploadSound(id: song.id, file: file);
+      if(response.response.statusCode == 200) {
+        return DataSuccess(response.data);
+      }else{
+        return DataFailed(
+          DioException(
+            error: response.response.statusMessage,
+            requestOptions: response.response.requestOptions,
+            response: response.response,
+            type: DioExceptionType.badResponse,
+          ),
+        );
+      }
+    }on DioException catch(e){
+      return DataFailed(e);
+    }
   }
 
   @override
-  Future<DataState<SongEntity>> uploadVideo() {
-    return uploadVideo(); // TODO: implement uploadVideo
+  Future<DataState<SongEntity>> uploadVideo(SongEntity song, File file) async {
+    try{
+      final response = await _songApiService.uploadVideo(id: song.id, file: file);
+      if(response.response.statusCode == 200) {
+        return DataSuccess(response.data);
+      }else{
+        return DataFailed(
+          DioException(
+            error: response.response.statusMessage,
+            requestOptions: response.response.requestOptions,
+            response: response.response,
+            type: DioExceptionType.badResponse,
+          ),
+        );
+      }
+    }on DioException catch(e){
+      return DataFailed(e);
+    }
   }
 
 }

@@ -26,7 +26,7 @@ class SongCreateBloc extends Bloc<SongCreateEvent, SongCreateState>{
 
   void _onSongCreate(CreateSong event, Emitter<SongCreateState> emit) async {
     if(event.title.isEmpty){
-      emit(SongCreateError("Název písničky nesmí být prázdný", state.songFileResult, state.videoFileResult));
+      emit(TitleError("Název písničky nesmí být prázdný", state.songFileResult, state.videoFileResult));
       return;
     }
     final user = await _getUserUseCase();

@@ -1,6 +1,7 @@
 import 'package:band_app/core/constants/palette.dart';
 import 'package:band_app/features/song/data/models/song.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SongItem extends StatelessWidget {
   const SongItem({
@@ -46,8 +47,10 @@ class SongItem extends StatelessWidget {
               ),
             ],
           ),
+          onTap: () {
+            GoRouter.of(context).pushNamed("song", pathParameters: {'id': song.id.toString()});
+          },
         )
-
       )
     );
   }

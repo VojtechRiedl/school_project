@@ -8,6 +8,7 @@ import 'package:band_app/features/login/presentation/pages/login_view.dart';
 import 'package:band_app/features/login/presentation/pages/register_view.dart';
 import 'package:band_app/features/plans/presentation/pages/plans_view.dart';
 import 'package:band_app/features/song/presentation/pages/create_song_view.dart';
+import 'package:band_app/features/song/presentation/pages/song_view.dart';
 import 'package:band_app/features/song/presentation/pages/songs_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,6 +80,25 @@ final router = GoRouter(
                   return FadeTransition(
                     opacity:
                         CurveTween(curve: Curves.easeInOut).animate(animation),
+                    child: child,
+                  );
+                },
+              );
+            },
+          ),
+          GoRoute(
+            name: 'song',
+            path: 'song/:id',
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              return CustomTransitionPage<void>(
+                key: state.pageKey,
+                child: SongView(id: int.parse(state.pathParameters['id']!)),
+                transitionDuration: const Duration(milliseconds: 500),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(
+                    opacity:
+                    CurveTween(curve: Curves.easeInOut).animate(animation),
                     child: child,
                   );
                 },

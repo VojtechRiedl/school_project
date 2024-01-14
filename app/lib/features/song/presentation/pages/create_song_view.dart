@@ -77,33 +77,44 @@ class _CreateSongViewState extends State<CreateSongView> {
         }
       },
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              SongInput(multiLine: false, label: "Název písničky", controller: _titleController),
-              SongInput(multiLine: false, label: "Odkaz na youtube", controller: _youtubeLinkController),
-              SongInput(multiLine: true, label: "Text písničky",  controller: _textController, errorText: state is TitleError ? state.message : null),
-              UploadButton(label: "Video",loaded: state.videoFileResult != null, onPressed: () async {
-                context.read<SongCreateBloc>().add(LoadVideo(await FilePicker.platform.pickFiles(
-                    type: FileType.custom,
-                    allowedExtensions: ['mp4']
-                )));
-              }),
-              UploadButton(label: "Písnička",loaded: state.songFileResult != null, onPressed: () async {
-                context.read<SongCreateBloc>().add(LoadSound(await FilePicker.platform.pickFiles(
-                    type: FileType.custom,
-                    allowedExtensions: ['mp3']
-                )));
-              }),
-              SubmitButton(label: "Uložit", onPressed: (){
-                context.read<SongCreateBloc>().add(CreateSong(
-                    _titleController.text,
-                    _youtubeLinkController.text,
-                    _textController.text
-                ));
-              })
-            ],
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0, bottom: 40.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    SongInput(multiLine: false, label: "Název písničky", controller: _titleController, errorText: state is TitleError ? state.message : null),
+                    SongInput(multiLine: false, label: "Odkaz na youtube", controller: _youtubeLinkController),
+                    SongInput(multiLine: true, label: "Text písničky",  controller: _textController),
+                  ],
+                ),
+                Column(
+                  children: [
+                    UploadButton(label: "Video",loaded: state.videoFileResult != null, onPressed: () async {
+                      context.read<SongCreateBloc>().add(LoadVideo(await FilePicker.platform.pickFiles(
+                          type: FileType.custom,
+                          allowedExtensions: ['mp4']
+                      )));
+                    }),
+                    UploadButton(label: "Písnička",loaded: state.songFileResult != null, onPressed: () async {
+                      context.read<SongCreateBloc>().add(LoadSound(await FilePicker.platform.pickFiles(
+                          type: FileType.custom,
+                          allowedExtensions: ['mp3']
+                      )));
+                    }),
+                    SubmitButton(label: "Uložit", onPressed: (){
+                      context.read<SongCreateBloc>().add(CreateSong(
+                          _titleController.text,
+                          _youtubeLinkController.text,
+                          _textController.text
+                      ));
+                    })
+                  ],
+                )
+              ],
+            ),
           ),
         );
       },

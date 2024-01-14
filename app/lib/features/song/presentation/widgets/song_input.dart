@@ -22,7 +22,7 @@ class SongInput extends StatelessWidget{
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: SizedBox(
-        height: multiLine ? 200 : null,
+        height: multiLine ? 180 : null,
         child: TextField(
           controller: controller,
           minLines: multiLine ? 10 : 1,
@@ -47,6 +47,9 @@ class SongInput extends StatelessWidget{
             ),
             labelStyle: const TextStyle(
               color: Palette.second,
+            ),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
             ),
             errorText: errorText,
             errorBorder: const OutlineInputBorder(

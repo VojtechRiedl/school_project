@@ -8,13 +8,11 @@ class UserModel extends UserEntity{
       required String username,
       required DateTime createdAt,
       required DateTime lastLogin,
-      required bool whiteMode,
     }) : super (
       id: id,
       username: username,
       createdAt: createdAt,
       lastLogin: lastLogin,
-      whiteMode: whiteMode,
     );
 
     factory UserModel.fromJson(Map<String,dynamic> map){
@@ -23,7 +21,6 @@ class UserModel extends UserEntity{
         username: map['username'],
         createdAt: DateFormat("yyyy-MM-ddTHH:mm:ss").parse(map['created']),
         lastLogin: DateFormat("yyyy-MM-ddTHH:mm:ss").parse(map['last_login']),
-        whiteMode: map['white_mode'],
       );
     }
 
@@ -33,7 +30,6 @@ class UserModel extends UserEntity{
         username: entity.username,
         createdAt: entity.createdAt,
         lastLogin: entity.lastLogin,
-        whiteMode: entity.whiteMode,
       );
     }
 }

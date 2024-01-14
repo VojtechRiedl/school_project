@@ -50,7 +50,7 @@ def create_song(song: SongCreate, db: Session = Depends(get_db)):
     
     return crud.create_song(db, song)
 
-@router.post("/video/upload/{id}", response_model=SongSuccessResponse, summary="Upload an video by id")
+@router.post("/video/upload/{id}", response_model=Song, summary="Upload an video by id")
 def upload_video(video_file: UploadFile, id: int = Path(..., title="ID songu"), db: Session = Depends(get_db)):
     response = crud.upload_video(db, id, video_file)
     
@@ -60,7 +60,7 @@ def upload_video(video_file: UploadFile, id: int = Path(..., title="ID songu"), 
     return response
     
 
-@router.post("/sound/upload/{id}", response_model=SongSuccessResponse, summary="Upload an sound by id")
+@router.post("/sound/upload/{id}", response_model=Song, summary="Upload an sound by id")
 def upload_song(sound_file: UploadFile, id: int = Path(..., title="ID songu"), db: Session = Depends(get_db)):
     response = crud.upload_sound(db, id, sound_file)
     

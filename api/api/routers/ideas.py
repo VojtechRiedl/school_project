@@ -12,7 +12,7 @@ def read_ideas(db: Session = Depends(get_db)):
     return crud.get_ideas(db)
 
 @router.get("/{id}", response_model=Idea, summary="Get an idea by id")
-def read_idea(id: int = Path(..., title="ID plánu"), db: Session = Depends(get_db)):
+def read_idea(id: int = Path(..., title="ID idei"), db: Session = Depends(get_db)):
     idea = crud.get_idea(db, id)
     
     if idea is None:
@@ -28,7 +28,7 @@ def create_idea(idea: IdeaCreate, db: Session = Depends(get_db)):
     return crud.create_idea(db, idea)
 
 @router.patch("/update/{id}",response_model=IdeaSuccessResponse, summary="Update an idea by id")
-def update_idea(idea: IdeaUpdate, id: int = Path(..., title="ID plánu"), db: Session = Depends(get_db)):
+def update_idea(idea: IdeaUpdate, id: int = Path(..., title="ID idei"), db: Session = Depends(get_db)):
     response = crud.update_idea(db, id, idea)
     
     if response.rows_affacted == 0:
@@ -37,7 +37,7 @@ def update_idea(idea: IdeaUpdate, id: int = Path(..., title="ID plánu"), db: Se
     return response
 
 @router.delete("/delete/{id}",response_model=IdeaSuccessResponse ,summary="Delete an idea by id")
-def delete_idea(id: int = Path(..., title="ID plánu"), db: Session = Depends(get_db)):
+def delete_idea(id: int = Path(..., title="ID idei"), db: Session = Depends(get_db)):
     response = crud.delete_idea(db, id)
     
     if response.rows_affacted == 0:

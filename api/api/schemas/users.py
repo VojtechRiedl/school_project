@@ -20,15 +20,14 @@ class User(BaseModel):
     username: str = Field(description="Jméno uživatele", examples=["Pepa Dlouhý"])
     created: datetime = Field(description="Datum vytvoření uživatele", examples=["2021-01-01 12:00:00"])
     last_login: datetime = Field(description="Datum posledního přihlášení uživatele", examples=["2021-01-01 12:00:00"])
-    white_mode: bool = Field(description="Bílý mód", examples=[True])
     
     model_config = ConfigDict(from_attributes=True)
   
 
 class UserUpdate(BaseModel):
     username: str = Field(description="Jméno uživatele", examples=["Pepa Dlouhý"])
-    white_mode: bool = Field(description="Bílý mód", examples=[True])
-    
+    password: str = Field(description="Heslo uživatele", examples=["d4w8as4d5wa4d68was5d4a6dwa9sd9"])
+        
     model_config = ConfigDict(from_attributes=True)
 
 class UserSuccessResponse(BaseModel):
@@ -39,10 +38,3 @@ class UserSuccessResponse(BaseModel):
     
     model_config = ConfigDict(from_attributes=True)
     
-class UserInfo(BaseModel):
-    username: str = Field(description="Jméno uživatele", examples=["Pepa Dlouhý"])
-    created: datetime = Field(description="Datum vytvoření uživatele", examples=["2021-01-01 12:00:00"])
-    last_login: datetime = Field(description="Datum posledního přihlášení uživatele", examples=["2021-01-01 12:00:00"])
-    image_path: str = Field(description="Cesta k profilovému obrázku uživatele", examples=["/static/images/default.png"])
-
-    model_config = ConfigDict(from_attributes=True)

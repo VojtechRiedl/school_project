@@ -12,7 +12,6 @@ class Users(Base):
     password = Column(String, nullable=False)
     created = Column(DateTime(timezone=False), default=func.now(), nullable=False)
     last_login = Column(DateTime(timezone=False), default=func.now(), nullable=False)
-    white_mode = Column(Boolean, default=True, nullable=False)
 
     ideas = relationship("Ideas", back_populates="users")
     votes = relationship("Votes", back_populates="users")
@@ -68,6 +67,17 @@ class Plans(Base):
         self.date = date
         self.description = description
         self.user_id = user_id
+
+
+class FavoriteSongs(Base):
+    __tablename__ = "favorite_songs"
+    
+    favorite_song_id = Column(Integer, primary_key=True, index=True,autoincrement=True)
+    song_id = Column(Integer, ForeignKey("songs.song_id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
+    
+    songs = relationship("Songs", back_populates="favorite_songs")
+    users = relationship("Users", back_populates="favorite_songs")
 
 class Songs(Base):
     __tablename__ = "songs"

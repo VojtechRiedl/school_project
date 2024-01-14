@@ -32,7 +32,6 @@ def register(db: Session, authorization: Authorization):
         username=db_user.username,
         created=db_user.created,
         last_login=db_user.last_login,
-        white_mode=db_user.white_mode
     )
 
 def login(db: Session, authorization: Authorization):
@@ -46,7 +45,6 @@ def login(db: Session, authorization: Authorization):
             username=logged_user.username,
             created=logged_user.created,
             last_login=logged_user.last_login,
-            white_mode=logged_user.white_mode
         )
     
     return AuthorizationFailed(
@@ -64,7 +62,6 @@ def get_users(db: Session):
                 username=user.username,
                 created=user.created,
                 last_login=user.last_login,
-                white_mode=user.white_mode
             ))
         return response_users
     return response_users
@@ -77,12 +74,11 @@ def get_user(db: Session, user_id: int):
             username=user.username,
             created=user.created,
             last_login=user.last_login,
-            white_mode=user.white_mode
         )
     return None
 
 def update_user(db: Session, user_id: int, user: UserUpdate):
-    updated_user = db.query(models.Users).filter(models.Users.user_id == user_id).update({models.Users.white_mode: user.white_mode})
+    updated_user = db.query(models.Users).filter(models.Users.user_id == user_id).update({models.Users.username: user.username, models.Users.password: user.password})
     db.commit()
     return UserSuccessResponse(
         user_id=user_id,
@@ -266,38 +262,48 @@ def create_song(db: Session, song_create: SongCreate):
     )
 
 def upload_sound(db: Session, song_id: int, sound_file : UploadFile):    
-    song = db.query(models.Songs).filter(models.Songs.song_id == song_id).first()
+    query = db.query(models.Songs).filter(models.Songs.song_id == song_id)
+    
+    song = query.first()
     
     if song is None:
         return None
     
     path = files.save_sound_file("song_" + str(song.song_id), sound_file)
     
-    affected_rows = db.query(models.Songs).filter(models.Songs.song_id == song_id).update({models.Songs.song_path: path})
+    query.update({models.Songs.song_path: path})
     db.commit()
-    
-    return SongSuccessResponse(
-        song_id=song_id,
-        message="Song byl úspěšně nahrán",
-        rows_affacted=affected_rows
+    db.refresh(song)
+    return Song(
+        song_id=song.song_id,
+        name=song.name,
+        created=song.created,
+        yt_link=song.yt_link,
+        text=song.text,
+        user=song.users.username,
     )
 
 def upload_video(db: Session, song_id: int, video_file : UploadFile):
-    song = db.query(models.Songs).filter(models.Songs.song_id == song_id).first()
+    query = db.query(models.Songs).filter(models.Songs.song_id == song_id)
     
-    db.commit()
+    song = query.first()
+    
     if song is None:
         return None
     
     path = files.save_video_file("video_" + str(song.song_id), video_file)
     
-    affected_rows = db.query(models.Songs).filter(models.Songs.song_id == song_id).update({models.Songs.video_path: path})
+    query.update({models.Songs.video_path: path})
     db.commit()
+    db.refresh(song)
     
-    return SongSuccessResponse(
-        song_id=song_id,
-        message="Video bylo úspěšně nahráno",
-        rows_affacted=affected_rows
+    return Song(
+        song_id=song.song_id,
+        name=song.name,
+        created=song.created,
+        yt_link=song.yt_link,
+        text=song.text,
+        user=song.users.username,
     )
 
 def get_video(db: Session, song_id: int):

@@ -1,9 +1,9 @@
 import 'package:band_app/core/constants/palette.dart';
 import 'package:band_app/features/home/presentation/widgets/default_scaffold.dart';
 import 'package:band_app/features/song/data/models/song.dart';
-import 'package:band_app/features/song/presentation/bloc/song/songs_bloc.dart';
-import 'package:band_app/features/song/presentation/bloc/song/songs_event.dart';
-import 'package:band_app/features/song/presentation/bloc/song/songs_state.dart';
+import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
+import 'package:band_app/features/song/presentation/bloc/songs/songs_event.dart';
+import 'package:band_app/features/song/presentation/bloc/songs/songs_state.dart';
 import 'package:band_app/features/song/presentation/widgets/song_item.dart';
 import 'package:band_app/features/song/presentation/widgets/song_search_bar.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +47,7 @@ class _SongsViewState extends State<SongsView> {
           if (state is SongCreated){
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
+                behavior: SnackBarBehavior.floating,
                 content: Text("Písnička byla úspěšně vytvořena"),
               ),
             );

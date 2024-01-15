@@ -5,8 +5,8 @@ import 'package:band_app/features/song/domain/usecases/create_song.dart';
 import 'package:band_app/features/song/domain/usecases/get_songs.dart';
 import 'package:band_app/features/song/domain/usecases/upload_sound.dart';
 import 'package:band_app/features/song/domain/usecases/upload_video.dart';
-import 'package:band_app/features/song/presentation/bloc/song/songs_event.dart';
-import 'package:band_app/features/song/presentation/bloc/song/songs_state.dart';
+import 'package:band_app/features/song/presentation/bloc/songs/songs_event.dart';
+import 'package:band_app/features/song/presentation/bloc/songs/songs_state.dart';
 import 'package:band_app/features/user/domain/usecases/get_user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

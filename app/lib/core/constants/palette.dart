@@ -14,8 +14,8 @@ class Palette{
 
   static const Color fifth = Color(0xFFCFCFCF);
 
-  static const Color accept = Color(0xFF10C936);
+  static const Color accept = Color(0xFF00B124);
 
-  static const Color decline = Color(0xFFD80032);
+  static const Color decline = Color(0xFFA50026);
 
 }

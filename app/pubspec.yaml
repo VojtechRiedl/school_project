@@ -51,6 +51,7 @@ dependencies:
   crypto: ^3.0.3
   file_picker: ^6.1.1
   google_fonts: ^6.1.0
+  video_player: ^2.8.2
 
 dev_dependencies:
   flutter_test:

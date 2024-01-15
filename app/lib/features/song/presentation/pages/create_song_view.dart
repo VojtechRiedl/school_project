@@ -1,7 +1,7 @@
 import 'package:band_app/core/constants/palette.dart';
 import 'package:band_app/features/home/presentation/widgets/default_scaffold.dart';
-import 'package:band_app/features/song/presentation/bloc/song/songs_bloc.dart';
-import 'package:band_app/features/song/presentation/bloc/song/songs_event.dart';
+import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
+import 'package:band_app/features/song/presentation/bloc/songs/songs_event.dart';
 import 'package:band_app/features/song/presentation/bloc/song_create/song_create_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/song_create/song_create_event.dart';
 import 'package:band_app/features/song/presentation/bloc/song_create/song_create_state.dart';
@@ -60,15 +60,15 @@ class _CreateSongViewState extends State<CreateSongView> {
         if(state is UploadError) {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
+                behavior: SnackBarBehavior.floating,
                 content: Text(state.message),
-                backgroundColor: Colors.red,
               )
           );
         }else if(state is SongCreateError){
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
+                behavior: SnackBarBehavior.floating,
                 content: Text(state.message),
-                backgroundColor: Colors.red,
               )
           );
         }else if(state is SongCreated){

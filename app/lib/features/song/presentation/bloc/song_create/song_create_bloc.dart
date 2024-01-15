@@ -41,6 +41,7 @@ class SongCreateBloc extends Bloc<SongCreateEvent, SongCreateState>{
     final dataState = await _createSongUseCase(params: newSong);
 
     if(dataState is DataSuccess) {
+
       SongEntity song = dataState.data!;
 
 

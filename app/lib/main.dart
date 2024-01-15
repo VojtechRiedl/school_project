@@ -1,7 +1,7 @@
 import 'package:band_app/config/routes/routes.dart';
 import 'package:band_app/features/login/presentation/bloc/login/login_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/register/register_bloc.dart';
-import 'package:band_app/features/song/presentation/bloc/song/songs_bloc.dart';
+import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
 import 'package:band_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

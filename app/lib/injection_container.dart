@@ -1,5 +1,3 @@
-
-
 import 'package:band_app/core/constants/environment.dart';
 import 'package:band_app/features/login/data/data_sources/remote/authorization_api_service.dart';
 import 'package:band_app/features/login/data/repository/authorization_repository_impl.dart';
@@ -15,7 +13,7 @@ import 'package:band_app/features/song/domain/usecases/create_song.dart';
 import 'package:band_app/features/song/domain/usecases/get_songs.dart';
 import 'package:band_app/features/song/domain/usecases/upload_sound.dart';
 import 'package:band_app/features/song/domain/usecases/upload_video.dart';
-import 'package:band_app/features/song/presentation/bloc/song/songs_bloc.dart';
+import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/song_create/song_create_bloc.dart';
 import 'package:band_app/features/user/data/repository/user_repository_impl.dart';
 import 'package:band_app/features/user/domain/repository/user_repository.dart';

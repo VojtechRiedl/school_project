@@ -1,7 +1,7 @@
 import 'package:band_app/core/constants/palette.dart';
 import 'package:band_app/features/song/domain/entites/song.dart';
-import 'package:band_app/features/song/presentation/bloc/song/songs_bloc.dart';
-import 'package:band_app/features/song/presentation/bloc/song/songs_event.dart';
+import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
+import 'package:band_app/features/song/presentation/bloc/songs/songs_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

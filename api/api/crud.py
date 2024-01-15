@@ -221,6 +221,8 @@ def get_songs(db: Session):
             response_songs.append(Song(
                 song_id=song.song_id,
                 name=song.name,
+                video=song.video_path is not None,
+                sound=song.song_path is not None,
                 created=song.created,
                 yt_link=song.yt_link,
                 text=song.text,
@@ -235,6 +237,8 @@ def get_song(db: Session, song_id: int):
         return Song(
             song_id=song.song_id,
             name=song.name,
+            video=song.video_path is not None,
+            sound=song.song_path is not None,
             created=song.created,
             yt_link=song.yt_link,
             text=song.text,
@@ -243,22 +247,24 @@ def get_song(db: Session, song_id: int):
     return None
 
 def create_song(db: Session, song_create: SongCreate):
-    db_song = models.Songs(
+    song = models.Songs(
         name=song_create.name,
         yt_link=song_create.yt_link,
         text=song_create.text,
         user_id=song_create.user_id
     )
-    db.add(db_song)
+    db.add(song)
     db.commit()
-    db.refresh(db_song)
+    db.refresh(song)
     return Song(
-        song_id=db_song.song_id,
-        name=db_song.name,
-        created=db_song.created,
-        yt_link=db_song.yt_link,
-        text=db_song.text,
-        user=db_song.users.username,
+        song_id=song.song_id,
+        name=song.name,
+        video=song.video_path is not None,
+        sound=song.song_path is not None,
+        created=song.created,
+        yt_link=song.yt_link,
+        text=song.text,
+        user=song.users.username,
     )
 
 def upload_sound(db: Session, song_id: int, sound_file : UploadFile):    
@@ -277,6 +283,8 @@ def upload_sound(db: Session, song_id: int, sound_file : UploadFile):
     return Song(
         song_id=song.song_id,
         name=song.name,
+        video=song.video_path is not None,
+        sound=song.song_path is not None,
         created=song.created,
         yt_link=song.yt_link,
         text=song.text,
@@ -300,6 +308,8 @@ def upload_video(db: Session, song_id: int, video_file : UploadFile):
     return Song(
         song_id=song.song_id,
         name=song.name,
+        video=song.video_path is not None,
+        sound=song.song_path is not None,
         created=song.created,
         yt_link=song.yt_link,
         text=song.text,

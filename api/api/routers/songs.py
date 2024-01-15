@@ -32,7 +32,6 @@ def get_video(id: int = Path(..., title="video"),db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Song not found")
     
     return StreamingResponse(response, media_type="video/mp4")
-    
 
 @router.get("/sound/{id}", summary="Get an sound by song_id")
 def get_sound(id: int = Path(..., title="Sound"), db: Session = Depends(get_db)):

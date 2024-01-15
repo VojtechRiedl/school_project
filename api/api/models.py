@@ -17,6 +17,7 @@ class Users(Base):
     votes = relationship("Votes", back_populates="users")
     plans = relationship("Plans", back_populates="users")
     songs = relationship("Songs", back_populates="users")
+    favorite_songs = relationship("FavoriteSongs", back_populates="users")
 
 
 class Votes(Base):
@@ -67,18 +68,6 @@ class Plans(Base):
         self.date = date
         self.description = description
         self.user_id = user_id
-
-
-class FavoriteSongs(Base):
-    __tablename__ = "favorite_songs"
-    
-    favorite_song_id = Column(Integer, primary_key=True, index=True,autoincrement=True)
-    song_id = Column(Integer, ForeignKey("songs.song_id"), nullable=False)
-    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
-    
-    songs = relationship("Songs", back_populates="favorite_songs")
-    users = relationship("Users", back_populates="favorite_songs")
-
 class Songs(Base):
     __tablename__ = "songs"
     
@@ -92,3 +81,14 @@ class Songs(Base):
     user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     
     users = relationship("Users", back_populates="songs")
+    favorite_songs = relationship("FavoriteSongs", back_populates="songs")
+
+class FavoriteSongs(Base):
+    __tablename__ = "favorite_songs"
+    
+    favorite_song_id = Column(Integer, primary_key=True, index=True,autoincrement=True)
+    song_id = Column(Integer, ForeignKey("songs.song_id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
+    
+    songs = relationship("Songs", back_populates="favorite_songs")
+    users = relationship("Users", back_populates="favorite_songs")

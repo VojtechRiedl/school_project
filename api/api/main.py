@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -6,6 +7,15 @@ from .routers import ideas, plans, songs, authorization, users
 from .database import engine
 from . import models
 
+
+if __name__ == '__main__':
+    uvicorn.run("api.main:app",
+                host="0.0.0.0",
+                port=8000,
+                reload=True,
+                )
+#ssl_keyfile="C:/Users/vojta/Desktop/band_project/api/ssl103+3-key.pem", 
+#ssl_certfile="C:/Users/vojta/Desktop/band_project/api/ssl103+3.pem"
 app_settings = AppSettings()
 
 models.Base.metadata.create_all(bind=engine)

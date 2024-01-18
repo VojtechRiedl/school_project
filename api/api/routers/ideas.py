@@ -27,11 +27,11 @@ def create_idea(idea: IdeaCreate, db: Session = Depends(get_db)):
     
     return crud.create_idea(db, idea)
 
-@router.patch("/update/{id}",response_model=IdeaSuccessResponse, summary="Update an idea by id")
+@router.patch("/update/{id}",response_model=Idea, summary="Update an idea by id")
 def update_idea(idea: IdeaUpdate, id: int = Path(..., title="ID idei"), db: Session = Depends(get_db)):
     response = crud.update_idea(db, id, idea)
     
-    if response.rows_affacted == 0:
+    if response is None:
         raise HTTPException(status_code=404, detail="Idea not found")
     
     return response

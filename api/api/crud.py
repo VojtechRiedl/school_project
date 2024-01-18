@@ -7,8 +7,8 @@ from . import models
 from .database import engine
 from .schemas.ideas import IdeaCreate, Idea, IdeaUpdate, IdeaSuccessResponse
 from .schemas.plans import Plan, PlanCreate, PlanUpdate, PlanSuccessResponse
-from .schemas.songs import Song, SongCreate, SongUpdate, SongSuccessResponse
-from .schemas.users import Authorization, AuthorizationFailed, User, UserUpdate, UserSuccessResponse
+from .schemas.songs import Song, SongCreate, SongUpdate
+from .schemas.users import Authorization, AuthorizationFailed, User, UserUpdate
 
 from . import files
 
@@ -78,14 +78,27 @@ def get_user(db: Session, user_id: int):
     return None
 
 def update_user(db: Session, user_id: int, user: UserUpdate):
-    updated_user = db.query(models.Users).filter(models.Users.user_id == user_id).update({models.Users.username: user.username, models.Users.password: user.password})
-    db.commit()
-    return UserSuccessResponse(
-        user_id=user_id,
-        rows_affacted=updated_user,
-        message="Uživatel byl úspěšně aktualizován",
-    )
+    user = db.query(models.Users).filter(models.Users.username == user.username).first()
+    
+    if user is None:
+        return None
+    
+    updated_user = db.query(models.Users).filter(models.Users.user_id == user_id).first()
+    
+    if updated_user is None:
+        return None
 
+    updated_user.username = user.username
+    updated_user.password = user.password
+    
+    db.commit()
+    db.refresh(updated_user)
+    return User(
+        id=updated_user.user_id,
+        username=updated_user.username,
+        created=updated_user.created,
+        last_login=updated_user.last_login,
+    )
 
 def get_ideas(db: Session): 
     ideas = db.query(models.Ideas).all()   
@@ -138,22 +151,45 @@ def create_idea(db: Session, idea_create: IdeaCreate):
     return idea_create
 
 def update_idea(db: Session, idea_id: int, idea: IdeaUpdate):
-    updated_idea = db.query(models.Ideas).filter(models.Ideas.idea_id == idea_id).update({models.Ideas.name: idea.name, models.Ideas.active: idea.active, models.Ideas.description: idea.description})
+    updated_idea = db.query(models.Ideas).filter(models.Ideas.idea_id == idea_id).first() 
+    
+    if updated_idea is None:
+        return None
+    
+    updated_idea.name = idea.name
+    updated_idea.active = idea.active
+    updated_idea.description = idea.description
+    
     db.commit()
-    return IdeaSuccessResponse(
-        idea_id=idea_id,
-        rows_affacted=updated_idea,
-        message="Nápad byl úspěšně aktualizován",
-    ) 
-
-def delete_idea(db: Session, idea_id: int):
-    deleted_idea = db.query(models.Ideas).filter(models.Ideas.idea_id == idea_id).delete()
-    db.commit()
-    return IdeaSuccessResponse(
-        idea_id=idea_id,
-        rows_affacted=deleted_idea,
-        message="Nápad byl úspěšně smazán",
+    db.refresh(updated_idea)
+    return Idea(
+        idea_id=updated_idea.idea_id,
+        name=updated_idea.name,
+        active=updated_idea.active,
+        description=updated_idea.description,
+        created=updated_idea.created,
+        user=updated_idea.users.username,
     )
+
+def delete_idea(db: Session, idea_id: int):    
+    query = db.query(models.Ideas).filter(models.Ideas.idea_id == idea_id)
+    idea = query.first()
+    
+    if idea is None:
+        return None
+    
+    deleted_idea = Idea(
+        idea_id=idea.idea_id,
+        name=idea.name,
+        active=idea.active,
+        description=idea.description,
+        created=idea.created,
+        user=idea.users.username,
+    )
+    
+    query.delete()
+    db.commit()
+    return deleted_idea
     
 
 def get_plans(db: Session):

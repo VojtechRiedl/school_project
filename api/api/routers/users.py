@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Path
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..schemas.users import User, UserSuccessResponse, UserUpdate
+from ..schemas.users import User, UserUpdate
 
 from .. import crud
 
@@ -21,7 +21,7 @@ def read_user(db: Session = Depends(get_db), user_id: int = Path(..., title="ID 
     
     return response
 
-@router.patch("/update/{user_id}", response_model=UserSuccessResponse, summary="Update an user")
+@router.patch("/update/{user_id}", response_model=User, summary="Update an user")
 def update_user(user: UserUpdate, db: Session = Depends(get_db), user_id: int = Path(..., title="ID of the user")):
     if user is None:
         raise HTTPException(status_code=400, detail="Bad request")

@@ -22,8 +22,8 @@ class DefaultScaffold extends StatelessWidget{
             GoRouter.of(context).pushReplacementNamed('home');
           }
         },
-        backgroundColor: index == 0 ? Palette.first : Palette.fifth,
-        child: Icon(Icons.home, color: index == 0 ? Palette.fifth : Palette.fourth, size: 32),
+        backgroundColor: index == 0 ? Palette.first : Palette.fourth,
+        child: const Icon(Icons.home, color: Palette.fifth, size: 32),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       appBar: DefaultAppBar(title: title),

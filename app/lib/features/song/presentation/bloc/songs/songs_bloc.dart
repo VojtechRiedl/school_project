@@ -17,6 +17,7 @@ class SongsBloc extends Bloc<SongsEvent, SongsState>{
     on<LoadSongs>(_onSongsLoading);
     on<SearchSongs>(_onSongSearch);
     on<AddSong>(_onSongCreate);
+    on<RemoveSong>(_onSongRemove);
 
   }
 
@@ -43,5 +44,11 @@ class SongsBloc extends Bloc<SongsEvent, SongsState>{
     List<SongEntity> songs = List.from(state.songs)..add(event.song);
 
     emit(SongCreated(songs));
+  }
+
+  void _onSongRemove(RemoveSong event, Emitter<SongsState> emit) async {
+    List<SongEntity> songs = List.from(state.songs)..remove(event.song);
+
+    emit(SongDeleted(songs));
   }
 }

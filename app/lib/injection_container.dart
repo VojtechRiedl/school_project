@@ -10,9 +10,12 @@ import 'package:band_app/features/song/data/data_sources/remote/song_api_service
 import 'package:band_app/features/song/data/repository/song_repository_impl.dart';
 import 'package:band_app/features/song/domain/repository/song_repository.dart';
 import 'package:band_app/features/song/domain/usecases/create_song.dart';
+import 'package:band_app/features/song/domain/usecases/delete_song.dart';
+import 'package:band_app/features/song/domain/usecases/get_song.dart';
 import 'package:band_app/features/song/domain/usecases/get_songs.dart';
 import 'package:band_app/features/song/domain/usecases/upload_sound.dart';
 import 'package:band_app/features/song/domain/usecases/upload_video.dart';
+import 'package:band_app/features/song/presentation/bloc/song/song_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/song_create/song_create_bloc.dart';
 import 'package:band_app/features/user/data/repository/user_repository_impl.dart';
@@ -114,6 +117,18 @@ Future<void> initializeDependencies() async{
     ),
   );
 
+  sl.registerSingleton<GetSongUseCase>(
+    GetSongUseCase(
+      sl(),
+    ),
+  );
+
+  sl.registerSingleton<DeleteSongUseCase>(
+    DeleteSongUseCase(
+      sl(),
+    ),
+  );
+
   //Blocs
   sl.registerFactory<RegisterBloc>(
     () => RegisterBloc(
@@ -139,4 +154,9 @@ Future<void> initializeDependencies() async{
     )
   );
 
+  sl.registerFactory<SongBloc>(
+    () => SongBloc(
+        sl(),sl()
+    )
+  );
 }

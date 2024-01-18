@@ -36,3 +36,13 @@ class AddSong extends SongsEvent {
   @override
   List<Object> get props => [song];
 }
+
+class RemoveSong extends SongsEvent {
+  final SongEntity song;
+
+
+  const RemoveSong(this.song);
+
+  @override
+  List<Object> get props => [song];
+}

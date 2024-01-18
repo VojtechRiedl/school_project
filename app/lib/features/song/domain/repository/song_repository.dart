@@ -16,4 +16,6 @@ abstract class SongRepository {
 
   Future<DataState<SongEntity>> uploadVideo(SongEntity song, File file);
 
+  Future<DataState<SongEntity>> deleteSong(int id);
+
 }

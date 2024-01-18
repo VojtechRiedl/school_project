@@ -26,11 +26,14 @@ class SongItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                song.title,
-                style: const TextStyle(
-                  color: Palette.second,
-                  fontWeight: FontWeight.bold,
+              Expanded(
+                child: Text(
+                  song.title,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Palette.second,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Row(

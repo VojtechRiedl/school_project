@@ -129,4 +129,26 @@ class SongRepositoryImpl extends SongRepository{
     }
   }
 
+  @override
+  Future<DataState<SongEntity>> deleteSong(int id) async {
+    try{
+      final response = await _songApiService.deleteSong(id: id);
+
+      if(response.response.statusCode == 200) {
+        return DataSuccess(response.data);
+      }else{
+        return DataFailed(
+          DioException(
+            error: response.response.statusMessage,
+            requestOptions: response.response.requestOptions,
+            response: response.response,
+            type: DioExceptionType.badResponse,
+          ),
+        );
+      }
+    }on DioException catch(e){
+      return DataFailed(e);
+    }
+  }
+
 }

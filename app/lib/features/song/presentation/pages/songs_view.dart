@@ -51,6 +51,13 @@ class _SongsViewState extends State<SongsView> {
                 content: Text("Písnička byla úspěšně vytvořena"),
               ),
             );
+          }else if(state is SongDeleted){
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                behavior: SnackBarBehavior.floating,
+                content: Text("Písnička byla úspěšně smazána"),
+              ),
+            );
           }
         },
         builder: (BuildContext context, state) {

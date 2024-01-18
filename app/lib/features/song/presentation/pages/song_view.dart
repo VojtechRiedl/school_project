@@ -1,7 +1,19 @@
 import 'package:band_app/core/constants/environment.dart';
 import 'package:band_app/core/constants/palette.dart';
 import 'package:band_app/features/home/presentation/widgets/default_scaffold.dart';
+import 'package:band_app/features/song/presentation/bloc/song/song_bloc.dart';
+import 'package:band_app/features/song/presentation/bloc/song/song_event.dart';
+import 'package:band_app/features/song/presentation/bloc/song/song_state.dart';
+import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
+import 'package:band_app/features/song/presentation/bloc/songs/songs_event.dart';
+import 'package:band_app/features/song/presentation/widgets/sound_player.dart';
+import 'package:band_app/injection_container.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 
 class SongView extends StatefulWidget {
@@ -15,19 +27,21 @@ class SongView extends StatefulWidget {
 
 class _SongViewState extends State<SongView> {
 
-  late VideoPlayerController _controller;
-  late Future<void> _initializeVideoPlayerFuture;
+  VideoPlayerController ? _videoPlayerController;
+
+  ChewieController ? _chewieController;
+
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(
-      Uri.parse(
-          'http://${Environment.apiUrl}/songs/video/${widget.id}'
-      ),
-    );
+  }
 
-    _initializeVideoPlayerFuture = _controller.initialize();
+  @override
+  void dispose() {
+    _videoPlayerController?.dispose();
+    _chewieController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -47,109 +61,151 @@ class _SongViewState extends State<SongView> {
   }
 
   _buildBody(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 40),
-        child: Column(
-          children: [
-            Card(
-              color: Palette.fifth,
-              child: ListTile(
-                title: Text("Písnička ${widget.id}", textAlign: TextAlign.center, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 5.0),
-              child: Card(
-                color: Palette.fifth,
-                child: ListTile(
-                  title: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.0),
-                    child: Text("Písnička sssssssssss\nsssssssssssssssssssssssssssssssssssssssssssssss\nssssssssssssssssssssssssssssssssss\nssssssssssssssssssssssss\nsssssssssssss\nsss"),
-                  ),
-                ),
-              ),
-            ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+    return BlocProvider<SongBloc>(
+      create: (_) => sl<SongBloc>()..add(LoadSong(widget.id)),
+      child: BlocConsumer<SongBloc, SongState>(
+        listener: (context, state) async {
+          if(state is SongLoaded){
+            if(state.songEntity.hasVideo){
+              _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse("${Environment.apiUrl}/songs/video/${state.songEntity.id}"));
+              await _videoPlayerController!.initialize();
+
+              _chewieController = ChewieController(
+                videoPlayerController: _videoPlayerController!,
+                maxScale: 1,
+                autoInitialize: true,
+                aspectRatio: _videoPlayerController!.value.aspectRatio,
+                autoPlay: false,
+                looping: false,
+                deviceOrientationsAfterFullScreen: [
+                  DeviceOrientation.portraitUp,
+                ],
+              );
+              setState(() {
+
+              });
+            }
+          }else if(state is SongDeleted){
+            context.read<SongsBloc>().add(RemoveSong(state.songEntity));
+            context.pop(context);
+          }
+        },
+        builder: (context, state) {
+          if(state is SongInitial){
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }else if(state is SongLoaded){
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 40),
                 child: Column(
                   children: [
-                    FutureBuilder(
-                      future: _initializeVideoPlayerFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          // If the VideoPlayerController has finished initialization, use
-                          // the data it provides to limit the aspect ratio of the video.
-                          return AspectRatio(
-                            aspectRatio: _controller.value.aspectRatio,
-                            // Use the VideoPlayer widget to display the video.
-                            child: VideoPlayer(_controller),
-                          );
-                        } else {
-                          // If the VideoPlayerController is still initializing, show a
-                          // loading spinner.
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      },
-                    ),
-                    ListTile(
-                      title: IconButton(
-                        icon: Icon(
-                          _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: Card(
+                        color: Palette.fifth,
+                        child: ListTile(
+                          title: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(state.songEntity.title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                          ),
                         ),
-                        onPressed: () {
-                          // Wrap the play or pause in a call to `setState`. This ensures the
-                          // correct icon is shown.
-                          setState(() {
-                            // If the video is playing, pause it.
-                            if (_controller.value.isPlaying) {
-                              _controller.pause();
-                            } else {
-                              // If the video is paused, play it.
-                              _controller.play();
-                            }
-                          });
-                        },
                       ),
-                    )
-                  ],
-                )
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5.0),
-              child: Card(
-                color: Palette.fifth,
-                child: ListTile(
-                  title: Column(
-                    children: [
-                      Slider(
-                        allowedInteraction: SliderInteraction.slideThumb,
-                        value: 0.5,
-                        min: 0,
-                        max: 1,
-                        onChanged: (double value) {},
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: Card(
+                        color: Palette.fifth,
+                        child: ListTile(
+                          title: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text("Vytvořeno uživatelem", style: TextStyle(fontWeight: FontWeight.bold, color: Palette.second, fontSize: 16)),
+                                Text(state.songEntity.poster, style: const TextStyle(fontWeight: FontWeight.bold, color: Palette.second, fontSize: 16)),
+                              ],
+                            ),
+                          ),
                         ),
-                      Icon(Icons.play_arrow),
-                    ],
-                  ),
-                  )
+                      ),
+                    ),
+                    state.songEntity.youtubeUrl == null || state.songEntity.youtubeUrl!.isEmpty ? Container() :
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: Card(
+                        color: Palette.fifth,
+                        child: ListTile(
+                          title: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text(state.songEntity.youtubeUrl!),
+                          ),
+                        ),
+                      ),
+                    ),
+                    state.songEntity.text == null || state.songEntity.text!.isEmpty ? Container() :
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: Card(
+                        color: Palette.fifth,
+                        child: ListTile(
+                          title: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text(state.songEntity.text!),
+                          ),
+                        ),
+                      ),
+                    ),
+                    !state.songEntity.hasVideo ? Container() :
+                    Card(
+                      elevation: 0,
+                      color: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: _chewieController != null &&
+                          _chewieController!
+                              .videoPlayerController.value.isInitialized
+                          ? AspectRatio(
+                            aspectRatio: _chewieController!.aspectRatio!,
+                            child: Chewie(
+                        controller: _chewieController!,
+                      ),
+                          )
+                          : const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(),
+                        ],
+                      ),
+                    ),
+                    !state.songEntity.hasSound ? Container() :
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: SoundPlayer(url: "${Environment.apiUrl}/songs/sound/${state.songEntity.id}",)
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: Card(
+                          color: Palette.decline,
+                          child: ListTile(
+                            title: const Text("Smazat", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Palette.white)),
+                            onTap: () {
+                              context.read<SongBloc>().add(DeleteSong(state.songEntity.id));
+                            },
+                          )
+                      ),
+                    ),
+
+                  ],
                 ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 5.0),
-              child: Card(
-                color: Palette.decline,
-                  child: ListTile(
-                    title: Text("Smazat", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Palette.white)),
-                  )
               ),
-            ),
-          ],
-        ),
+            );
+          }else{
+            return Container();
+          }
+        },
       ),
     );
   }

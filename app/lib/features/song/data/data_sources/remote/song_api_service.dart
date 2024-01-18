@@ -37,4 +37,9 @@ abstract class SongApiService {
     @Path('id') required int id,
     @Part(name: "sound_file") required File file,
   });
+
+  @DELETE("/songs/delete/{id}")
+  Future<HttpResponse<SongModel>> deleteSong({
+    @Path("id") required int id,
+  });
 }

@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from pydantic import Json
 
 from ..database import get_db
-from ..schemas.songs import Song, SongCreate, SongSuccessResponse, SongUpdate
-from fastapi.responses import StreamingResponse,FileResponse
+from ..schemas.songs import Song, SongCreate, SongUpdate, FavoriteSongCreate
+from fastapi.responses import StreamingResponse
 
 
 
@@ -23,6 +23,15 @@ def read_song(id: int = Path(..., title="ID songu"), db: Session = Depends(get_d
         raise HTTPException(status_code=404, detail="Song not found")
     
     return song
+
+@router.get("/favorite/{id}", response_model=list[Song], summary="Get all favorite songs by user_id")
+def read_favorite_songs(id: int = Path(..., title="ID uživatele"), db: Session = Depends(get_db)):
+    songs = crud.get_favorite_songs(db, id)
+    if songs is None:
+        raise HTTPException(status_code=404, detail="Song not found")
+    
+    return songs
+
 
 @router.get("/video/{id}", summary="Get an video by song_id")
 def get_video(id: int = Path(..., title="video"),db: Session = Depends(get_db)):
@@ -48,6 +57,14 @@ def create_song(song: SongCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Song not found")
     
     return crud.create_song(db, song)
+
+@router.post("/favorite/create", response_model=Song, summary="Create an favorite song")
+def create_song(song: FavoriteSongCreate, db: Session = Depends(get_db)):    
+    if song is None:
+        raise HTTPException(status_code=404, detail="Song not found")
+    
+    return crud.create_favorite_song(db, song)
+
 
 @router.post("/video/upload/{id}", response_model=Song, summary="Upload an video by id")
 def upload_video(video_file: UploadFile, id: int = Path(..., title="ID songu"), db: Session = Depends(get_db)):

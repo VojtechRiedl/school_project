@@ -37,3 +37,9 @@ class SongSuccessResponse(BaseModel):
     rows_affacted: int = Field(description="Počet ovlivněných řádků", examples=[1])
     
     model_config = ConfigDict(from_attributes=True)
+    
+class FavoriteSongCreate(BaseModel):    
+    song_id: int = Field(description="ID songu", examples=[1,8])
+    user_id: int = Field(description="ID uživatele", examples=[1,8])
+
+    model_config = ConfigDict(from_attributes=True)

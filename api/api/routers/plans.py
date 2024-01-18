@@ -18,12 +18,14 @@ def read_plan(id: int = Path(..., title="ID plánu"), db: Session = Depends(get_
         raise HTTPException(status_code=404, detail="Plan not found")
     return plan
 
+
 @router.post("/create", response_model=PlanCreate, summary="Create an plan")
 def create_plan(plan: PlanCreate, db: Session = Depends(get_db)):
     if plan is None:
         raise HTTPException(status_code=404, detail="Plan not found")
     
     return crud.create_plan(db, plan)
+
 
 @router.patch("/update/{id}", response_model=PlanSuccessResponse, summary="Update an plan by id")
 def update_plan(plan: PlanUpdate, id: int = Path(..., title="ID plánu"), db: Session = Depends(get_db)):

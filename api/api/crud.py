@@ -5,9 +5,9 @@ from datetime import datetime
 
 from . import models
 from .database import engine
-from .schemas.ideas import IdeaCreate, Idea, IdeaUpdate, IdeaSuccessResponse
+from .schemas.ideas import IdeaCreate, Idea, IdeaUpdate
 from .schemas.plans import Plan, PlanCreate, PlanUpdate, PlanSuccessResponse
-from .schemas.songs import Song, SongCreate, SongUpdate
+from .schemas.songs import Song, SongCreate, SongUpdate, FavoriteSongCreate
 from .schemas.users import Authorization, AuthorizationFailed, User, UserUpdate
 
 from . import files
@@ -160,6 +160,8 @@ def update_idea(db: Session, idea_id: int, idea: IdeaUpdate):
     updated_idea.active = idea.active
     updated_idea.description = idea.description
     
+    accepted = db.query(models.Votes).filter(models.Votes.idea_id == idea_id, models.Votes.accepted == True).count()
+    declined = db.query(models.Votes).filter(models.Votes.idea_id == idea_id, models.Votes.accepted == False).count()
     db.commit()
     db.refresh(updated_idea)
     return Idea(
@@ -169,11 +171,16 @@ def update_idea(db: Session, idea_id: int, idea: IdeaUpdate):
         description=updated_idea.description,
         created=updated_idea.created,
         user=updated_idea.users.username,
+        accepted=accepted,
+        declined=declined
     )
 
 def delete_idea(db: Session, idea_id: int):    
     query = db.query(models.Ideas).filter(models.Ideas.idea_id == idea_id)
     idea = query.first()
+    
+    accepted = db.query(models.Votes).filter(models.Votes.idea_id == idea_id, models.Votes.accepted == True).count()
+    declined = db.query(models.Votes).filter(models.Votes.idea_id == idea_id, models.Votes.accepted == False).count()
     
     if idea is None:
         return None
@@ -185,6 +192,8 @@ def delete_idea(db: Session, idea_id: int):
         description=idea.description,
         created=idea.created,
         user=idea.users.username,
+        accepted=accepted,
+        declined=declined
     )
     
     query.delete()
@@ -282,6 +291,27 @@ def get_song(db: Session, song_id: int):
         )
     return None
 
+def get_favorite_songs(db: Session, user_id: int):
+    songs = db.query(models.FavoriteSongs).join(models.Songs).filter(models.FavoriteSongs.user_id == user_id).all()
+    
+    favorite_songs = []
+    
+    if songs:
+        for song in songs:
+            favorite_songs.append(Song(
+                song_id=song.songs.song_id,
+                name=song.songs.name,
+                video=song.songs.video_path is not None,
+                sound=song.songs.song_path is not None,
+                created=song.songs.created,
+                yt_link=song.songs.yt_link,
+                text=song.songs.text,
+                user=song.songs.users.username,
+            ))
+        return favorite_songs
+    return favorite_songs
+    
+
 def create_song(db: Session, song_create: SongCreate):
     song = models.Songs(
         name=song_create.name,
@@ -302,6 +332,26 @@ def create_song(db: Session, song_create: SongCreate):
         text=song.text,
         user=song.users.username,
     )
+
+def create_favorite_song(db: Session, favorire_song_create: FavoriteSongCreate):
+    favorite_song = models.FavoriteSongs(
+        song_id=favorire_song_create.song_id,
+        user_id=favorire_song_create.user_id
+    )
+    db.add(favorite_song)
+    db.commit()
+    db.refresh(favorite_song)
+    return Song(
+        song_id=favorite_song.songs.song_id,
+        name=favorite_song.songs.name,
+        video=favorite_song.songs.video_path is not None,
+        sound=favorite_song.songs.song_path is not None,
+        created=favorite_song.songs.created,
+        yt_link=favorite_song.songs.yt_link,
+        text=favorite_song.songs.text,
+        user=favorite_song.songs.users.username,
+    )
+
 
 def upload_sound(db: Session, song_id: int, sound_file : UploadFile):    
     query = db.query(models.Songs).filter(models.Songs.song_id == song_id)

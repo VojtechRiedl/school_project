@@ -335,24 +335,26 @@ def get_sound(db: Session, song_id: int):
         return None
     return files.stream_sound_file(song.song_path)
 
-def update_song(db: Session, song_id: int, song: SongUpdate):
-    updated_song = db.query(models.Songs).filter(models.Songs.song_id == song_id).first()
-    if updated_song is None:
+def update_song(db: Session, song_id: int, updated_song: SongUpdate):
+    song = db.query(models.Songs).filter(models.Songs.song_id == song_id).first()
+    if song is None:
         return None
     
-    updated_song.name = song.name
-    updated_song.yt_link = song.yt_link
-    updated_song.text = song.text
+    song.name = updated_song.name
+    song.yt_link = updated_song.yt_link
+    song.text = updated_song.text
     
     db.commit()
-    db.refresh(updated_song)
+    db.refresh(song)
     return Song(
-        song_id=updated_song.song_id,
-        name=updated_song.name,
-        created=updated_song.created,
-        yt_link=updated_song.yt_link,
-        text=updated_song.text,
-        user=updated_song.users.username,
+        song_id=song.song_id,
+        name=song.name,
+        video=song.video_path is not None,
+        sound=song.song_path is not None,
+        created=song.created,
+        yt_link=song.yt_link,
+        text=song.text,
+        user=song.users.username,
     )
 
 def delete_song(db: Session, song_id: int):
@@ -365,6 +367,8 @@ def delete_song(db: Session, song_id: int):
     deleted_song = Song(
         song_id=song.song_id,
         name=song.name,
+        video=song.video_path is not None,
+        sound=song.song_path is not None,
         created=song.created,
         yt_link=song.yt_link,
         text=song.text,

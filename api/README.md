@@ -34,15 +34,13 @@
   "username": "string",
   "created": "datetime",
   "last_login": "datetime",
-  "white_mode": "boolean",
 }
 ```
 ###### Fail
 ```json
 {
   "username": "string",
-  "password": "string",
-  "error": "string"
+  "password": "string"
 }
 ```
 
@@ -75,16 +73,14 @@
   "id": "int",
   "username": "string",
   "created": "datetime",
-  "last_login": "datetime",
-  "white_mode": "boolean",
+  "last_login": "datetime"
 }
 ```
 ###### Fail
 ```json
 {
   "username": "string",
-  "password": "string",
-  "error": "string"
+  "password": "string"
 }
 ```
 
@@ -127,8 +123,7 @@
 
 ```json
 {
-  "username": "string",
-  "white_mode": "boolean",
+  "username": "string"
 } 
 ```
 

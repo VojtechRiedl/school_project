@@ -1,91 +1,79 @@
 import 'package:band_app/core/constants/palette.dart';
 import 'package:band_app/features/home/presentation/widgets/default_app_bar.dart';
+import 'package:band_app/features/home/presentation/widgets/navigation_item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class DefaultScaffold extends StatelessWidget{
-  final Widget ? title;
+  final Text ? title;
   final Widget ? body;
   final int index;
+  final PageController pageController;
 
-  const DefaultScaffold({super.key, this.body, this.title, required this.index});
+  const DefaultScaffold({super.key, this.body, this.title, required this.index, required this.pageController});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Palette.white,
-      floatingActionButton: FloatingActionButton(
-        elevation: 5,
-        onPressed: () {
-          if(index != 0) {
-            GoRouter.of(context).pushReplacementNamed('home');
-          }
-        },
-        backgroundColor: index == 0 ? Palette.first : Palette.fourth,
-        child: const Icon(Icons.home, color: Palette.fifth, size: 32),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      backgroundColor: Palette.light,
       appBar: DefaultAppBar(title: title),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 5,
-        notchMargin: 8,
-        shape: const CircularNotchedRectangle(),
-        height: 60,
-        color: Palette.fifth,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: IconButton(
-                onPressed: () {
-                  if(index != 1){
-                    GoRouter.of(context).pushReplacementNamed('ideas');
-                  }
-                },
-                icon:  Icon(Icons.article, size: 24, color: index == 1 ? Palette.first : Palette.fourth),
+      bottomNavigationBar: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+        child: BottomAppBar(
+          elevation: 5,
+          height: 60,
+          color: Palette.bottomNavigatorBarColor,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              NavigationItem(
+                selectedIcon: Icons.article,
+                unselectedIcon: Icons.article_outlined,
+                isSelected: index == 0,
+                index: 0,
+                pageController: pageController,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 30.0),
-              child: IconButton(
-                onPressed: () {
-                  if(index != 2){
-                    GoRouter.of(context).pushReplacementNamed('songs');
-                  }
-                },
-                icon:  Icon(Icons.queue_music, size: 24,color: index == 2 ? Palette.first : Palette.fourth),
+              NavigationItem(
+                selectedIcon: Icons.queue_music,
+                unselectedIcon: Icons.queue_music_outlined,
+                isSelected: index == 1,
+                index: 1,
+                pageController: pageController,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 30.0),
-              child: IconButton(
-                onPressed: () {
-                  if(index != 3) {
-                    GoRouter.of(context).pushReplacementNamed('plans');
-                  }
-                },
-                icon:  Icon(Icons.calendar_month, size: 24, color: index == 3 ? Palette.first : Palette.fourth),
+              NavigationItem(
+                selectedIcon: Icons.home,
+                unselectedIcon: Icons.home_outlined,
+                isSelected: index == 2,
+                index: 2,
+                pageController: pageController,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: IconButton(
-                onPressed: () {
-                  if(index != 4){
-                    //GoRouter.of(context).pushReplacement('/settings');
-                  }
-                },
-                icon:  Icon(Icons.settings, size: 24, color: index == 4 ? Palette.first : Palette.fourth),
+              NavigationItem(
+                selectedIcon: Icons.calendar_month,
+                unselectedIcon: Icons.calendar_month_outlined,
+                isSelected: index == 3,
+                index: 3,
+                pageController: pageController,
               ),
-            ),
-          ],
+              NavigationItem(
+                selectedIcon: Icons.settings,
+                unselectedIcon: Icons.settings_outlined,
+                isSelected: index == 4,
+                index: 3,
+                pageController: pageController,
+              ),
+            ],
+          ),
         ),
       ),
       body: body,
     );
   }
+
+  int get actualIndex => index;
 
 }

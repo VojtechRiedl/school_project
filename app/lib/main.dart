@@ -1,4 +1,7 @@
 import 'package:band_app/config/routes/routes.dart';
+import 'package:band_app/features/home/presentation/bloc/navigation/navigation_cubit.dart';
+import 'package:band_app/features/login/presentation/bloc/authorization/authorization_bloc.dart';
+import 'package:band_app/features/login/presentation/bloc/authorization/authorization_state.dart';
 import 'package:band_app/features/login/presentation/bloc/login/login_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/register/register_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
@@ -22,27 +25,37 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<LoginBloc>(
-          create: (_) => sl<LoginBloc>(),
-        ),
-        BlocProvider<RegisterBloc>(
-          create: (_) => sl<RegisterBloc>(),
+        BlocProvider<AuthorizationBloc>(
+          create: (_) => sl<AuthorizationBloc>(),
         ),
         BlocProvider<SongsBloc>(
           create: (_) => sl<SongsBloc>(),
         ),
+        BlocProvider<NavigationCubit>(
+          create: (_) => sl<NavigationCubit>(),
+        ),
       ],
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: 'Art Of The Crooked',
-        routeInformationProvider: router.routeInformationProvider,
-        routerDelegate: router.routerDelegate,
-        routeInformationParser: router.routeInformationParser,
-        theme: ThemeData(
-          textTheme: GoogleFonts.montserratTextTheme(
-            Theme.of(context).textTheme,
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<AuthorizationBloc, AuthorizationState>(
+            listener: (context, state) {
+
+            },
           ),
-        )
+        ],
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          title: 'Art Of The Crooked',
+          routeInformationProvider: router.routeInformationProvider,
+          routerDelegate: router.routerDelegate,
+          routeInformationParser: router.routeInformationParser,
+          theme: ThemeData(
+            useMaterial3: false,
+            textTheme: GoogleFonts.montserratTextTheme(
+              Theme.of(context).textTheme,
+            ),
+          )
+        ),
       ),
     );
   }

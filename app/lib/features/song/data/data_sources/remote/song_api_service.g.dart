@@ -20,10 +20,10 @@ class _SongApiService implements SongApiService {
 
   @override
   Future<HttpResponse<List<SongModel>>> getSongs() async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<List<dynamic>>(
         _setStreamType<HttpResponse<List<SongModel>>>(Options(
       method: 'GET',
@@ -50,10 +50,10 @@ class _SongApiService implements SongApiService {
 
   @override
   Future<HttpResponse<SongModel>> getSongById({required int id}) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<HttpResponse<SongModel>>(Options(
       method: 'GET',
@@ -79,7 +79,7 @@ class _SongApiService implements SongApiService {
   @override
   Future<HttpResponse<SongModel>> createSong(
       {required SongCreateModel song}) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
@@ -111,7 +111,7 @@ class _SongApiService implements SongApiService {
     required int id,
     required File file,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
@@ -150,7 +150,7 @@ class _SongApiService implements SongApiService {
     required int id,
     required File file,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
@@ -186,10 +186,10 @@ class _SongApiService implements SongApiService {
 
   @override
   Future<HttpResponse<SongModel>> deleteSong({required int id}) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<HttpResponse<SongModel>>(Options(
       method: 'DELETE',

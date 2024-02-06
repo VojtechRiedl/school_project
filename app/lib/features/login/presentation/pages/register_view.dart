@@ -1,7 +1,8 @@
+import 'package:band_app/core/constants/enums.dart';
 import 'package:band_app/core/constants/palette.dart';
-import 'package:band_app/features/login/presentation/bloc/register/register_bloc.dart';
-import 'package:band_app/features/login/presentation/bloc/register/register_event.dart';
-import 'package:band_app/features/login/presentation/bloc/register/register_state.dart';
+import 'package:band_app/features/login/presentation/bloc/authorization/authorization_bloc.dart';
+import 'package:band_app/features/login/presentation/bloc/authorization/authorization_event.dart';
+import 'package:band_app/features/login/presentation/bloc/authorization/authorization_state.dart';
 import 'package:band_app/features/login/presentation/widgets/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,14 +31,97 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Palette.white,
-        body: _buildBody(context)
+    return BlocListener<AuthorizationBloc, AuthorizationState>(
+      listener: (context, state) {
+        if(state is AuthorizationSuccessState){
+          GoRouter.of(context).pushReplacementNamed("home");
+        }
+      },
+      child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Palette.light,
+          body: _buildBody2(context)
+      ),
     );
   }
 
-  Widget _buildBody(BuildContext context){
+  Widget _buildBody2(BuildContext context){
+    AuthorizationBloc authorizationBloc = context.watch<AuthorizationBloc>();
+
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Spacer(flex: 1),
+              Column(
+                  children: [
+                    const Text("Art Of The Crooked",style: TextStyle(color: Palette.darkTextColor, fontSize: 32, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 40),
+                    Input(
+                        label: "Uživatelské jméno",
+                        isObscured: false,
+                        controller: _usernameController ,
+                        errorText: authorizationBloc.state is RegistrationErrorState && (authorizationBloc.state as RegistrationErrorState).error == AuthorizationError.badPassword ? (authorizationBloc.state as RegistrationErrorState).message : null
+                    ),
+                    const SizedBox(height: 10),
+                    Input(
+                        label: "Heslo",
+                        isObscured: true,
+                        controller: _passwordController,
+                        errorText: authorizationBloc.state is RegistrationErrorState && (authorizationBloc.state as RegistrationErrorState).error == AuthorizationError.badPassword ? (authorizationBloc.state as RegistrationErrorState).message : null
+                    ),
+                    const SizedBox(height: 10),
+                    Input(
+                        label: "Potvrzení hesla",
+                        isObscured: true,
+                        controller: _confirmPasswordController ,
+                        errorText: authorizationBloc.state is RegistrationErrorState && (authorizationBloc.state as RegistrationErrorState).error == AuthorizationError.badPassword ? (authorizationBloc.state as RegistrationErrorState).message : null
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                            onPressed: (){
+                              if(authorizationBloc.state is! AuthorizationLoadingState){
+                                GoRouter.of(context).pop("login");
+                              }
+                            },
+                            child: const Text("Máš již účet?", style: TextStyle(color: Palette.darkTextColor, fontSize: 14, fontWeight: FontWeight.bold))),
+                      ],
+                    )
+                  ]
+              ),
+              const Spacer(flex: 1),
+              Card(
+                elevation: 0.5,
+                child: ListTile(
+                  tileColor: Palette.yellow,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  title: const Text("Zaregistrovat se", textAlign: TextAlign.center, style: TextStyle(color: Palette.darkTextColor, fontSize: 16, fontWeight: FontWeight.bold)),
+                  onTap: (){
+
+                    context.read<AuthorizationBloc>().add(
+                        RegisterEvent(
+                            username: _usernameController.value.text,
+                            password: _passwordController.value.text,
+                            confirmPassword: _confirmPasswordController.value.text
+                        )
+                    );
+                  },
+                ),
+              ),
+              const Spacer(flex: 1),
+            ]
+        )
+    );
+  }
+
+  /*Widget _buildBody(BuildContext context){
     return BlocConsumer<RegisterBloc, RegisterState>(
       listener: (context, state) {
         if(state is RegisterSuccess){
@@ -83,7 +167,7 @@ class _RegisterViewState extends State<RegisterView> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0),
                       ),
-                      title: const Text("Registrovat se", textAlign: TextAlign.center, style: TextStyle(color: Palette.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                      title: const Text("Zaregistrovat se", textAlign: TextAlign.center, style: TextStyle(color: Palette.white, fontSize: 16, fontWeight: FontWeight.bold)),
                       onTap: (){
                         context.read<RegisterBloc>().add(
                             RegisterUser(
@@ -101,5 +185,5 @@ class _RegisterViewState extends State<RegisterView> {
         );
       },
     );
-  }
+  }*/
 }

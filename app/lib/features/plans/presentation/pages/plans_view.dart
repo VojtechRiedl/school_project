@@ -7,17 +7,6 @@ class PlansView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const DefaultScaffold(
-      index: 3,
-      title: Text(
-        "Plány",
-        style: TextStyle(
-          fontSize: 20,
-          color: Palette.first,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      body: Center(),
-    );
+    return Container();
   }
 }

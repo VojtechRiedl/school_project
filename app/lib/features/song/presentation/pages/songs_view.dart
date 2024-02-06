@@ -27,18 +27,7 @@ class _SongsViewState extends State<SongsView> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultScaffold(
-      index: 2,
-      title: const Text(
-        "Písničky",
-        style: TextStyle(
-          fontSize: 20,
-          color: Palette.first,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      body: _buildBody(),
-    );
+    return  _buildBody();
   }
 
   _buildBody() {
@@ -69,7 +58,7 @@ class _SongsViewState extends State<SongsView> {
           final suggestions = state is SongsSearched ? state.suggestions : state.songs;
           return Padding(
             padding: const EdgeInsets.only(
-                left: 20, right: 20, top: 20, bottom: 40),
+                left: 20, right: 20, top: 20, bottom: 20),
             child: Column(
               children: [
                 SongSearchBar(suggestions: state.songs),

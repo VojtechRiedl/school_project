@@ -17,7 +17,7 @@ class UserModel extends UserEntity{
 
     factory UserModel.fromJson(Map<String,dynamic> map){
       return UserModel(
-        id: map['id'],
+        id: map['id'] ?? 155555555555555555,
         username: map['username'],
         createdAt: DateFormat("yyyy-MM-ddTHH:mm:ss").parse(map['created']),
         lastLogin: DateFormat("yyyy-MM-ddTHH:mm:ss").parse(map['last_login']),

@@ -2,7 +2,7 @@ import 'package:band_app/core/constants/palette.dart';
 import 'package:flutter/material.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget{
-  final Widget ? title;
+  final Text ? title;
 
   const DefaultAppBar({super.key, this.title});
 
@@ -10,7 +10,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget{
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 5,
-      backgroundColor: Palette.fifth,
+      backgroundColor: Palette.appBarColor,
       centerTitle: true,
       title: title,
     );

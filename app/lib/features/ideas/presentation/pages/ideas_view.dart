@@ -7,20 +7,7 @@ class IdeasView extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return DefaultScaffold(
-      index: 1,
-      title: Text(
-        "Nápady",
-        style: TextStyle(
-          fontSize: 20,
-          color: Palette.first,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      body: Center(
-
-      ),
-    );
+    return Container();
   }
 
 }

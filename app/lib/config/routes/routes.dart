@@ -1,5 +1,8 @@
 import 'package:band_app/features/home/presentation/pages/home_view.dart';
+import 'package:band_app/features/home/presentation/pages/main_view.dart';
 import 'package:band_app/features/ideas/presentation/pages/ideas_view.dart';
+import 'package:band_app/features/login/presentation/bloc/authorization/authorization_bloc.dart';
+import 'package:band_app/features/login/presentation/bloc/authorization/authorization_state.dart';
 import 'package:band_app/features/login/presentation/bloc/login/login_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/login/login_state.dart';
 import 'package:band_app/features/login/presentation/bloc/register/register_bloc.dart';
@@ -33,7 +36,7 @@ final router = GoRouter(
         pageBuilder: (BuildContext context, GoRouterState state) {
           return CustomTransitionPage<void>(
             key: state.pageKey,
-            child: const HomeView(),
+            child: const MainView(),
             transitionDuration: const Duration(milliseconds: 500),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
@@ -45,7 +48,10 @@ final router = GoRouter(
           );
         },
       redirect: (context, state) {
-          return context.read<LoginBloc>().state is LoginSuccess || context.read<RegisterBloc>().state is RegisterSuccess ? null : '/login';
+          return context.read<AuthorizationBloc>().state is LogoutState ? "/login" : null;
+          return "/login";
+          //return context.read<LoginBloc>().state is LoginSuccess || context.read<RegisterBloc>().state is RegisterSuccess ? null : '/login';
+        //return context.read<LoginBloc>().state is LoginSuccess || context.read<RegisterBloc>().state is RegisterSuccess ? "/login" : null; //TODO vratit zpět
       },
     ),
 

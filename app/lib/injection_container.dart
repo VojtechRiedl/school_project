@@ -1,9 +1,11 @@
 import 'package:band_app/core/constants/environment.dart';
+import 'package:band_app/features/home/presentation/bloc/navigation/navigation_cubit.dart';
 import 'package:band_app/features/login/data/data_sources/remote/authorization_api_service.dart';
 import 'package:band_app/features/login/data/repository/authorization_repository_impl.dart';
 import 'package:band_app/features/login/domain/repository/authorization_repository.dart';
 import 'package:band_app/features/login/domain/usecases/login.dart';
 import 'package:band_app/features/login/domain/usecases/register.dart';
+import 'package:band_app/features/login/presentation/bloc/authorization/authorization_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/login/login_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/register/register_bloc.dart';
 import 'package:band_app/features/song/data/data_sources/remote/song_api_service.dart';
@@ -130,14 +132,13 @@ Future<void> initializeDependencies() async{
   );
 
   //Blocs
-  sl.registerFactory<RegisterBloc>(
-    () => RegisterBloc(
-        sl(), sl()
-    ),
+
+  sl.registerFactory<NavigationCubit>(
+    () => NavigationCubit(),
   );
 
-  sl.registerFactory<LoginBloc>(
-    () => LoginBloc(
+  sl.registerFactory<AuthorizationBloc>(
+    () => AuthorizationBloc(
       sl(), sl()
     ),
   );

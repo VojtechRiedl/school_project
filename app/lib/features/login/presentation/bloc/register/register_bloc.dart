@@ -6,7 +6,6 @@ import 'package:band_app/features/login/domain/usecases/register.dart';
 import 'package:band_app/features/login/presentation/bloc/register/register_event.dart';
 import 'package:band_app/features/login/presentation/bloc/register/register_state.dart';
 import 'package:band_app/features/user/domain/usecases/save_user.dart';
-import 'package:bcrypt/bcrypt.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

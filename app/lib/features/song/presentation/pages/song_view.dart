@@ -47,12 +47,13 @@ class _SongViewState extends State<SongView> {
   @override
   Widget build(BuildContext context) {
     return DefaultScaffold(
+      pageController: PageController(initialPage: 2), //TODO předělat
       index: 2,
       title: const Text(
         "Písničky",
         style: TextStyle(
           fontSize: 20,
-          color: Palette.first,
+          color: Palette.lightTextColor,
           fontWeight: FontWeight.bold,
         ),
       ),

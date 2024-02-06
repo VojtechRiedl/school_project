@@ -41,6 +41,7 @@ class _CreateSongViewState extends State<CreateSongView> {
     return BlocProvider<SongCreateBloc>(
       create: (_) => sl<SongCreateBloc>(),
       child: DefaultScaffold(
+        pageController: PageController(initialPage: 2), //TODO předělat
         index: 2,
         title: const Text(
           "Písničky",

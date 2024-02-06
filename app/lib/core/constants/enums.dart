@@ -1,0 +1,4 @@
+enum AuthorizationError{
+  badPassword,
+  badUsername,
+}

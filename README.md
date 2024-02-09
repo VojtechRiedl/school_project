@@ -1,5 +1,3 @@
-# band_app
+# Mobilní aplikace pro Ústeckou kapelu s API
 
-## Říjen
-
-- https://www.figma.com/file/SrjsBGFuWKU35TBreHfCvZ?type=design
+## [Desing](https://www.figma.com/file/SrjsBGFuWKU35TBreHfCvZ?type=design)

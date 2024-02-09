@@ -1,5 +1,7 @@
 import 'package:band_app/core/constants/enums.dart';
 import 'package:band_app/core/constants/palette.dart';
+import 'package:band_app/features/home/presentation/bloc/internet/internet_cubit.dart';
+import 'package:band_app/features/home/presentation/bloc/internet/internet_state.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_event.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_state.dart';
@@ -29,21 +31,32 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthorizationBloc,AuthorizationState>(
-      listener: (context, state) {
-        if(state is AuthorizationSuccessState){
-          GoRouter.of(context).pushReplacementNamed('home');
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<InternetCubit, InternetState>(
+          listener: (context, state) {
+            if(state is InternetConnectionFailure){
+              context.pushNamed('connection-lost');
+            }
+          },
+        ),
+        BlocListener<AuthorizationBloc,AuthorizationState>(
+            listener: (context, state) {
+              if(state is AuthorizationAuthenticateSuccess){
+                context.goNamed("home");
+              }
+            },
+          ),
+      ],
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Palette.light,
-        body: _buildBody2(context),
+        body: _buildBody(context),
       ),
     );
   }
 
-  Widget _buildBody2(BuildContext context){
+  Widget _buildBody(BuildContext context){
     AuthorizationBloc authorizationBloc = context.watch<AuthorizationBloc>();
 
     return Padding(
@@ -57,13 +70,13 @@ class _LoginViewState extends State<LoginView> {
                   children: [
                     const Text("Art Of The Crooked",style: TextStyle(color: Palette.darkTextColor, fontSize: 32, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 40),
-                    Input(label: "Uživatelské jméno", isObscured: false, controller: _usernameController, errorText: authorizationBloc.state is LoginErrorState && (authorizationBloc.state as LoginErrorState).error == AuthorizationError.badUsername ? (authorizationBloc.state as LoginErrorState).message : null),
+                    Input(label: "Uživatelské jméno", isObscured: false, controller: _usernameController, errorText: authorizationBloc.state is AuthorizationLoginFailure && (authorizationBloc.state as AuthorizationLoginFailure).error == AuthorizationError.badUsername ? (authorizationBloc.state as AuthorizationLoginFailure).message : null),
                     const SizedBox(height: 10),
                     Input(
                         label: "Heslo",
                         isObscured: true,
                         controller: _passwordController,
-                        errorText:  authorizationBloc.state is LoginErrorState && (authorizationBloc.state as LoginErrorState).error == AuthorizationError.badPassword ? (authorizationBloc.state as LoginErrorState).message : null),
+                        errorText:  authorizationBloc.state is AuthorizationLoginFailure && (authorizationBloc.state as AuthorizationLoginFailure).error == AuthorizationError.badPassword ? (authorizationBloc.state as AuthorizationLoginFailure).message : null),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -71,7 +84,7 @@ class _LoginViewState extends State<LoginView> {
                         TextButton(
                             style: ButtonStyle(overlayColor: MaterialStateProperty.all(Palette.light)),
                             onPressed: (){
-                              if(authorizationBloc.state is! AuthorizationLoadingState){
+                              if(authorizationBloc.state is! AuthorizationAuthenticateInProgress){
                                 GoRouter.of(context).pushNamed("register");
                               }
                             },
@@ -88,10 +101,10 @@ class _LoginViewState extends State<LoginView> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   ),
-                  title: authorizationBloc.state is AuthorizationLoadingState ? const Center(child: CircularProgressIndicator(color: Palette.dark)) : const Text("Přihlásit se", textAlign: TextAlign.center, style: TextStyle(color: Palette.darkTextColor, fontSize: 16, fontWeight: FontWeight.bold)),
+                  title: authorizationBloc.state is AuthorizationAuthenticateInProgress ? const Center(child: CircularProgressIndicator(color: Palette.dark)) : const Text("Přihlásit se", textAlign: TextAlign.center, style: TextStyle(color: Palette.darkTextColor, fontSize: 16, fontWeight: FontWeight.bold)),
                   onTap: (){
                     context.read<AuthorizationBloc>().add(
-                        LoginEvent(
+                        AuthorizationLogged(
                             username: _usernameController.text,
                             password: _passwordController.text
                         )

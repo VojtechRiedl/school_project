@@ -1,4 +1,5 @@
 import 'package:band_app/core/constants/environment.dart';
+import 'package:band_app/features/home/presentation/bloc/internet/internet_cubit.dart';
 import 'package:band_app/features/home/presentation/bloc/navigation/navigation_cubit.dart';
 import 'package:band_app/features/login/data/data_sources/remote/authorization_api_service.dart';
 import 'package:band_app/features/login/data/repository/authorization_repository_impl.dart';
@@ -6,8 +7,6 @@ import 'package:band_app/features/login/domain/repository/authorization_reposito
 import 'package:band_app/features/login/domain/usecases/login.dart';
 import 'package:band_app/features/login/domain/usecases/register.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_bloc.dart';
-import 'package:band_app/features/login/presentation/bloc/login/login_bloc.dart';
-import 'package:band_app/features/login/presentation/bloc/register/register_bloc.dart';
 import 'package:band_app/features/song/data/data_sources/remote/song_api_service.dart';
 import 'package:band_app/features/song/data/repository/song_repository_impl.dart';
 import 'package:band_app/features/song/domain/repository/song_repository.dart';
@@ -24,6 +23,7 @@ import 'package:band_app/features/user/data/repository/user_repository_impl.dart
 import 'package:band_app/features/user/domain/repository/user_repository.dart';
 import 'package:band_app/features/user/domain/usecases/get_user.dart';
 import 'package:band_app/features/user/domain/usecases/save_user.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
@@ -37,6 +37,8 @@ Future<void> initializeDependencies() async{
   );
 
   sl.registerSingleton<Dio>(Dio());
+
+  sl.registerSingleton<Connectivity>(Connectivity());
 
   sl.registerSingleton<AuthorizationApiService>(
     AuthorizationApiService(
@@ -135,6 +137,12 @@ Future<void> initializeDependencies() async{
 
   sl.registerFactory<NavigationCubit>(
     () => NavigationCubit(),
+  );
+
+  sl.registerFactory<InternetCubit>(
+    () => InternetCubit(
+      sl(),
+    ),
   );
 
   sl.registerFactory<AuthorizationBloc>(

@@ -11,39 +11,35 @@ abstract class AuthorizationState extends Equatable {
 }
 
 
-class LogoutState extends AuthorizationState {}
+class AuthorizationLogoutSuccess extends AuthorizationState {}
 
-class AuthorizationLoadingState extends AuthorizationState {}
+class AuthorizationAuthenticateInProgress extends AuthorizationState {}
 
-class RegistrationErrorState extends AuthorizationState {
+class AuthorizationRegisterFailure extends AuthorizationState {
   final AuthorizationError error;
   final String message;
 
-  const RegistrationErrorState(this.message, this.error);
+  const AuthorizationRegisterFailure(this.message, this.error);
 
   @override
   List<Object> get props => [message, error];
 }
 
-class LoginErrorState extends AuthorizationState {
+class AuthorizationLoginFailure extends AuthorizationState {
   final AuthorizationError error;
   final String message;
 
-  const LoginErrorState(this.message, this.error);
+  const AuthorizationLoginFailure(this.message, this.error);
 
   @override
   List<Object> get props => [message, error];
 }
 
-class AuthorizationSuccessState extends AuthorizationState {
+class AuthorizationAuthenticateSuccess extends AuthorizationState {
   final UserModel user;
 
-  const AuthorizationSuccessState(this.user);
+  const AuthorizationAuthenticateSuccess(this.user);
 
   @override
   List<Object> get props => [user];
 }
-
-class LoginSuccessState extends AuthorizationState {}
-
-class RegisterSuccessState extends AuthorizationState {}

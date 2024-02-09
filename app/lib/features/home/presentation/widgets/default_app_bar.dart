@@ -1,10 +1,10 @@
 import 'package:band_app/core/constants/palette.dart';
 import 'package:flutter/material.dart';
 
-class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget{
+class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
   final Text ? title;
 
-  const DefaultAppBar({super.key, this.title});
+  const MainAppBar({super.key, this.title});
 
   @override
   Widget build(BuildContext context) {

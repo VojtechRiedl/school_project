@@ -5,7 +5,6 @@ import 'package:band_app/features/login/data/data_sources/remote/authorization_a
 import 'package:band_app/features/login/data/models/Authorization.dart';
 import 'package:band_app/features/login/domain/repository/authorization_repository.dart';
 import 'package:band_app/features/user/data/models/user.dart';
-import 'package:band_app/features/user/domain/entities/user.dart';
 import 'package:dio/dio.dart';
 
 class AuthorizationRepositoryImpl implements AuthorizationRepository {

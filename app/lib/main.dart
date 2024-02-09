@@ -1,14 +1,15 @@
 import 'package:band_app/config/routes/routes.dart';
+import 'package:band_app/features/home/presentation/bloc/internet/internet_cubit.dart';
+import 'package:band_app/features/home/presentation/bloc/internet/internet_state.dart';
 import 'package:band_app/features/home/presentation/bloc/navigation/navigation_cubit.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_state.dart';
-import 'package:band_app/features/login/presentation/bloc/login/login_bloc.dart';
-import 'package:band_app/features/login/presentation/bloc/register/register_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
 import 'package:band_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
@@ -34,14 +35,19 @@ class MyApp extends StatelessWidget {
         BlocProvider<NavigationCubit>(
           create: (_) => sl<NavigationCubit>(),
         ),
+        BlocProvider<InternetCubit>(
+          create: (_) => sl<InternetCubit>(),
+        ),
       ],
+
       child: MultiBlocListener(
         listeners: [
-          BlocListener<AuthorizationBloc, AuthorizationState>(
+          BlocListener<InternetCubit, InternetState>(
             listener: (context, state) {
 
             },
           ),
+
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
@@ -54,7 +60,7 @@ class MyApp extends StatelessWidget {
             textTheme: GoogleFonts.montserratTextTheme(
               Theme.of(context).textTheme,
             ),
-          )
+          ),
         ),
       ),
     );

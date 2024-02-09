@@ -1,5 +1,7 @@
 import 'package:band_app/core/constants/enums.dart';
 import 'package:band_app/core/constants/palette.dart';
+import 'package:band_app/features/home/presentation/bloc/internet/internet_cubit.dart';
+import 'package:band_app/features/home/presentation/bloc/internet/internet_state.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_event.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_state.dart';
@@ -31,21 +33,32 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthorizationBloc, AuthorizationState>(
-      listener: (context, state) {
-        if(state is AuthorizationSuccessState){
-          GoRouter.of(context).pushReplacementNamed("home");
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<InternetCubit, InternetState>(
+          listener: (context, state) {
+            if(state is InternetConnectionFailure){
+              context.pushNamed('connection-lost');
+            }
+          },
+        ),
+        BlocListener<AuthorizationBloc,AuthorizationState>(
+          listener: (context, state) {
+            if(state is AuthorizationAuthenticateSuccess){
+              context.goNamed("home");
+            }
+          },
+        ),
+      ],
       child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Palette.light,
-          body: _buildBody2(context)
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Palette.light,
+        body: _buildBody(context),
       ),
     );
   }
 
-  Widget _buildBody2(BuildContext context){
+  Widget _buildBody(BuildContext context){
     AuthorizationBloc authorizationBloc = context.watch<AuthorizationBloc>();
 
     return Padding(
@@ -63,21 +76,21 @@ class _RegisterViewState extends State<RegisterView> {
                         label: "Uživatelské jméno",
                         isObscured: false,
                         controller: _usernameController ,
-                        errorText: authorizationBloc.state is RegistrationErrorState && (authorizationBloc.state as RegistrationErrorState).error == AuthorizationError.badPassword ? (authorizationBloc.state as RegistrationErrorState).message : null
+                        errorText: authorizationBloc.state is AuthorizationRegisterFailure && (authorizationBloc.state as AuthorizationRegisterFailure).error == AuthorizationError.badUsername ? (authorizationBloc.state as AuthorizationRegisterFailure).message : null
                     ),
                     const SizedBox(height: 10),
                     Input(
                         label: "Heslo",
                         isObscured: true,
                         controller: _passwordController,
-                        errorText: authorizationBloc.state is RegistrationErrorState && (authorizationBloc.state as RegistrationErrorState).error == AuthorizationError.badPassword ? (authorizationBloc.state as RegistrationErrorState).message : null
+                        errorText: authorizationBloc.state is AuthorizationRegisterFailure && (authorizationBloc.state as AuthorizationRegisterFailure).error == AuthorizationError.badPassword ? (authorizationBloc.state as AuthorizationRegisterFailure).message : null
                     ),
                     const SizedBox(height: 10),
                     Input(
                         label: "Potvrzení hesla",
                         isObscured: true,
                         controller: _confirmPasswordController ,
-                        errorText: authorizationBloc.state is RegistrationErrorState && (authorizationBloc.state as RegistrationErrorState).error == AuthorizationError.badPassword ? (authorizationBloc.state as RegistrationErrorState).message : null
+                        errorText: authorizationBloc.state is AuthorizationRegisterFailure && (authorizationBloc.state as AuthorizationRegisterFailure).error == AuthorizationError.badPassword ? (authorizationBloc.state as AuthorizationRegisterFailure).message : null
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -85,7 +98,7 @@ class _RegisterViewState extends State<RegisterView> {
                       children: [
                         TextButton(
                             onPressed: (){
-                              if(authorizationBloc.state is! AuthorizationLoadingState){
+                              if(authorizationBloc.state is! AuthorizationAuthenticateInProgress){
                                 GoRouter.of(context).pop("login");
                               }
                             },
@@ -106,7 +119,7 @@ class _RegisterViewState extends State<RegisterView> {
                   onTap: (){
 
                     context.read<AuthorizationBloc>().add(
-                        RegisterEvent(
+                        AuthorizationRegistered(
                             username: _usernameController.value.text,
                             password: _passwordController.value.text,
                             confirmPassword: _confirmPasswordController.value.text

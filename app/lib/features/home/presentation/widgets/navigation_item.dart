@@ -19,7 +19,7 @@ class NavigationItem extends StatelessWidget{
     return IconButton(
       onPressed: (){
         context.read<NavigationCubit>().changePage(index);
-        pageController.jumpToPage(context.watch()<NavigationCubit>().state.currentPage);
+        pageController.jumpToPage(context.read<NavigationCubit>().state.currentPage);
       },
       icon:  Icon(
           isSelected ? selectedIcon : unselectedIcon,

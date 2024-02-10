@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:band_app/core/constants/environment.dart';
 import 'package:band_app/features/home/presentation/bloc/internet/internet_cubit.dart';
 import 'package:band_app/features/home/presentation/bloc/navigation/navigation_cubit.dart';
@@ -16,6 +17,7 @@ import 'package:band_app/features/song/domain/usecases/get_song.dart';
 import 'package:band_app/features/song/domain/usecases/get_songs.dart';
 import 'package:band_app/features/song/domain/usecases/upload_sound.dart';
 import 'package:band_app/features/song/domain/usecases/upload_video.dart';
+import 'package:band_app/features/song/presentation/bloc/music/music_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/song/song_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/song_create/song_create_bloc.dart';
@@ -39,6 +41,10 @@ Future<void> initializeDependencies() async{
   sl.registerSingleton<Dio>(Dio());
 
   sl.registerSingleton<Connectivity>(Connectivity());
+
+  sl.registerFactory<AudioPlayer>(
+    () => AudioPlayer(),
+  );
 
   sl.registerSingleton<AuthorizationApiService>(
     AuthorizationApiService(
@@ -167,5 +173,11 @@ Future<void> initializeDependencies() async{
     () => SongBloc(
         sl(),sl()
     )
+  );
+
+  sl.registerFactory<MusicBloc>(
+    () => MusicBloc(
+      sl()
+    ),
   );
 }

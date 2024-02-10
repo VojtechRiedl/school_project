@@ -26,9 +26,9 @@ class Palette{
 
   static const Color bottomNavigatorBarColor = Color(0xFF4C4C4C);
 
-  static const Color activeTrackColor = Color(0xFF262626);
+  static const Color activeTrackColor = Color(0xFF4C4C4C);
 
-  static const Color inactiveTrackColor = Color(0xFF4C4C4C);
+  static const Color inactiveTrackColor = Color(0xFFD9D9D9);
 
 
 

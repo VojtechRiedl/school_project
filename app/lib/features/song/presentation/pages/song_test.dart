@@ -1,5 +1,6 @@
 import 'package:band_app/core/constants/palette.dart';
 import 'package:band_app/features/home/presentation/widgets/default_app_bar.dart';
+import 'package:band_app/features/song/presentation/widgets/music_player.dart';
 import 'package:flutter/material.dart';
 
 class SongTest extends StatefulWidget {
@@ -62,7 +63,7 @@ class _SongTestState extends State<SongTest> {
                       onPressed: (){
                         //TODO
                       },
-                      child: Text("Zobrazit více", style: TextStyle(color: Palette.lightTextColor, fontSize: 16, fontWeight: FontWeight.bold)),
+                      child: Text("Zobrazit více", style: TextStyle(color: Palette.yellow, fontSize: 16, fontWeight: FontWeight.bold)),
                   ),
                 )
               ],
@@ -70,14 +71,32 @@ class _SongTestState extends State<SongTest> {
             SizedBox(height: 20),
 
             Container(
-              color: Colors.yellow,
+              //color: Colors.yellow,
               height: 200,
               child: Center(
                 child: Text("Loading...")
               ),
             ),
             SizedBox(height: 20),
-            SliderTheme(
+
+            MusicPlayer(),
+
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Palette.yellow),
+                fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width - 40, 50)),
+                shape: MaterialStateProperty.all(
+                    const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)
+                        ))),
+              ),
+              onPressed: (){
+                //TODO
+              },
+              child: Text("Odstranit", style: TextStyle(color: Palette.dark, fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+
+            /*SliderTheme(
               data: SliderThemeData(
                 trackHeight: 50,
                 overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
@@ -98,7 +117,7 @@ class _SongTestState extends State<SongTest> {
                   });
                 },
               ),
-            )
+            )*/
 
           ],
         ),

@@ -111,11 +111,11 @@ class _RegisterViewState extends State<RegisterView> {
               Card(
                 elevation: 0.5,
                 child: ListTile(
-                  tileColor: Palette.yellow,
+                  tileColor: Palette.dark,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   ),
-                  title: const Text("Zaregistrovat se", textAlign: TextAlign.center, style: TextStyle(color: Palette.darkTextColor, fontSize: 16, fontWeight: FontWeight.bold)),
+                  title: const Text("Zaregistrovat se", textAlign: TextAlign.center, style: TextStyle(color: Palette.yellow, fontSize: 16, fontWeight: FontWeight.bold)),
                   onTap: (){
 
                     context.read<AuthorizationBloc>().add(

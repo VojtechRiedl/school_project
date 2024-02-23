@@ -97,11 +97,11 @@ class _LoginViewState extends State<LoginView> {
               Card(
                 elevation: 0.5,
                 child: ListTile(
-                  tileColor: Palette.yellow,
+                  tileColor: Palette.dark,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   ),
-                  title: authorizationBloc.state is AuthorizationAuthenticateInProgress ? const Center(child: CircularProgressIndicator(color: Palette.dark)) : const Text("Přihlásit se", textAlign: TextAlign.center, style: TextStyle(color: Palette.darkTextColor, fontSize: 16, fontWeight: FontWeight.bold)),
+                  title: authorizationBloc.state is AuthorizationAuthenticateInProgress ? const Center(child: CircularProgressIndicator(color: Palette.dark)) : const Text("Přihlásit se", textAlign: TextAlign.center, style: TextStyle(color: Palette.yellow, fontSize: 16, fontWeight: FontWeight.bold)),
                   onTap: (){
                     context.read<AuthorizationBloc>().add(
                         AuthorizationLogged(

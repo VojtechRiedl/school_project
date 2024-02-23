@@ -52,7 +52,7 @@ class _SongsViewState extends State<SongsView> {
         builder: (BuildContext context, state) {
           if (state is SongsInitial) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: Palette.dark,),
             );
           }
           final suggestions = state is SongsSearched ? state.suggestions : state.songs;
@@ -74,9 +74,10 @@ class _SongsViewState extends State<SongsView> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: Card(
+                    margin: const EdgeInsets.all(0),
                     color: Palette.first,
                     child: ListTile(
-                      title: const Icon(Icons.add, color: Palette.white,
+                      title: const Icon(Icons.add, color: Palette.yellow,
                         size: 32),
                       onTap: () {
                         GoRouter.of(context).pushNamed("create-song");

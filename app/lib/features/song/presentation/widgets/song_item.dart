@@ -14,14 +14,16 @@ class SongItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 7.5),
       child: Card(
-        color: Palette.fifth,
+        margin: const EdgeInsets.all(0),
+        color: Palette.lightCard,
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),
         child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           title: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -31,7 +33,7 @@ class SongItem extends StatelessWidget {
                   song.title,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    color: Palette.second,
+                    color: Palette.dark,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -40,11 +42,11 @@ class SongItem extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.edit, color: Palette.second),
+                    icon: const Icon(Icons.edit, color: Palette.dark),
                   ),
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.bookmark, color: Palette.second),
+                    icon: const Icon(Icons.bookmark, color: Palette.dark),
                   ),
                 ],
               ),

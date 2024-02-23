@@ -27,7 +27,7 @@ class SongView extends StatefulWidget {
 
 class _SongViewState extends State<SongView> {
 
-  VideoPlayerController ? _videoPlayerController;
+  late VideoPlayerController ? _videoPlayerController;
 
   ChewieController ? _chewieController;
 

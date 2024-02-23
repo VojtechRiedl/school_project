@@ -12,7 +12,7 @@ class Palette{
 
   static const Color lightOutlineTextBoxColor = Color(0xFFCFCFCF);
 
-  static const Color darkOutlineTextBoxColor = Color(0xFF4C4C4C);
+  static const Color darkOutlineTextBoxColor = Color(0xFF262626);
 
   static const Color yellow = Color(0xFFFAEA05);
 
@@ -22,14 +22,17 @@ class Palette{
 
   static const Color error = Color(0xFFA50026);
 
-  static const Color appBarColor = Color(0xFF4C4C4C);
+  static const Color appBarColor = Color(0xFF262626);
 
-  static const Color bottomNavigatorBarColor = Color(0xFF4C4C4C);
+  static const Color bottomNavigatorBarColor = Color(0xFF262626);
 
-  static const Color activeTrackColor = Color(0xFF4C4C4C);
+  static const Color activeTrackColor = Color(0xFF262626);
 
   static const Color inactiveTrackColor = Color(0xFFD9D9D9);
 
+  static const Color secondDark = Color(0xFF353535);
+
+  static const Color lightCard = Color(0xFFE5E5E5);
 
 
   static const Color white = Color(0xFFF3F3F3);

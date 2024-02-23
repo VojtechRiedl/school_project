@@ -77,8 +77,10 @@ class MusicBloc extends Bloc<MusicEvent, MusicState>{
   void _onMusicRestarted(MusicRestarted event, Emitter<MusicState> emit) async {
     /*await audioPlayer.seek(Duration.zero);
     await audioPlayer.resume();*/
+    await audioPlayer.play(UrlSource(event.url));
 
-    add(MusicLoaded(url: event.url));
+    //add(MusicLoaded(url: event.url));
+    emit(MusicLoadSuccess(duration: state.duration));
   }
 
   @override

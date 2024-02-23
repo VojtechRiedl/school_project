@@ -46,7 +46,7 @@ final router = GoRouter(
           );
         },
       redirect: (context, state) {
-          return context.read<AuthorizationBloc>().state is AuthorizationLogoutSuccess ? "/login" : null;
+          return context.read<AuthorizationBloc>().state is AuthorizationLogoutSuccess ? null : "/login";// : null;
           return "/login";
           //return context.read<LoginBloc>().state is LoginSuccess || context.read<RegisterBloc>().state is RegisterSuccess ? null : '/login';
         //return context.read<LoginBloc>().state is LoginSuccess || context.read<RegisterBloc>().state is RegisterSuccess ? "/login" : null; //TODO vratit zpět

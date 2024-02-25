@@ -15,12 +15,15 @@ import 'package:band_app/features/song/domain/usecases/create_song.dart';
 import 'package:band_app/features/song/domain/usecases/delete_song.dart';
 import 'package:band_app/features/song/domain/usecases/get_song.dart';
 import 'package:band_app/features/song/domain/usecases/get_songs.dart';
+import 'package:band_app/features/song/domain/usecases/update_song.dart';
 import 'package:band_app/features/song/domain/usecases/upload_sound.dart';
 import 'package:band_app/features/song/domain/usecases/upload_video.dart';
 import 'package:band_app/features/song/presentation/bloc/music/music_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/song/song_bloc.dart';
+import 'package:band_app/features/song/presentation/bloc/song_update/song_update_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/song_create/song_create_bloc.dart';
+import 'package:band_app/features/song/presentation/bloc/video/video_cubit.dart';
 import 'package:band_app/features/user/data/repository/user_repository_impl.dart';
 import 'package:band_app/features/user/domain/repository/user_repository.dart';
 import 'package:band_app/features/user/domain/usecases/get_user.dart';
@@ -139,6 +142,12 @@ Future<void> initializeDependencies() async{
     ),
   );
 
+  sl.registerSingleton<UpdateSongUseCase>(
+    UpdateSongUseCase(
+      sl(),
+    ),
+  );
+
   //Blocs
 
   sl.registerFactory<NavigationCubit>(
@@ -165,7 +174,7 @@ Future<void> initializeDependencies() async{
 
   sl.registerFactory<SongCreateBloc>(
     () => SongCreateBloc(
-      sl(), sl(), sl(), sl()
+      sl(), sl(), sl()
     )
   );
 
@@ -178,6 +187,16 @@ Future<void> initializeDependencies() async{
   sl.registerFactory<MusicBloc>(
     () => MusicBloc(
       sl()
+    ),
+  );
+
+  sl.registerFactory<VideoCubit>(
+    () => VideoCubit(),
+  );
+
+  sl.registerFactory<SongUpdateBloc>(
+    () => SongUpdateBloc(
+      sl(), sl(), sl(), sl()
     ),
   );
 }

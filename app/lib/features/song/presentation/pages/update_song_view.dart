@@ -2,11 +2,11 @@ import 'package:band_app/core/constants/palette.dart';
 import 'package:band_app/features/home/presentation/widgets/default_app_bar.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_state.dart';
+import 'package:band_app/features/song/presentation/bloc/song_update/song_update_bloc.dart';
+import 'package:band_app/features/song/presentation/bloc/song_update/song_update_event.dart';
+import 'package:band_app/features/song/presentation/bloc/song_update/song_update_state.dart';
 import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/songs/songs_event.dart';
-import 'package:band_app/features/song/presentation/bloc/song_create/song_create_bloc.dart';
-import 'package:band_app/features/song/presentation/bloc/song_create/song_create_event.dart';
-import 'package:band_app/features/song/presentation/bloc/song_create/song_create_state.dart';
 import 'package:band_app/features/song/presentation/widgets/song_input.dart';
 import 'package:band_app/features/song/presentation/widgets/upload_button.dart';
 import 'package:band_app/injection_container.dart';
@@ -15,14 +15,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class CreateSongView extends StatefulWidget{
-  const CreateSongView({super.key});
+class UpdateSongView extends StatefulWidget{
+  final int id;
+
+  const UpdateSongView({super.key, required this.id});
 
   @override
-  State<CreateSongView> createState() => _CreateSongViewState();
+  State<UpdateSongView> createState() => _UpdateSongViewState();
 }
 
-class _CreateSongViewState extends State<CreateSongView> {
+class _UpdateSongViewState extends State<UpdateSongView> {
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _youtubeLinkController = TextEditingController();
@@ -38,23 +40,22 @@ class _CreateSongViewState extends State<CreateSongView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SongCreateBloc>(
-      create: (_) => sl<SongCreateBloc>(),
+    return BlocProvider<SongUpdateBloc>(
+      create: (_) => sl<SongUpdateBloc>()..add(LoadSong(widget.id)),
       child:  Scaffold(
-      resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Palette.light,
+        appBar: const MainAppBar(
 
-      backgroundColor: Palette.light,
-      appBar: const MainAppBar(
-
-        title: Text('Písničky'),
+          title: Text('Písničky'),
+        ),
+        body:_buildBody(),
       ),
-      body:_buildBody(),
-     ),
     );
   }
 
   _buildBody(){
-    return BlocConsumer<SongCreateBloc, SongCreateState>(
+    return BlocConsumer<SongUpdateBloc, SongUpdateState>(
       listener: (context, state) {
         if(state is UploadError) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -63,16 +64,20 @@ class _CreateSongViewState extends State<CreateSongView> {
                 content: Text(state.message),
               )
           );
-        }else if(state is SongCreateError){
+        }else if(state is SongUpdateError){
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 behavior: SnackBarBehavior.floating,
                 content: Text(state.message),
               )
           );
-        }else if(state is SongCreated){
-          context.read<SongsBloc>().add(AddSong(state.song));
+        }else if(state is SongUpdated){
+          context.read<SongsBloc>().add(ActualizeSong(state.song));
           context.pop(context);
+        }else if(state is SongLoaded){
+          _titleController.text = state.song.title;
+          _youtubeLinkController.text = state.song.youtubeUrl ?? "";
+          _textController.text = state.song.text ?? "";
         }
       },
       builder: (context, state) {
@@ -87,13 +92,13 @@ class _CreateSongViewState extends State<CreateSongView> {
                   SongInput(multiLine: false, label: "Odkaz na youtube", controller: _youtubeLinkController),
                   SongInput(multiLine: true, label: "Text písničky",  controller: _textController),
                   UploadButton(label: "Video",loaded: state.videoFileResult != null, onPressed: () async {
-                    context.read<SongCreateBloc>().add(LoadVideo(await FilePicker.platform.pickFiles(
+                    context.read<SongUpdateBloc>().add(LoadVideo(await FilePicker.platform.pickFiles(
                         type: FileType.custom,
                         allowedExtensions: ['mp4']
                     )));
                   }),
                   UploadButton(label: "Písnička",loaded: state.songFileResult != null, onPressed: () async {
-                    context.read<SongCreateBloc>().add(LoadSound(await FilePicker.platform.pickFiles(
+                    context.read<SongUpdateBloc>().add(LoadSound(await FilePicker.platform.pickFiles(
                         type: FileType.custom,
                         allowedExtensions: ['mp3']
                     )));
@@ -113,15 +118,15 @@ class _CreateSongViewState extends State<CreateSongView> {
                   AuthorizationBloc bloc = context.read<AuthorizationBloc>();
 
                   if(bloc.state is AuthorizationAuthenticateSuccess){
-                    context.read<SongCreateBloc>().add(CreateSong(
+                    context.read<SongUpdateBloc>().add(UpdateSong(
                         _titleController.text,
                         _youtubeLinkController.text,
                         _textController.text,
-                        (bloc.state as AuthorizationAuthenticateSuccess).user.id
+                        widget.id,
                     ));
                   }
                 },
-                child: const Text("Uložit", style: TextStyle(color: Palette.yellow, fontSize: 16, fontWeight: FontWeight.bold)),
+                child: const Text("Upravit", style: TextStyle(color: Palette.yellow, fontSize: 16, fontWeight: FontWeight.bold)),
               )
             ],
           ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:band_app/core/resources/data_state.dart';
 import 'package:band_app/features/song/data/data_sources/remote/song_api_service.dart';
 import 'package:band_app/features/song/data/models/song_create.dart';
+import 'package:band_app/features/song/data/models/song_update.dart';
 import 'package:band_app/features/song/domain/entites/song.dart';
 import 'package:band_app/features/song/domain/repository/song_repository.dart';
 import 'package:dio/dio.dart';
@@ -149,6 +150,30 @@ class SongRepositoryImpl extends SongRepository{
     }on DioException catch(e){
       return DataFailed(e);
     }
+  }
+
+  @override
+  Future<DataState<SongEntity>> updateSong(int id,SongUpdateModel song) async {
+    try{
+      final response = await _songApiService.updateSong(id: id, song: song);
+
+      if(response.response.statusCode == 200) {
+        return DataSuccess(response.data);
+      }else{
+        return DataFailed(
+          DioException(
+            error: response.response.statusMessage,
+            requestOptions: response.response.requestOptions,
+            response: response.response,
+            type: DioExceptionType.badResponse,
+          ),
+        );
+      }
+
+    }on DioException catch(e){
+      return DataFailed(e);
+    }
+
   }
 
 }

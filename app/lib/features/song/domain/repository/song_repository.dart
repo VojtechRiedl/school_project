@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:band_app/core/resources/data_state.dart';
 import 'package:band_app/features/song/data/models/song_create.dart';
+import 'package:band_app/features/song/data/models/song_update.dart';
 import 'package:band_app/features/song/domain/entites/song.dart';
 
 abstract class SongRepository {
@@ -17,5 +18,7 @@ abstract class SongRepository {
   Future<DataState<SongEntity>> uploadVideo(SongEntity song, File file);
 
   Future<DataState<SongEntity>> deleteSong(int id);
+
+  Future<DataState<SongEntity>> updateSong(int id, SongUpdateModel song);
 
 }

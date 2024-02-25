@@ -32,6 +32,8 @@ class Palette{
 
   static const Color secondDark = Color(0xFF353535);
 
+  static const Color secondLight = Color(0xFFE5E5E5);
+
   static const Color lightCard = Color(0xFFE5E5E5);
 
 

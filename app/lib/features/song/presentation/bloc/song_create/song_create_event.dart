@@ -9,14 +9,15 @@ abstract class SongCreateEvent extends Equatable {
 }
 
 class CreateSong extends SongCreateEvent {
+  final int userId;
   final String title;
   final String ? youtubeLink;
   final String ? text;
 
-  const CreateSong(this.title, this.youtubeLink, this.text);
+  const CreateSong(this.title, this.youtubeLink, this.text, this.userId);
 
   @override
-  List<Object> get props => [title, youtubeLink!, text!];
+  List<Object> get props => [title, youtubeLink!, text!, userId];
 }
 
 class LoadVideo extends SongCreateEvent {

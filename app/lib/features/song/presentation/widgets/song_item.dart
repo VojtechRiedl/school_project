@@ -41,7 +41,9 @@ class SongItem extends StatelessWidget {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      GoRouter.of(context).pushNamed("update-song", pathParameters: {'id': song.id.toString()});
+                    },
                     icon: const Icon(Icons.edit, color: Palette.dark),
                   ),
                   IconButton(

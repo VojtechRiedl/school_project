@@ -20,7 +20,7 @@ class SongInput extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: SizedBox(
         height: multiLine ? 180 : null,
         child: TextField(
@@ -34,19 +34,19 @@ class SongInput extends StatelessWidget{
             focusedBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
               borderSide: BorderSide(
-                color: Palette.second,
+                color: Palette.secondDark,
                 width: 2,
               ),
             ),
             enabledBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
               borderSide: BorderSide(
-                color: Palette.second,
+                color: Palette.secondDark,
                 width: 2,
               ),
             ),
             labelStyle: const TextStyle(
-              color: Palette.second,
+              color: Palette.secondDark,
             ),
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -55,7 +55,7 @@ class SongInput extends StatelessWidget{
             errorBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
               borderSide: BorderSide(
-                color: Palette.decline,
+                color: Palette.error,
                 width: 2,
               ),
             ),

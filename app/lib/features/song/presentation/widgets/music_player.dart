@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MusicPlayer extends StatelessWidget{
-  final String url = "https://onlinetestcase.com/wp-content/uploads/2023/06/500-KB-MP3.mp3";
+  final String url; //= "https://onlinetestcase.com/wp-content/uploads/2023/06/500-KB-MP3.mp3";
 
-  const MusicPlayer({super.key});
+  const MusicPlayer({super.key, required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +20,9 @@ class MusicPlayer extends StatelessWidget{
         //color: Palette.yellow,
         child: BlocBuilder<MusicBloc, MusicState>(
           builder: (context, state) {
-            print(state);
             if(state is MusicInitial){
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator(color: Palette.dark,));
             }
-
             return Column(
               children: [
                 Padding(

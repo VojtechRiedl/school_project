@@ -42,3 +42,10 @@ class SongDeleted extends SongsState {
   @override
   List<Object> get props => [songs];
 }
+
+class SongUpdated extends SongsState {
+  const SongUpdated(songs) : super(songs: songs);
+
+  @override
+  List<Object> get props => [songs];
+}

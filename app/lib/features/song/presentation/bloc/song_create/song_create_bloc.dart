@@ -14,11 +14,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SongCreateBloc extends Bloc<SongCreateEvent, SongCreateState>{
   final UploadSoundUseCase _uploadSoundUseCase;
   final UploadVideoUseCase _uploadVideoUseCase;
-  final GetUserUseCase _getUserUseCase;
   final CreateSongUseCase _createSongUseCase;
 
 
-  SongCreateBloc(this._uploadSoundUseCase, this._uploadVideoUseCase, this._getUserUseCase, this._createSongUseCase) : super(SongCreateInitial()){
+  SongCreateBloc(this._uploadSoundUseCase, this._uploadVideoUseCase,this._createSongUseCase) : super(SongCreateInitial()){
     on<CreateSong>(_onSongCreate);
     on<LoadSound>(_onSoundLoad);
     on<LoadVideo>(_onVideoLoad);
@@ -29,13 +28,12 @@ class SongCreateBloc extends Bloc<SongCreateEvent, SongCreateState>{
       emit(TitleError("Název písničky nesmí být prázdný", state.songFileResult, state.videoFileResult));
       return;
     }
-    final user = await _getUserUseCase();
 
     final newSong = SongCreateModel(
       title: event.title,
       youtubeLink: event.youtubeLink,
       text: event.text,
-      user: user.id,
+      user: event.userId
     );
 
     final dataState = await _createSongUseCase(params: newSong);

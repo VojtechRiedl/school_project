@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:band_app/features/song/data/models/song.dart';
 import 'package:band_app/features/song/data/models/song_create.dart';
+import 'package:band_app/features/song/data/models/song_update.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -41,5 +42,11 @@ abstract class SongApiService {
   @DELETE("/songs/delete/{id}")
   Future<HttpResponse<SongModel>> deleteSong({
     @Path("id") required int id,
+  });
+
+  @PATCH("/songs/update/{id}")
+  Future<HttpResponse<SongModel>> updateSong({
+    @Path("id") required int id,
+    @Body() required SongUpdateModel song,
   });
 }

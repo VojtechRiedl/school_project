@@ -1,6 +1,7 @@
 import 'package:band_app/core/constants/palette.dart';
 import 'package:band_app/features/song/presentation/bloc/video/video_cubit.dart';
 import 'package:band_app/features/song/presentation/bloc/video/video_state.dart';
+import 'package:band_app/injection_container.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,31 +33,41 @@ class _VideoPlayerState extends State<VideoPlayer> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<VideoCubit>(
-      create: (context) => VideoCubit()..loadVideo(widget.url),
+      create: (context) => sl<VideoCubit>()..loadVideo(widget.url),
       child: BlocBuilder<VideoCubit, VideoState>(
         builder: (BuildContext context, VideoState state) {
           if(state is VideoLoaded){
-            return Container(
-              //color: Colors.yellow,
-              height: 200,
-              child: state.chewieController
-                  .videoPlayerController.value.isInitialized
-                  ? AspectRatio(
-                aspectRatio: state.chewieController.aspectRatio!,
-                child: Chewie(
-                  controller: state.chewieController,
-                ),
-              )
-                  : const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(color: Palette.dark,),
-                ],
-              ),
-            );
+            return _buildVideoPlayer(state.chewieController);
           }
-          return const CircularProgressIndicator(color: Palette.dark);
+          return _buildLoading();
         },
+      ),
+    );
+  }
+
+
+  Widget _buildVideoPlayer(ChewieController chewieController) {
+
+      return SizedBox(
+        //color: Colors.yellow,
+        height: 200,
+        child: chewieController
+            .videoPlayerController.value.isInitialized
+            ? AspectRatio(
+          aspectRatio: chewieController.aspectRatio!,
+          child: Chewie(
+            controller: chewieController,
+          ),
+        )
+            : _buildLoading());
+
+  }
+
+  Widget _buildLoading() {
+    return const SizedBox(
+      height: 200,
+      child: Center(
+        child: CircularProgressIndicator(color: Palette.dark,),
       ),
     );
   }

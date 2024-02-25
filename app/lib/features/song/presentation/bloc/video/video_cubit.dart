@@ -6,9 +6,9 @@ import 'package:video_player/video_player.dart';
 
 class VideoCubit extends Cubit<VideoState> {
 
-  late VideoPlayerController _videoPlayerController;
+  VideoPlayerController ? _videoPlayerController;
 
-  late ChewieController _chewieController;
+  ChewieController ? _chewieController;
 
 
   VideoCubit() : super(const VideoInitial());
@@ -17,13 +17,13 @@ class VideoCubit extends Cubit<VideoState> {
 
   Future<void> loadVideo(String url) async {
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(url));
-    await _videoPlayerController.initialize();
+    await _videoPlayerController!.initialize();
 
     _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController,
+      videoPlayerController: _videoPlayerController!,
       maxScale: 1,
       autoInitialize: true,
-      aspectRatio: _videoPlayerController.value.aspectRatio,
+      aspectRatio: _videoPlayerController!.value.aspectRatio,
       autoPlay: false,
       looping: false,
       deviceOrientationsAfterFullScreen: [
@@ -31,13 +31,13 @@ class VideoCubit extends Cubit<VideoState> {
       ],
     );
 
-    emit(VideoLoaded(_chewieController));
+    emit(VideoLoaded(_chewieController!));
   }
 
   @override
   Future<void> close() {
-    _videoPlayerController.dispose();
-    _chewieController.dispose();
+    _videoPlayerController?.dispose();
+    _chewieController?.dispose();
     return super.close();
   }
 

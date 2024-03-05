@@ -2,18 +2,18 @@ from fastapi import APIRouter, Depends, HTTPException, Path
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..schemas.ideas import IdeaCreate, Idea, IdeaUpdate, IdeaSuccessResponse
+from ..schemas.ideas import IdeaCreate, Idea, IdeaUpdate, IdeaSuccessResponse, VoteCreate
 from .. import crud
 
 router = APIRouter(prefix="/ideas", tags=["Ideas"])
 
 @router.get("/", response_model=list[Idea], summary="Get all ideas")
 def read_ideas(db: Session = Depends(get_db)):    
-    return crud.get_ideas(db)
+    return crud.read_ideas(db)
 
 @router.get("/{id}", response_model=Idea, summary="Get an idea by id")
 def read_idea(id: int = Path(..., title="ID idei"), db: Session = Depends(get_db)):
-    idea = crud.get_idea(db, id)
+    idea = crud.read_idea(db, id)
     
     if idea is None:
         raise HTTPException(status_code=404, detail="Idea not found")
@@ -25,22 +25,32 @@ def create_idea(idea: IdeaCreate, db: Session = Depends(get_db)):
     if idea is None:
         raise HTTPException(status_code=400, detail="Idea not found")
     
+    user = crud.get_user(db, idea.user_id)
+    
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    
     return crud.create_idea(db, idea)
 
-@router.patch("/update/{id}",response_model=Idea, summary="Update an idea by id")
-def update_idea(idea: IdeaUpdate, id: int = Path(..., title="ID idei"), db: Session = Depends(get_db)):
-    response = crud.update_idea(db, id, idea)
+@router.post("/vote", response_model=Idea, summary="Vote an idea by id")
+def create_vote(vote_create: VoteCreate, db: Session = Depends(get_db)):
+    vote = crud.read_vote(db, vote_create.idea_id, vote_create.user_id)
+    
+    if vote is not None:
+        raise HTTPException(status_code=404, detail="Already voted for this idea")
+        
+    response = crud.create_vote(db, vote_create)
     
     if response is None:
         raise HTTPException(status_code=404, detail="Idea not found")
     
     return response
 
-@router.delete("/delete/{id}",response_model=IdeaSuccessResponse ,summary="Delete an idea by id")
+@router.delete("/delete/{id}",response_model=Idea ,summary="Delete an idea by id")
 def delete_idea(id: int = Path(..., title="ID idei"), db: Session = Depends(get_db)):
     response = crud.delete_idea(db, id)
     
-    if response.rows_affacted == 0:
+    if response is None: 
         raise HTTPException(status_code=404, detail="Idea not found")
     
     return response

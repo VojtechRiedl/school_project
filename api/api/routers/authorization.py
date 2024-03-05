@@ -28,6 +28,6 @@ def login(authorization: Authorization, db: Session = Depends(get_db)):
     
     response = crud.login(db, authorization)
     if type(response) is AuthorizationFailed:
-        raise HTTPException(status_code=404, detail=response.model_dump())
+        raise HTTPException(status_code=404, detail="username or password is incorrect")
     
     return response

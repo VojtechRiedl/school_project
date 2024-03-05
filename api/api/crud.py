@@ -5,7 +5,7 @@ from datetime import datetime
 
 from . import models
 from .database import engine
-from .schemas.ideas import IdeaCreate, Idea, IdeaUpdate
+from .schemas.ideas import IdeaCreate, Idea, IdeaUpdate, VoteCreate
 from .schemas.plans import Plan, PlanCreate, PlanUpdate, PlanSuccessResponse
 from .schemas.songs import Song, SongCreate, SongUpdate, FavoriteSongCreate
 from .schemas.users import Authorization, AuthorizationFailed, User, UserUpdate
@@ -100,49 +100,25 @@ def update_user(db: Session, user_id: int, user: UserUpdate):
         last_login=updated_user.last_login,
     )
 
-def get_ideas(db: Session): 
-    ideas = db.query(models.Ideas).all()   
-    response_ideas = [] 
-    if ideas:
-        for idea in ideas:
-            accepted = db.query(models.Votes).filter(models.Votes.idea_id == idea.idea_id, models.Votes.accepted == True).count()
-            declined = db.query(models.Votes).filter(models.Votes.idea_id == idea.idea_id, models.Votes.accepted == False).count()
-        response_ideas.append(Idea(
-            idea_id=idea.idea_id,
-            name=idea.name,
-            active=idea.active,
-            description=idea.description,
-            created=idea.created,
-            user=idea.users.username,
-            accepted=accepted,
-            declined=declined
-        ))
-        return response_ideas
-    return response_ideas
+def read_ideas(db: Session): 
+    ideas = db.query(models.Ideas).all()
+    
+    if not ideas:
+        return []
+        
+    return ideas
 
-def get_idea(db: Session, idea_id: int):
-    idea = db.query(models.Ideas).filter(models.Ideas.idea_id == idea_id).first()
+def read_idea(db: Session, idea_id: int):
+    idea = db.query(models.Ideas).filter(models.Ideas.id == idea_id).first()
     if idea:
-        accepted = db.query(models.Votes).filter(models.Votes.idea_id == idea.idea_id, models.Votes.accepted == True).count()
-        declined = db.query(models.Votes).filter(models.Votes.idea_id == idea.idea_id, models.Votes.accepted == False).count()
-        return Idea(
-            idea_id=idea.idea_id,
-            name=idea.name,
-            active=idea.active,
-            description=idea.description,
-            created=idea.created,
-            user=idea.users.username,
-            accepted=accepted,
-            declined=declined
-        )
+        return idea
     return None  
   
 def create_idea(db: Session, idea_create: IdeaCreate):
     db_idea = models.Ideas(
-        name=idea_create.name,
-        active=idea_create.active,
+        title=idea_create.title,
         description=idea_create.description,
-        created=idea_create.created,
+        deadline=idea_create.deadline,
         user_id=idea_create.user_id
     )
     db.add(db_idea)
@@ -150,55 +126,35 @@ def create_idea(db: Session, idea_create: IdeaCreate):
     db.refresh(db_idea)
     return idea_create
 
-def update_idea(db: Session, idea_id: int, idea: IdeaUpdate):
-    updated_idea = db.query(models.Ideas).filter(models.Ideas.idea_id == idea_id).first() 
-    
-    if updated_idea is None:
-        return None
-    
-    updated_idea.name = idea.name
-    updated_idea.active = idea.active
-    updated_idea.description = idea.description
-    
-    accepted = db.query(models.Votes).filter(models.Votes.idea_id == idea_id, models.Votes.accepted == True).count()
-    declined = db.query(models.Votes).filter(models.Votes.idea_id == idea_id, models.Votes.accepted == False).count()
-    db.commit()
-    db.refresh(updated_idea)
-    return Idea(
-        idea_id=updated_idea.idea_id,
-        name=updated_idea.name,
-        active=updated_idea.active,
-        description=updated_idea.description,
-        created=updated_idea.created,
-        user=updated_idea.users.username,
-        accepted=accepted,
-        declined=declined
+def create_vote(db: Session, vote_create: VoteCreate):
+    vote = models.Votes(
+        idea_id=vote_create.idea_id,
+        user_id=vote_create.user_id,
+        accepted=vote_create.like
     )
+    db.add(vote)
+    db.commit()
+    db.refresh(vote)
+    
+    return read_idea(db, vote.idea_id)
+
+def read_vote(db: Session, idea_id: int, user_id: int):
+    vote = db.query(models.Votes).filter(models.Votes.idea_id == idea_id, models.Votes.user_id == user_id).first()
+    if vote:
+        return vote
+    return None
 
 def delete_idea(db: Session, idea_id: int):    
-    query = db.query(models.Ideas).filter(models.Ideas.idea_id == idea_id)
+    query = db.query(models.Ideas).filter(models.Ideas.id == idea_id)
     idea = query.first()
-    
-    accepted = db.query(models.Votes).filter(models.Votes.idea_id == idea_id, models.Votes.accepted == True).count()
-    declined = db.query(models.Votes).filter(models.Votes.idea_id == idea_id, models.Votes.accepted == False).count()
     
     if idea is None:
         return None
-    
-    deleted_idea = Idea(
-        idea_id=idea.idea_id,
-        name=idea.name,
-        active=idea.active,
-        description=idea.description,
-        created=idea.created,
-        user=idea.users.username,
-        accepted=accepted,
-        declined=declined
-    )
+
     
     query.delete()
     db.commit()
-    return deleted_idea
+    return idea
     
 
 def get_plans(db: Session):

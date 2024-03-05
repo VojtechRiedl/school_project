@@ -18,6 +18,7 @@ if __name__ == '__main__':
 #ssl_certfile="C:/Users/vojta/Desktop/band_project/api/ssl103+3.pem"
 app_settings = AppSettings()
 
+#models.Base.metadata.drop_all(bind=engine)
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(

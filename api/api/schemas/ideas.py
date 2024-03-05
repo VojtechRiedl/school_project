@@ -1,25 +1,71 @@
 from datetime import date
 from pydantic import BaseModel, Field, ConfigDict
 
+from .users import User
+
+class Vote(BaseModel):
+    
+    user: User = Field(
+        description="Uživatel, který hlasoval",
+        examples=[
+            User(
+                id=1,
+                username="Pepa Dlouhý",
+                created="2021-01-01 12:00:00",
+                last_login="2021-01-01 12:00:00"
+            ).model_dump()
+        ]
+    )
+    accepted: bool = Field(description="Hlas pro/proti", examples=[True, False])
+    
+    model_config = ConfigDict(from_attributes=True)
+
 
 class Idea(BaseModel):
-    idea_id: int = Field(description="ID nápadu", examples=[1,8])
-    name: str = Field(description="Název nápadu", examples=["Nápad 1"])
-    active: bool = Field(description="Aktivní nápad", examples=[True])
+    id: int = Field(description="ID nápadu", examples=[1,8])
+    title: str = Field(description="Název nápadu", examples=["Nápad 1"])
     description: str | None = Field(description="Popis nápadu", examples=["Popis nápadu 1"])
+    deadline: date | None = Field(description="Datum uzávěrky", examples=["2021-01-01"])
     created: date = Field(description="Datum vytvoření nápadu", examples=["2021-01-01"])
-    user: str  = Field(description="Tvůrce nápadu", examples=["Pepa Dlouhý"])
-    accepted: int = Field(description="Počet pro", examples=[1])
-    declined: int = Field(description="Počet proti", examples=[1])
+    user: User  = Field(description="Tvůrce nápadu", examples=[
+        User(
+            id=1,
+            username="Pepa Dlouhý",
+            created="2021-01-01 12:00:00",
+            last_login="2021-01-01 12:00:00"
+        ).model_dump()
+    ])
+    
+    votes: list[Vote] | None = Field(
+        description="Seznam hlasů",
+        examples=[
+            [Vote(
+                user=User(
+                    id=1,
+                    username="Pepa Dlouhý",
+                    created="2021-01-01 12:00:00",
+                    last_login="2021-01-01 12:00:00"
+                ),
+                accepted=True
+            ).model_dump()]
+        ]
+    )
     
     model_config = ConfigDict(from_attributes=True)
 
 class IdeaCreate(BaseModel):
-    name: str = Field(description="Název nápadu", examples=["Nápad 1"])
-    active: bool = Field(description="Aktivní nápad", examples=[True])
+    title: str = Field(description="Název nápadu", examples=["Nápad 1"])
     description: str | None = Field(description="Popis nápadu", examples=["Popis nápadu 1"])
-    created: date = Field(description="Datum vytvoření nápadu", examples=["2021-01-01"])
+    deadline: date = Field(description="Datum expirace nápadu", examples=["2021-01-01"])
     user_id: int = Field(description="ID uživatele", examples=[1,8])
+    
+    model_config = ConfigDict(from_attributes=True)
+
+class VoteCreate(BaseModel):    
+    
+    idea_id: int = Field(description="ID nápadu", examples=[1,8])
+    user_id: int = Field(description="ID uživatele", examples=[1,8])
+    like: bool = Field(description="Hlas pro/proti", examples=[True, False])
     
     model_config = ConfigDict(from_attributes=True)
 

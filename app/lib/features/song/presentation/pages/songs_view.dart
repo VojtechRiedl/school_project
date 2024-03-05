@@ -27,7 +27,7 @@ class _SongsViewState extends State<SongsView> {
 
   @override
   Widget build(BuildContext context) {
-    return  _buildBody();
+    return _buildBody();
   }
 
   _buildBody() {

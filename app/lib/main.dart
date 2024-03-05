@@ -2,6 +2,7 @@ import 'package:band_app/config/routes/routes.dart';
 import 'package:band_app/features/home/presentation/bloc/internet/internet_cubit.dart';
 import 'package:band_app/features/home/presentation/bloc/internet/internet_state.dart';
 import 'package:band_app/features/home/presentation/bloc/navigation/navigation_cubit.dart';
+import 'package:band_app/features/ideas/presentation/bloc/ideas_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_state.dart';
 import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
@@ -31,6 +32,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<SongsBloc>(
           create: (_) => sl<SongsBloc>(),
+        ),
+        BlocProvider<IdeasBloc>(
+          create: (_) => sl<IdeasBloc>(),
         ),
         BlocProvider<NavigationCubit>(
           create: (_) => sl<NavigationCubit>(),

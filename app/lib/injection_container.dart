@@ -2,6 +2,11 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:band_app/core/constants/environment.dart';
 import 'package:band_app/features/home/presentation/bloc/internet/internet_cubit.dart';
 import 'package:band_app/features/home/presentation/bloc/navigation/navigation_cubit.dart';
+import 'package:band_app/features/ideas/data/data_sources/remote/idea_api_service.dart';
+import 'package:band_app/features/ideas/data/repository/idea_repository_impl.dart';
+import 'package:band_app/features/ideas/domain/repository/idea_repository.dart';
+import 'package:band_app/features/ideas/domain/usecases/get_ideas.dart';
+import 'package:band_app/features/ideas/presentation/bloc/ideas_bloc.dart';
 import 'package:band_app/features/login/data/data_sources/remote/authorization_api_service.dart';
 import 'package:band_app/features/login/data/repository/authorization_repository_impl.dart';
 import 'package:band_app/features/login/domain/repository/authorization_repository.dart';
@@ -63,6 +68,13 @@ Future<void> initializeDependencies() async{
     ),
   );
 
+  sl.registerSingleton<IdeaApiService>(
+    IdeaApiService(
+      sl(),
+      baseUrl: Environment.apiUrl,
+    ),
+  );
+
   sl.registerSingleton<AuthorizationRepository>(
     AuthorizationRepositoryImpl(
       apiService: sl(),
@@ -79,6 +91,11 @@ Future<void> initializeDependencies() async{
     UserRepositoryImpl(),
   );
 
+  sl.registerSingleton<IdeaRepository>(
+    IdeaRepositoryImpl(
+      sl(),
+    ),
+  );
 
   //UseCases
 
@@ -148,6 +165,12 @@ Future<void> initializeDependencies() async{
     ),
   );
 
+  sl.registerSingleton<GetIdeasUseCase>(
+    GetIdeasUseCase(
+      sl(),
+    ),
+  );
+
   //Blocs
 
   sl.registerFactory<NavigationCubit>(
@@ -197,6 +220,12 @@ Future<void> initializeDependencies() async{
   sl.registerFactory<SongUpdateBloc>(
     () => SongUpdateBloc(
       sl(), sl(), sl(), sl()
+    ),
+  );
+
+  sl.registerFactory<IdeasBloc>(
+    () => IdeasBloc(
+      sl()
     ),
   );
 }

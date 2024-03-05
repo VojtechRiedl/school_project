@@ -27,10 +27,9 @@ class SongsBloc extends Bloc<SongsEvent, SongsState>{
     final dataState = await _getSongsUseCase();
 
     if(dataState is DataSuccess){
-      emit(SongsLoaded(dataState.data));
-    }else if(dataState is DataFailed){
-      //TODO handle error
-      emit(const SongsLoaded(<SongEntity>[]));
+      emit(SongsLoaded(dataState.data!));
+    } else {
+      //TODO  handle error
     }
   }
 

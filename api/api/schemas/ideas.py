@@ -65,7 +65,7 @@ class VoteCreate(BaseModel):
     
     idea_id: int = Field(description="ID nápadu", examples=[1,8])
     user_id: int = Field(description="ID uživatele", examples=[1,8])
-    like: bool = Field(description="Hlas pro/proti", examples=[True, False])
+    accepted: bool = Field(description="Hlas pro/proti", examples=[True, False])
     
     model_config = ConfigDict(from_attributes=True)
 
@@ -73,12 +73,5 @@ class IdeaUpdate(BaseModel):
     name: str = Field(description="Název nápadu", examples=["Nápad 1"])
     active: bool = Field(description="Aktivní nápad", examples=[True])
     description: str | None = Field(description="Popis nápadu", examples=["Popis nápadu 1"])
-    
-    model_config = ConfigDict(from_attributes=True)
-    
-class IdeaSuccessResponse(BaseModel):
-    idea_id: int = Field(description="ID nápadu", examples=[1,8])
-    message: str = Field(description="Zpráva", examples=["Nápad byl úspěšně aktualizován"])
-    rows_affacted: int = Field(description="Počet ovlivněných řádků", examples=[1])
     
     model_config = ConfigDict(from_attributes=True)

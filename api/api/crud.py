@@ -5,7 +5,7 @@ from datetime import datetime
 
 from . import models
 from .database import engine
-from .schemas.ideas import IdeaCreate, Idea, IdeaUpdate, VoteCreate
+from .schemas.ideas import IdeaCreate, Idea, IdeaUpdate, VoteCreate, Vote
 from .schemas.plans import Plan, PlanCreate, PlanUpdate, PlanSuccessResponse
 from .schemas.songs import Song, SongCreate, SongUpdate, FavoriteSongCreate
 from .schemas.users import Authorization, AuthorizationFailed, User, UserUpdate
@@ -28,7 +28,7 @@ def register(db: Session, authorization: Authorization):
     db.commit()
     db.refresh(db_user)
     return User(
-        id=db_user.user_id,
+        id=db_user.id,
         username=db_user.username,
         created=db_user.created,
         last_login=db_user.last_login,
@@ -41,7 +41,7 @@ def login(db: Session, authorization: Authorization):
         db.commit()
         db.refresh(logged_user)
         return User(
-            id=logged_user.user_id,
+            id=logged_user.id,
             username=logged_user.username,
             created=logged_user.created,
             last_login=logged_user.last_login,
@@ -58,7 +58,7 @@ def get_users(db: Session):
     if users:
         for user in users:
             response_users.append(User(
-                id=user.user_id,
+                id=user.id,
                 username=user.username,
                 created=user.created,
                 last_login=user.last_login,
@@ -67,10 +67,10 @@ def get_users(db: Session):
     return response_users
     
 def get_user(db: Session, user_id: int):
-    user = db.query(models.Users).filter(models.Users.user_id == user_id).first()
+    user = db.query(models.Users).filter(models.Users.id == user_id).first()
     if user:
         return User(
-            id=user.user_id,
+            id=user.id,
             username=user.username,
             created=user.created,
             last_login=user.last_login,
@@ -83,7 +83,7 @@ def update_user(db: Session, user_id: int, user: UserUpdate):
     if user is None:
         return None
     
-    updated_user = db.query(models.Users).filter(models.Users.user_id == user_id).first()
+    updated_user = db.query(models.Users).filter(models.Users.id == user_id).first()
     
     if updated_user is None:
         return None
@@ -94,7 +94,7 @@ def update_user(db: Session, user_id: int, user: UserUpdate):
     db.commit()
     db.refresh(updated_user)
     return User(
-        id=updated_user.user_id,
+        id=updated_user.id,
         username=updated_user.username,
         created=updated_user.created,
         last_login=updated_user.last_login,
@@ -124,13 +124,21 @@ def create_idea(db: Session, idea_create: IdeaCreate):
     db.add(db_idea)
     db.commit()
     db.refresh(db_idea)
-    return idea_create
+    return db_idea
 
-def create_vote(db: Session, vote_create: VoteCreate):
+def put_vote(db: Session, vote_create: VoteCreate):
+    vote = read_vote(db, vote_create.idea_id, vote_create.user_id)
+    if vote is not None:
+        db.query(models.Votes).filter(models.Votes.idea_id == vote_create.idea_id, models.Votes.user_id == vote_create.user_id).update({models.Votes.accepted: vote_create.accepted})
+        db.commit()
+        db.refresh(vote)
+        return read_idea(db, vote.idea_id)
+    
+    
     vote = models.Votes(
         idea_id=vote_create.idea_id,
         user_id=vote_create.user_id,
-        accepted=vote_create.like
+        accepted=vote_create.accepted
     )
     db.add(vote)
     db.commit()
@@ -145,17 +153,16 @@ def read_vote(db: Session, idea_id: int, user_id: int):
     return None
 
 def delete_idea(db: Session, idea_id: int):    
-    query = db.query(models.Ideas).filter(models.Ideas.id == idea_id)
-    idea = query.first()
+    idea = read_idea(db, idea_id)
     
     if idea is None:
         return None
 
-    
-    query.delete()
+
+    db.query(models.Ideas).filter(models.Ideas.id == idea_id).delete()
     db.commit()
+
     return idea
-    
 
 def get_plans(db: Session):
     plans = db.query(models.Plans).all()

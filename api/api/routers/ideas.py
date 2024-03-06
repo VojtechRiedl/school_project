@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Path
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..schemas.ideas import IdeaCreate, Idea, IdeaUpdate, IdeaSuccessResponse, VoteCreate
+from ..schemas.ideas import IdeaCreate, Idea, IdeaUpdate, VoteCreate
 from .. import crud
 
 router = APIRouter(prefix="/ideas", tags=["Ideas"])
@@ -20,7 +20,7 @@ def read_idea(id: int = Path(..., title="ID idei"), db: Session = Depends(get_db
 
     return idea
 
-@router.post("/create", response_model=IdeaCreate, summary="Create an idea")
+@router.post("/create", response_model=Idea, summary="Create an idea")
 def create_idea(idea: IdeaCreate, db: Session = Depends(get_db)):
     if idea is None:
         raise HTTPException(status_code=400, detail="Idea not found")
@@ -32,14 +32,9 @@ def create_idea(idea: IdeaCreate, db: Session = Depends(get_db)):
     
     return crud.create_idea(db, idea)
 
-@router.post("/vote", response_model=Idea, summary="Vote an idea by id")
-def create_vote(vote_create: VoteCreate, db: Session = Depends(get_db)):
-    vote = crud.read_vote(db, vote_create.idea_id, vote_create.user_id)
-    
-    if vote is not None:
-        raise HTTPException(status_code=404, detail="Already voted for this idea")
-        
-    response = crud.create_vote(db, vote_create)
+@router.put("/vote", response_model=Idea, summary="Vote an idea by id")
+def create_vote(vote_create: VoteCreate, db: Session = Depends(get_db)):        
+    response = crud.put_vote(db, vote_create)
     
     if response is None:
         raise HTTPException(status_code=404, detail="Idea not found")

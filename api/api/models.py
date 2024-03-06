@@ -41,8 +41,8 @@ class Ideas(Base):
     created = Column(Date,default=func.current_date(), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
-    user = relationship("Users", back_populates="ideas")
-    votes = relationship("Votes", back_populates="ideas", uselist=True)
+    user = relationship("Users", back_populates="ideas", lazy="joined")
+    votes = relationship("Votes", back_populates="ideas", uselist=True, lazy="joined")
     
 
 class Plans(Base):

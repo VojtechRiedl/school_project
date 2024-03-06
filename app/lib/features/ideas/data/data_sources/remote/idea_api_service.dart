@@ -21,7 +21,7 @@ abstract class IdeaApiService {
     @Body() required IdeaCreateModel ideaCreate,
   });
 
-  @POST("/ideas/vote")
+  @PUT("/ideas/vote")
   Future<HttpResponse<IdeaModel>> createVote({
     @Body() required VoteCreateModel voteCreate,
   });

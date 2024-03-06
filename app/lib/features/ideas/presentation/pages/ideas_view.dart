@@ -1,12 +1,13 @@
 import 'package:band_app/core/constants/palette.dart';
 import 'package:band_app/features/ideas/domain/usecases/get_ideas.dart';
-import 'package:band_app/features/ideas/presentation/bloc/ideas_bloc.dart';
-import 'package:band_app/features/ideas/presentation/bloc/ideas_event.dart';
-import 'package:band_app/features/ideas/presentation/bloc/ideas_state.dart';
+import 'package:band_app/features/ideas/presentation/bloc/ideas/ideas_bloc.dart';
+import 'package:band_app/features/ideas/presentation/bloc/ideas/ideas_event.dart';
+import 'package:band_app/features/ideas/presentation/bloc/ideas/ideas_state.dart';
 import 'package:band_app/features/ideas/presentation/widgets/idea.dart';
 import 'package:band_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class IdeasView extends StatefulWidget{
   const IdeasView({super.key});
@@ -41,7 +42,7 @@ class _IdeasViewState extends State<IdeasView> {
                   itemBuilder: (BuildContext context, int index) {
                     return IdeaWidget(idea: state.ideas[index]);
                   }, separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(height: 10,);
+                    return const SizedBox(height: 10);
                   },
                 ),
               ),
@@ -57,15 +58,24 @@ class _IdeasViewState extends State<IdeasView> {
                             ))),
                   ),
                   onPressed: (){
-
+                    GoRouter.of(context).pushNamed("create-idea");
                   },
-                  child: Icon(Icons.add, color: Palette.yellow, size: 32,),
+                  child: const Icon(Icons.add, color: Palette.yellow, size: 32,),
                 ),
               ),
             ],
           ),
         );
-      }, listener: (BuildContext context, IdeasState state) {  },
+      }, listener: (BuildContext context, IdeasState state) {
+        if (state is IdeasVoteFailure){
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              content: Text(state.message),
+            ),
+          );
+        }
+     },
     );
   }
 }

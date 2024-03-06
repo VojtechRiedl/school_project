@@ -46,10 +46,10 @@ class SongItem extends StatelessWidget {
                     },
                     icon: const Icon(Icons.edit, color: Palette.dark),
                   ),
-                  IconButton(
+                  /*IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.bookmark, color: Palette.dark),
-                  ),
+                  ),*/
                 ],
               ),
             ],

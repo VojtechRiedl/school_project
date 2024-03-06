@@ -1,6 +1,7 @@
 import 'package:band_app/features/home/presentation/pages/connection_lost_view.dart';
 import 'package:band_app/features/home/presentation/pages/home_view.dart';
 import 'package:band_app/features/home/presentation/pages/main_view.dart';
+import 'package:band_app/features/ideas/presentation/pages/create_idea_view.dart';
 import 'package:band_app/features/ideas/presentation/pages/ideas_view.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_state.dart';
@@ -47,15 +48,15 @@ final router = GoRouter(
           );
         },
       redirect: (context, state) {
-          //return context.read<AuthorizationBloc>().state is AuthorizationLogoutSuccess ? "/login" : null;
-          return null;
+          return context.read<AuthorizationBloc>().state is AuthorizationLogoutSuccess ? "/login" : null;
+          //return null;
           //return context.read<LoginBloc>().state is LoginSuccess || context.read<RegisterBloc>().state is RegisterSuccess ? null : '/login';
         //return context.read<LoginBloc>().state is LoginSuccess || context.read<RegisterBloc>().state is RegisterSuccess ? "/login" : null; //TODO vratit zpět
       },
       routes:[
         GoRoute(
           name: 'create-song',
-          path: 'create',
+          path: 'create-song',
           pageBuilder: (BuildContext context, GoRouterState state) {
             return CustomTransitionPage<void>(
               key: state.pageKey,
@@ -74,7 +75,7 @@ final router = GoRouter(
         ),
         GoRoute(
           name: 'update-song',
-          path: 'update/:id',
+          path: 'update-song/:id',
           pageBuilder: (BuildContext context, GoRouterState state) {
             return CustomTransitionPage<void>(
               key: state.pageKey,
@@ -98,6 +99,25 @@ final router = GoRouter(
             return CustomTransitionPage<void>(
               key: state.pageKey,
               child: SongView(id: int.parse(state.pathParameters['id']!)), //TODO switch to main view
+              transitionDuration: const Duration(milliseconds: 500),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity:
+                  CurveTween(curve: Curves.easeInOut).animate(animation),
+                  child: child,
+                );
+              },
+            );
+          },
+        ),
+        GoRoute(
+          name: 'create-idea',
+          path: 'create-idea',
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage<void>(
+              key: state.pageKey,
+              child: const CreateIdeaView(),
               transitionDuration: const Duration(milliseconds: 500),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {

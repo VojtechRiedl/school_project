@@ -1,5 +1,4 @@
 import 'package:band_app/core/resources/data_state.dart';
-import 'package:band_app/features/ideas/data/models/idea.dart';
 import 'package:band_app/features/ideas/data/models/idea_create.dart';
 import 'package:band_app/features/ideas/data/models/vote_create.dart';
 import 'package:band_app/features/ideas/domain/entities/idea.dart';

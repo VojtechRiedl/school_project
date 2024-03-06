@@ -5,8 +5,12 @@ import 'package:band_app/features/home/presentation/bloc/navigation/navigation_c
 import 'package:band_app/features/ideas/data/data_sources/remote/idea_api_service.dart';
 import 'package:band_app/features/ideas/data/repository/idea_repository_impl.dart';
 import 'package:band_app/features/ideas/domain/repository/idea_repository.dart';
+import 'package:band_app/features/ideas/domain/usecases/create_idea.dart';
+import 'package:band_app/features/ideas/domain/usecases/create_vote.dart';
+import 'package:band_app/features/ideas/domain/usecases/delete_idea.dart';
 import 'package:band_app/features/ideas/domain/usecases/get_ideas.dart';
-import 'package:band_app/features/ideas/presentation/bloc/ideas_bloc.dart';
+import 'package:band_app/features/ideas/presentation/bloc/idea_validation/idea_validation_cubit.dart';
+import 'package:band_app/features/ideas/presentation/bloc/ideas/ideas_bloc.dart';
 import 'package:band_app/features/login/data/data_sources/remote/authorization_api_service.dart';
 import 'package:band_app/features/login/data/repository/authorization_repository_impl.dart';
 import 'package:band_app/features/login/domain/repository/authorization_repository.dart';
@@ -171,6 +175,24 @@ Future<void> initializeDependencies() async{
     ),
   );
 
+  sl.registerSingleton<CreateVoteUseCase>(
+    CreateVoteUseCase(
+      sl(),
+    ),
+  );
+
+  sl.registerSingleton<CreateIdeaUseCase>(
+    CreateIdeaUseCase(
+      sl(),
+    ),
+  );
+
+  sl.registerSingleton<DeleteIdeaUseCase>(
+    DeleteIdeaUseCase(
+      sl(),
+    ),
+  );
+
   //Blocs
 
   sl.registerFactory<NavigationCubit>(
@@ -225,7 +247,11 @@ Future<void> initializeDependencies() async{
 
   sl.registerFactory<IdeasBloc>(
     () => IdeasBloc(
-      sl()
+      sl(), sl(),sl(),sl()
     ),
+  );
+
+  sl.registerFactory<IdeaValidationCubit>(
+    () => IdeaValidationCubit(),
   );
 }

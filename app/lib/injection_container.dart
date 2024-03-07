@@ -33,10 +33,12 @@ import 'package:band_app/features/song/presentation/bloc/song_update/song_update
 import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/song_create/song_create_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/video/video_cubit.dart';
+import 'package:band_app/features/user/data/data_sources/remote/user_api_service.dart';
 import 'package:band_app/features/user/data/repository/user_repository_impl.dart';
 import 'package:band_app/features/user/domain/repository/user_repository.dart';
 import 'package:band_app/features/user/domain/usecases/get_user.dart';
-import 'package:band_app/features/user/domain/usecases/save_user.dart';
+import 'package:band_app/features/user/domain/usecases/get_users.dart';
+import 'package:band_app/features/user/domain/usecases/update_user.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -79,6 +81,13 @@ Future<void> initializeDependencies() async{
     ),
   );
 
+  sl.registerSingleton<UserApiService>(
+    UserApiService(
+      sl(),
+      baseUrl: Environment.apiUrl,
+    ),
+  );
+
   sl.registerSingleton<AuthorizationRepository>(
     AuthorizationRepositoryImpl(
       apiService: sl(),
@@ -92,7 +101,9 @@ Future<void> initializeDependencies() async{
   );
 
   sl.registerSingleton<UserRepository>(
-    UserRepositoryImpl(),
+    UserRepositoryImpl(
+      sl(),
+    )
   );
 
   sl.registerSingleton<IdeaRepository>(
@@ -115,14 +126,20 @@ Future<void> initializeDependencies() async{
     ),
   );
 
-  sl.registerSingleton<SaveUserUseCase>(
-    SaveUserUseCase(
+  sl.registerSingleton<GetUsersUseCase>(
+    GetUsersUseCase(
       sl(),
     ),
   );
 
   sl.registerSingleton<GetUserUseCase>(
     GetUserUseCase(
+      sl(),
+    ),
+  );
+
+  sl.registerSingleton<UpdateUserUseCase>(
+    UpdateUserUseCase(
       sl(),
     ),
   );

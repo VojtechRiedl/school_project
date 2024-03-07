@@ -19,13 +19,8 @@ class IdeaWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthorizationBloc bloc = context.read<AuthorizationBloc>();
 
-    if(bloc.state is! AuthorizationAuthenticateSuccess){
-      return const SizedBox();
-    }
-
-    bool ? accepted = idea.votes.where((element) => element.author.id == (bloc.state as AuthorizationAuthenticateSuccess).user.id).firstOrNull?.accepted;
+    bool ? accepted = idea.votes.where((element) => element.author.id == context.read<AuthorizationBloc>().state.user!.id).firstOrNull?.accepted;
 
     return GestureDetector(
       onLongPress: () async {
@@ -79,14 +74,8 @@ class IdeaWidget extends StatelessWidget {
                 IconButton(
                   color: Palette.accept,
                   onPressed: (){
-                    AuthorizationBloc bloc = context.read<AuthorizationBloc>();
-
-                    if(bloc.state is! AuthorizationAuthenticateSuccess){
-                      return;
-                    }
-
                     if(accepted == null || accepted == false){
-                      context.read<IdeasBloc>().add(IdeasVoted(true, idea, (bloc.state as AuthorizationAuthenticateSuccess).user));
+                      context.read<IdeasBloc>().add(IdeasVoted(true, idea, context.read<AuthorizationBloc>().state.user!));
                     }
                   },
                   icon: Icon(accepted ?? false ? Icons.thumb_up_alt : Icons.thumb_up_alt_outlined),
@@ -95,14 +84,8 @@ class IdeaWidget extends StatelessWidget {
                 IconButton(
                   color: Palette.decline,
                   onPressed: (){
-                    AuthorizationBloc bloc = context.read<AuthorizationBloc>();
-
-                    if(bloc.state is! AuthorizationAuthenticateSuccess){
-                      return;
-                    }
-
                     if(accepted == null || accepted == true){
-                      context.read<IdeasBloc>().add(IdeasVoted(false, idea,(bloc.state as AuthorizationAuthenticateSuccess).user));
+                      context.read<IdeasBloc>().add(IdeasVoted(false, idea, context.read<AuthorizationBloc>().state.user!));
                     }
                   },
                   icon: Icon(accepted ?? true ? Icons.thumb_down_alt_outlined : Icons.thumb_down_alt),

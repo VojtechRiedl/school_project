@@ -3,11 +3,13 @@ import 'package:band_app/features/user/data/models/user.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class AuthorizationState extends Equatable {
+  final UserModel ? user;
 
-  const AuthorizationState();
+
+  const AuthorizationState({this.user});
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [user];
 }
 
 
@@ -36,10 +38,9 @@ class AuthorizationLoginFailure extends AuthorizationState {
 }
 
 class AuthorizationAuthenticateSuccess extends AuthorizationState {
-  final UserModel user;
 
-  const AuthorizationAuthenticateSuccess(this.user);
+  const AuthorizationAuthenticateSuccess(user) : super(user: user);
 
   @override
-  List<Object> get props => [user];
+  List<Object?> get props => [user];
 }

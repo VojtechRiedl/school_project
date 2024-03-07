@@ -110,16 +110,12 @@ class _CreateSongViewState extends State<CreateSongView> {
                           ))),
                 ),
                 onPressed: (){
-                  AuthorizationBloc bloc = context.read<AuthorizationBloc>();
-
-                  if(bloc.state is AuthorizationAuthenticateSuccess){
-                    context.read<SongCreateBloc>().add(CreateSong(
-                        _titleController.text,
-                        _youtubeLinkController.text,
-                        _textController.text,
-                        (bloc.state as AuthorizationAuthenticateSuccess).user.id
-                    ));
-                  }
+                  context.read<SongCreateBloc>().add(CreateSong(
+                      _titleController.text,
+                      _youtubeLinkController.text,
+                      _textController.text,
+                      context.read<AuthorizationBloc>().state.user!.id
+                  ));
                 },
                 child: const Text("Uložit", style: TextStyle(color: Palette.yellow, fontSize: 16, fontWeight: FontWeight.bold)),
               )

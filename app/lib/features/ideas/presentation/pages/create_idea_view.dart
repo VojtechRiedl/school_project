@@ -105,12 +105,8 @@ class _CreateIdeaViewState extends State<CreateIdeaView> {
       },
       listener: (BuildContext context, IdeaValidationState state) {
         if (state is IdeaValidationSuccess){
-          AuthorizationBloc bloc = context.read<AuthorizationBloc>();
-
-          if(bloc.state is! AuthorizationAuthenticateSuccess){
-            return;
-          }
-          context.read<IdeasBloc>().add(IdeasCreated(state.title, state.description, state.deadline, (bloc.state as AuthorizationAuthenticateSuccess).user));
+          
+          context.read<IdeasBloc>().add(IdeasCreated(state.title, state.description, state.deadline, context.read<AuthorizationBloc>().state.user!));
           context.pop(context);
         }else if (state is IdeaValidationFailure){
           ScaffoldMessenger.of(context).showSnackBar(

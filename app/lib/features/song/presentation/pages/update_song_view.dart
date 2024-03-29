@@ -44,7 +44,6 @@ class _UpdateSongViewState extends State<UpdateSongView> {
       create: (_) => sl<SongUpdateBloc>()..add(LoadSong(widget.id)),
       child:  Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Palette.light,
         appBar: const MainAppBar(
 
           title: Text('Písničky'),
@@ -97,6 +96,7 @@ class _UpdateSongViewState extends State<UpdateSongView> {
                         allowedExtensions: ['mp4']
                     )));
                   }),
+                  const SizedBox(height: 10,),
                   UploadButton(label: "Písnička",loaded: state.songFileResult != null, onPressed: () async {
                     context.read<SongUpdateBloc>().add(LoadSound(await FilePicker.platform.pickFiles(
                         type: FileType.custom,
@@ -106,17 +106,8 @@ class _UpdateSongViewState extends State<UpdateSongView> {
                 ],
               ),
               ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Palette.dark),
-                  fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width - 40, 50)),
-                  shape: MaterialStateProperty.all(
-                      const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)
-                          ))),
-                ),
                 onPressed: (){
                   AuthorizationBloc bloc = context.read<AuthorizationBloc>();
-
                   if(bloc.state is AuthorizationAuthenticateSuccess){
                     context.read<SongUpdateBloc>().add(UpdateSong(
                         _titleController.text,
@@ -126,7 +117,7 @@ class _UpdateSongViewState extends State<UpdateSongView> {
                     ));
                   }
                 },
-                child: const Text("Upravit", style: TextStyle(color: Palette.yellow, fontSize: 16, fontWeight: FontWeight.bold)),
+                child: Text("Upravit", style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 16, fontWeight: FontWeight.bold)),
               )
             ],
           ),

@@ -15,37 +15,26 @@ class MusicPlayer extends StatelessWidget{
   Widget build(BuildContext context) {
     return BlocProvider<MusicBloc>(
       create: (context) => sl<MusicBloc>()..add(MusicLoaded(url: url)),
-      child: Container(
+      child: SizedBox(
         height: 150,
         //color: Palette.yellow,
         child: BlocBuilder<MusicBloc, MusicState>(
           builder: (context, state) {
             if(state is MusicInitial){
-              return const Center(child: CircularProgressIndicator(color: Palette.dark,));
+              return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.onSurface,));
             }
             return Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                  child: SliderTheme(
-                    data: const SliderThemeData(
-                      trackHeight: 10,
-                        thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5),
-                        overlayShape: RoundSliderOverlayShape(overlayRadius: 0),
-                        thumbColor: Palette.dark,
-                        activeTrackColor: Palette.activeTrackColor,
-                        inactiveTrackColor: Palette.inactiveTrackColor,
-                        allowedInteraction: SliderInteraction.tapAndSlide
-                    ),
-                    child: Slider(
-                      value: state.position.inSeconds.toDouble(),
-                      min: 0,
-                      max: state.duration.inSeconds.toDouble(),
-                      onChanged: (double value) {
-                        final position = Duration(seconds: value.toInt());
-                        context.read<MusicBloc>().add(MusicSeeked(position: position));
-                      },
-                    ),
+                  child: Slider(
+                    value: state.position.inSeconds.toDouble(),
+                    min: 0,
+                    max: state.duration.inSeconds.toDouble(),
+                    onChanged: (double value) {
+                      final position = Duration(seconds: value.toInt());
+                      context.read<MusicBloc>().add(MusicSeeked(position: position));
+                    },
                   ),
                 ),
                 Row(
@@ -53,15 +42,15 @@ class MusicPlayer extends StatelessWidget{
                   children: [
                     Text(
                       formatTime(state.position),
-                      style: const TextStyle(
-                        color: Palette.second,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       formatTime(state.duration),
-                      style: const TextStyle(
-                        color: Palette.second,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

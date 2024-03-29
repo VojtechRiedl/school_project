@@ -15,27 +15,25 @@ class SongSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      decoration: const InputDecoration(
-        contentPadding: EdgeInsets.all(15),
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.all(15),
         labelText: 'Vyhledat...',
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
           borderSide: BorderSide(
-            color: Palette.darkOutlineTextBoxColor,
+            color: Theme.of(context).colorScheme.outline,
             width: 2,
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
           borderSide: BorderSide(
-            color: Palette.darkOutlineTextBoxColor,
+            color: Theme.of(context).colorScheme.outline,
             width: 2,
           ),
         ),
-        labelStyle: TextStyle(
-          color: Palette.secondDark,
-        ),
-        suffixIcon: Icon(Icons.search, color: Palette.secondDark),
+        labelStyle: Theme.of(context).textTheme.labelMedium,
+        suffixIcon: Icon(Icons.search, color: Theme.of(context).textTheme.labelMedium?.color),
         ),
       onChanged: (value) {
         context.read<SongsBloc>().add(SearchSongs(value, suggestions));

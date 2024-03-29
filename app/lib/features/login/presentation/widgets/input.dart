@@ -20,7 +20,7 @@ class _InputState extends State<Input> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      style: const TextStyle(color: Palette.lightTextBoxTextColor),
+      cursorColor: Theme.of(context).colorScheme.outline,
       maxLines: 1,
       controller: widget.controller,
       obscureText: widget.isObscured ? isObscure : false,
@@ -30,27 +30,26 @@ class _InputState extends State<Input> {
           onPressed: () => setState(() {
             isObscure = !isObscure;
           }),
-          icon: Icon(isObscure ? Icons.visibility : Icons.visibility_off, color: Palette.lightTextBoxTextColor),
-          color: Palette.darkOutlineTextBoxColor,
+          icon: Icon(isObscure ? Icons.visibility : Icons.visibility_off, color: Theme.of(context).colorScheme.outline),
+          color: Theme.of(context).colorScheme.outline,
         ) : null,
         labelText: widget.label,
         border: const OutlineInputBorder(),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5.0),
-          borderSide: const BorderSide(color: Palette.darkOutlineTextBoxColor, width: 2.0),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.outline, width: 2.0),
         ),
-        focusColor: Palette.darkOutlineTextBoxColor,
+        focusColor: Theme.of(context).colorScheme.outline,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5.0),
-          borderSide: const BorderSide(color: Palette.darkOutlineTextBoxColor, width: 2.0),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.outline, width: 2.0),
         ),
-        labelStyle: TextStyle(color: widget.errorText == null ?  Palette.darkOutlineTextBoxColor : Palette.error),
+        labelStyle: TextStyle(color: widget.errorText == null ? Theme.of(context).textTheme.labelMedium?.color : Palette.error),
         errorText: widget.errorText,
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5.0),
-          borderSide: const BorderSide(color: Palette.error, width: 2.0),
+          borderSide: const BorderSide(width: 2.0),
         ),
-        errorStyle: const TextStyle(color: Palette.error),
       ),
     );
   }

@@ -21,10 +21,11 @@ class UserLoaded extends UsersEvent {
 
 class UserUpdated extends UsersEvent {
   final int id;
-  final UserUpdateModel userUpdate;
+  final String password;
+  final String username;
 
-  const UserUpdated(this.id, this.userUpdate);
+  const UserUpdated(this.id, this.username, this.password);
 
   @override
-  List<Object> get props => [id, userUpdate];
+  List<Object> get props => [id, username, password];
 }

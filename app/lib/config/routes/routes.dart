@@ -13,6 +13,7 @@ import 'package:band_app/features/song/presentation/pages/song_view.dart';
 import 'package:band_app/features/song/presentation/pages/song_view.dart';
 import 'package:band_app/features/song/presentation/pages/songs_view.dart';
 import 'package:band_app/features/song/presentation/pages/update_song_view.dart';
+import 'package:band_app/features/user/presentation/pages/user_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -98,7 +99,7 @@ final router = GoRouter(
           pageBuilder: (BuildContext context, GoRouterState state) {
             return CustomTransitionPage<void>(
               key: state.pageKey,
-              child: SongView(id: int.parse(state.pathParameters['id']!)), //TODO switch to main view
+              child: SongView(id: int.parse(state.pathParameters['id']!)),
               transitionDuration: const Duration(milliseconds: 500),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
@@ -130,6 +131,25 @@ final router = GoRouter(
             );
           },
         ),
+        GoRoute(
+          name: 'user',
+          path: 'user/:id',
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage<void>(
+              key: state.pageKey,
+              child: UserView(id: int.parse(state.pathParameters['id']!)),
+              transitionDuration: const Duration(milliseconds: 500),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity:
+                  CurveTween(curve: Curves.easeInOut).animate(animation),
+                  child: child,
+                );
+              },
+            );
+          },
+        ),
       ]
     ),
     GoRoute(
@@ -149,23 +169,6 @@ final router = GoRouter(
         );
       },
     ),
-    GoRoute(
-        name: 'ideas',
-        path: '/ideas',
-        pageBuilder: (BuildContext context, GoRouterState state) {
-          return CustomTransitionPage<void>(
-            key: state.pageKey,
-            child: const IdeasView(),
-            transitionDuration: const Duration(milliseconds: 500),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
-                child: child,
-              );
-            },
-          );
-        }),
     GoRoute(
       path: '/settings',
       builder: (context, state) => const HomeView(),

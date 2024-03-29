@@ -3,12 +3,13 @@ import 'package:equatable/equatable.dart';
 
 abstract class UsersState extends Equatable {
   final List<UserModel> users;
+  final UserModel ? user;
 
 
-  const UsersState({this.users = const []});
+  const UsersState({this.users = const [], this.user});
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [users, user];
 }
 
 class UsersLoadInProgress extends UsersState {}
@@ -30,22 +31,45 @@ class UsersLoadFailure extends UsersState {
   List<Object> get props => [message];
 }
 
-class UserLoadInProgress extends UsersState {}
+class UserLoadInProgress extends UsersState {
+
+  const UserLoadInProgress(List<UserModel> users) : super(users: users);
+
+  @override
+  List<Object?> get props => [users];
+
+}
 
 class UserLoadFailure extends UsersState {
   final String message;
 
-  const UserLoadFailure(this.message);
+  const UserLoadFailure(this.message, users)  : super(users: users);
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [message, users];
 }
 
 class UserLoadSuccess extends UsersState {
-  final UserModel user;
 
-  const UserLoadSuccess(this.user);
+  const UserLoadSuccess(users,user) : super(users: users, user: user);
 
   @override
-  List<Object> get props => [user];
+  List<Object?> get props => [user, users];
+}
+
+class UserUpdateSuccess extends UsersState {
+
+  const UserUpdateSuccess(users, user) : super(users: users, user: user);
+
+  @override
+  List<Object?> get props => [user, users];
+}
+
+class UserUpdateFailure extends UsersState {
+  final String message;
+
+  const UserUpdateFailure(this.message, users)  : super(users: users);
+
+  @override
+  List<Object> get props => [message, users];
 }

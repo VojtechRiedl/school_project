@@ -48,8 +48,8 @@ class _VideoPlayerState extends State<VideoPlayer> {
 
   Widget _buildVideoPlayer(ChewieController chewieController) {
 
-      return SizedBox(
-        //color: Colors.yellow,
+      return Container(
+        color: Colors.transparent,
         height: 200,
         child: chewieController
             .videoPlayerController.value.isInitialized
@@ -64,10 +64,10 @@ class _VideoPlayerState extends State<VideoPlayer> {
   }
 
   Widget _buildLoading() {
-    return const SizedBox(
+    return SizedBox(
       height: 200,
       child: Center(
-        child: CircularProgressIndicator(color: Palette.dark,),
+        child: CircularProgressIndicator(color: Theme.of(context).colorScheme.onSurface,),
       ),
     );
   }

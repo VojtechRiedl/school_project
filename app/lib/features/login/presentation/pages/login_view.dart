@@ -19,8 +19,15 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
 
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  late TextEditingController _usernameController;
+  late TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    _usernameController = TextEditingController();
+    _passwordController = TextEditingController();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -31,6 +38,8 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    _usernameController.text = "admin";
+    _passwordController.text = "admin123";
     return MultiBlocListener(
       listeners: [
         BlocListener<InternetCubit, InternetState>(
@@ -50,7 +59,7 @@ class _LoginViewState extends State<LoginView> {
       ],
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Palette.light,
+        //backgroundColor: Palette.dark,
         body: _buildBody(context),
       ),
     );
@@ -68,7 +77,7 @@ class _LoginViewState extends State<LoginView> {
               const Spacer(flex: 1),
               Column(
                   children: [
-                    const Text("Art Of The Crooked",style: TextStyle(color: Palette.darkTextColor, fontSize: 32, fontWeight: FontWeight.bold)),
+                    Text("Art Of The Crooked",style: Theme.of(context).textTheme.headlineLarge/*extStyle(/*color: Palette.darkTextColor*/ fontSize: 32, fontWeight: FontWeight.bold)*/),
                     const SizedBox(height: 40),
                     Input(label: "Uživatelské jméno", isObscured: false, controller: _usernameController, errorText: authorizationBloc.state is AuthorizationLoginFailure && (authorizationBloc.state as AuthorizationLoginFailure).error == AuthorizationError.badUsername ? (authorizationBloc.state as AuthorizationLoginFailure).message : null),
                     const SizedBox(height: 10),
@@ -88,97 +97,28 @@ class _LoginViewState extends State<LoginView> {
                                 GoRouter.of(context).pushNamed("register");
                               }
                             },
-                            child: const Text("Nemáš účet?", style: TextStyle(color: Palette.darkTextColor, fontSize: 14, fontWeight: FontWeight.bold))),
+                            child: Text("Nemáš účet?", style: Theme.of(context).textTheme.bodyMedium)),
                       ],
                     )
                   ]
               ),
               const Spacer(flex: 1),
-              Card(
-                elevation: 0.5,
-                child: ListTile(
-                  tileColor: Palette.dark,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  title: authorizationBloc.state is AuthorizationAuthenticateInProgress ? const Center(child: CircularProgressIndicator(color: Palette.dark)) : const Text("Přihlásit se", textAlign: TextAlign.center, style: TextStyle(color: Palette.yellow, fontSize: 16, fontWeight: FontWeight.bold)),
-                  onTap: (){
-                    context.read<AuthorizationBloc>().add(
-                        AuthorizationLogged(
-                            username: _usernameController.text,
-                            password: _passwordController.text
-                        )
-                    );
-                  },
-                ),
+
+              ElevatedButton(
+                onPressed: (){
+                  context.read<AuthorizationBloc>().add(
+                      AuthorizationLogged(
+                          username: _usernameController.text,
+                          password: _passwordController.text
+                      )
+                  );
+                },
+                child: authorizationBloc.state is AuthorizationAuthenticateInProgress ? Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary)) : const Text("Přihlásit se", textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
               ),
+
               const Spacer(flex: 1),
             ]
         )
     );
   }
-
-  /*Widget _buildBody(BuildContext context){
-    return BlocConsumer<LoginBloc, LoginState>(
-      listener: (BuildContext context, LoginState state) {
-        if(state is LoginSuccess){
-          GoRouter.of(context).pushReplacementNamed('home');
-        }
-      },
-      builder: (BuildContext context, LoginState state) {
-        return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Spacer(flex: 1),
-                  Column(
-                      children: [
-                        const Icon(Icons.ac_unit, color: Palette.first, size: 128),
-                        const SizedBox(height: 10),
-                        const Text("Art Of The Crooked",style: TextStyle(color: Palette.second, fontSize: 32, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 40),
-                        Input(label: "Uživatelské jméno", obscured: false, controller: _usernameController, errorText: null),
-                        const SizedBox(height: 10),
-                        Input(label: "Heslo", obscured: true, controller: _passwordController, errorText: state is PasswordError ? state.message : null),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(Palette.white)),
-                                onPressed: (){
-                                  GoRouter.of(context).pushNamed('register');
-                                },
-                                child: const Text("Nemáš účet?", style: TextStyle(color: Palette.second, fontSize: 14, fontWeight: FontWeight.bold))),
-                          ],
-                        )
-                      ]
-                  ),
-                  const Spacer(flex: 2),
-                  Card(
-                    child: ListTile(
-                      tileColor: Palette.first,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      title: const Text("Přihlásit se", textAlign: TextAlign.center, style: TextStyle(color: Palette.white, fontSize: 16, fontWeight: FontWeight.bold)),
-                      onTap: (){
-                        context.read<LoginBloc>().add(
-                            LoginUser(
-                                username: _usernameController.text,
-                                password: _passwordController.text
-                            )
-                        );
-                      },
-                    ),
-                  ),
-                  const Spacer(flex: 1),
-                ]
-            )
-        );
-      },
-    );
-  }*/
 }

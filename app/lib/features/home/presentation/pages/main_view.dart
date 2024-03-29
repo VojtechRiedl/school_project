@@ -7,8 +7,8 @@ import 'package:band_app/features/home/presentation/pages/home_view.dart';
 import 'package:band_app/features/home/presentation/widgets/default_scaffold.dart';
 import 'package:band_app/features/ideas/presentation/pages/ideas_view.dart';
 import 'package:band_app/features/plans/presentation/pages/plans_view.dart';
-import 'package:band_app/features/song/presentation/pages/song_view.dart';
 import 'package:band_app/features/song/presentation/pages/songs_view.dart';
+import 'package:band_app/features/user/presentation/pages/users_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -52,7 +52,7 @@ class _MainViewState extends State<MainView> {
                     SongsView(),
                     HomeView(),
                     PlansView(),
-                    Text("test")
+                    UsersView(),
                   ],
                 )
             ),

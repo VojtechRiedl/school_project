@@ -16,19 +16,16 @@ class UploadButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Card(
-      elevation: 0.5,
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      color: Palette.secondLight,
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
         trailing: Icon(
           loaded ? Icons.file_download_done : Icons.file_upload_outlined,
-          color: Palette.secondDark,
+          color: Theme.of(context).colorScheme.onSurface,
         ),
         title: Text(
           label,
-          style: const TextStyle(
-            color: Palette.secondDark,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
             fontWeight: FontWeight.bold,
           ),
         ),

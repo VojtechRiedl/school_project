@@ -31,23 +31,22 @@ class SongInput extends StatelessWidget{
           decoration: InputDecoration(
             labelText: multiLine ? null : label,
             hintText: multiLine ? label : null,
-            focusedBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
               borderSide: BorderSide(
-                color: Palette.secondDark,
+                color: Theme.of(context).colorScheme.outline,
                 width: 2,
               ),
             ),
-            enabledBorder: const OutlineInputBorder(
+            enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
               borderSide: BorderSide(
-                color: Palette.secondDark,
+                color: Theme.of(context).colorScheme.outline,
                 width: 2,
               ),
             ),
-            labelStyle: const TextStyle(
-              color: Palette.secondDark,
-            ),
+            labelStyle: Theme.of(context).textTheme.labelMedium,
+            hintStyle: Theme.of(context).textTheme.labelMedium,
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
             ),
@@ -60,7 +59,7 @@ class SongInput extends StatelessWidget{
               ),
             ),
             errorStyle: const TextStyle(
-              color: Palette.decline,
+              color: Palette.error,
             ),
           )
         ),

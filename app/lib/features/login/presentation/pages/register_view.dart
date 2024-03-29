@@ -52,7 +52,6 @@ class _RegisterViewState extends State<RegisterView> {
       ],
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Palette.light,
         body: _buildBody(context),
       ),
     );
@@ -70,7 +69,7 @@ class _RegisterViewState extends State<RegisterView> {
               const Spacer(flex: 1),
               Column(
                   children: [
-                    const Text("Art Of The Crooked",style: TextStyle(color: Palette.darkTextColor, fontSize: 32, fontWeight: FontWeight.bold)),
+                    Text("Art Of The Crooked",style: Theme.of(context).textTheme.headlineLarge),
                     const SizedBox(height: 40),
                     Input(
                         label: "Uživatelské jméno",
@@ -102,22 +101,14 @@ class _RegisterViewState extends State<RegisterView> {
                                 GoRouter.of(context).pop("login");
                               }
                             },
-                            child: const Text("Máš již účet?", style: TextStyle(color: Palette.darkTextColor, fontSize: 14, fontWeight: FontWeight.bold))),
+                            child: Text("Máš již účet?", style: Theme.of(context).textTheme.bodyMedium)),
                       ],
                     )
                   ]
               ),
               const Spacer(flex: 1),
-              Card(
-                elevation: 0.5,
-                child: ListTile(
-                  tileColor: Palette.dark,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  title: const Text("Zaregistrovat se", textAlign: TextAlign.center, style: TextStyle(color: Palette.yellow, fontSize: 16, fontWeight: FontWeight.bold)),
-                  onTap: (){
-
+              ElevatedButton(
+                  onPressed: (){
                     context.read<AuthorizationBloc>().add(
                         AuthorizationRegistered(
                             username: _usernameController.value.text,
@@ -126,77 +117,13 @@ class _RegisterViewState extends State<RegisterView> {
                         )
                     );
                   },
-                ),
+                  child: authorizationBloc.state is AuthorizationAuthenticateInProgress ? Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary)) : const Text("Zaregistrovat se", textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
               ),
+
               const Spacer(flex: 1),
             ]
         )
     );
   }
 
-  /*Widget _buildBody(BuildContext context){
-    return BlocConsumer<RegisterBloc, RegisterState>(
-      listener: (context, state) {
-        if(state is RegisterSuccess){
-          GoRouter.of(context).pushReplacementNamed('home');
-        }
-      },
-      builder: (BuildContext context, RegisterState state) {
-        return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Spacer(flex: 1),
-                  Column(
-                      children: [
-                        const Icon(Icons.ac_unit, color: Palette.first, size: 128),
-                        const SizedBox(height: 10),
-                        const Text("Art Of The Crooked",style: TextStyle(color: Palette.second, fontSize: 32, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 40),
-                        Input(label: "Uživatelské jméno", obscured: false, controller: _usernameController ,errorText: state is UsernameError ? state.message : null),
-                        const SizedBox(height: 10),
-                        Input(label: "Heslo", obscured: true,controller: _passwordController, errorText: state is PasswordError ? state.message : null),
-                        const SizedBox(height: 10),
-                        Input(label: "Potvrzení hesla", obscured: true,controller: _confirmPasswordController ,errorText: state is PasswordError ? state.message : null),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                                onPressed: (){
-                                  GoRouter.of(context).pushNamed('login');
-                                },
-                                child: const Text("Máš již účet?", style: TextStyle(color: Palette.second, fontSize: 14, fontWeight: FontWeight.bold))),
-                          ],
-                        )
-                      ]
-                  ),
-                  const Spacer(flex: 2),
-                  Card(
-                    child: ListTile(
-                      tileColor: Palette.first,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      title: const Text("Zaregistrovat se", textAlign: TextAlign.center, style: TextStyle(color: Palette.white, fontSize: 16, fontWeight: FontWeight.bold)),
-                      onTap: (){
-                        context.read<RegisterBloc>().add(
-                            RegisterUser(
-                                username: _usernameController.value.text,
-                                password: _passwordController.value.text,
-                                confirmPassword: _confirmPasswordController.value.text
-                            )
-                        );
-                      },
-                    ),
-                  ),
-                  const Spacer(flex: 1),
-                ]
-            )
-        );
-      },
-    );
-  }*/
 }

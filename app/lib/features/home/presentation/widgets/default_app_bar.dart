@@ -1,4 +1,3 @@
-import 'package:band_app/core/constants/palette.dart';
 import 'package:flutter/material.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
@@ -9,8 +8,6 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 5,
-      backgroundColor: Palette.appBarColor,
       centerTitle: true,
       title: title,
     );

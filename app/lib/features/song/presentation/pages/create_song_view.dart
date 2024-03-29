@@ -42,9 +42,7 @@ class _CreateSongViewState extends State<CreateSongView> {
       create: (_) => sl<SongCreateBloc>(),
       child:  Scaffold(
       resizeToAvoidBottomInset: false,
-
-      backgroundColor: Palette.light,
-      appBar: const MainAppBar(
+        appBar: const MainAppBar(
 
         title: Text('Písničky'),
       ),
@@ -92,6 +90,7 @@ class _CreateSongViewState extends State<CreateSongView> {
                         allowedExtensions: ['mp4']
                     )));
                   }),
+                  SizedBox(height: 10),
                   UploadButton(label: "Písnička",loaded: state.songFileResult != null, onPressed: () async {
                     context.read<SongCreateBloc>().add(LoadSound(await FilePicker.platform.pickFiles(
                         type: FileType.custom,
@@ -101,14 +100,6 @@ class _CreateSongViewState extends State<CreateSongView> {
                 ],
               ),
               ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Palette.dark),
-                  fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width - 40, 50)),
-                  shape: MaterialStateProperty.all(
-                      const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)
-                          ))),
-                ),
                 onPressed: (){
                   context.read<SongCreateBloc>().add(CreateSong(
                       _titleController.text,
@@ -117,7 +108,7 @@ class _CreateSongViewState extends State<CreateSongView> {
                       context.read<AuthorizationBloc>().state.user!.id
                   ));
                 },
-                child: const Text("Uložit", style: TextStyle(color: Palette.yellow, fontSize: 16, fontWeight: FontWeight.bold)),
+                child: Text("Uložit", style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 16, fontWeight: FontWeight.bold)),
               )
             ],
           ),

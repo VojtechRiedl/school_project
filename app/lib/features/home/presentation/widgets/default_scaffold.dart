@@ -16,7 +16,7 @@ class DefaultScaffold extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Palette.light,
+      //backgroundColor: Palette.light,
       appBar: MainAppBar(title: title),
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.only(
@@ -24,9 +24,8 @@ class DefaultScaffold extends StatelessWidget{
           topRight: Radius.circular(10),
         ),
         child: BottomAppBar(
-          elevation: 5,
+
           height: 60,
-          color: Palette.bottomNavigatorBarColor,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             mainAxisSize: MainAxisSize.max,
@@ -63,7 +62,7 @@ class DefaultScaffold extends StatelessWidget{
                 selectedIcon: Icons.settings,
                 unselectedIcon: Icons.settings_outlined,
                 isSelected: index == 4,
-                index: 3,
+                index: 4,
                 pageController: pageController,
               ),
             ],

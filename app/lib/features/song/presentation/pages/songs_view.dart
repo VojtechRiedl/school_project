@@ -58,8 +58,8 @@ class _SongsViewState extends State<SongsView> {
         },
         builder: (BuildContext context, state) {
           if (state is SongsInitial) {
-            return const Center(
-              child: CircularProgressIndicator(color: Palette.dark,),
+            return Center(
+              child: CircularProgressIndicator(color: Theme.of(context).colorScheme.onSurface,),
             );
           }
           final suggestions = state is SongsSearched ? state.suggestions : state.songs;
@@ -80,16 +80,11 @@ class _SongsViewState extends State<SongsView> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
-                  child: Card(
-                    margin: const EdgeInsets.all(0),
-                    color: Palette.first,
-                    child: ListTile(
-                      title: const Icon(Icons.add, color: Palette.yellow,
-                        size: 32),
-                      onTap: () {
+                  child: ElevatedButton(
+                      onPressed: (){
                         GoRouter.of(context).pushNamed("create-song");
-                      }
-                    ),
+                      },
+                      child:  Icon(Icons.add, color: Theme.of(context).colorScheme.primary, size: 32,)
                   ),
                 ),
               ],

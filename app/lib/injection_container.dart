@@ -39,6 +39,7 @@ import 'package:band_app/features/user/domain/repository/user_repository.dart';
 import 'package:band_app/features/user/domain/usecases/get_user.dart';
 import 'package:band_app/features/user/domain/usecases/get_users.dart';
 import 'package:band_app/features/user/domain/usecases/update_user.dart';
+import 'package:band_app/features/user/presentation/bloc/users_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -270,5 +271,11 @@ Future<void> initializeDependencies() async{
 
   sl.registerFactory<IdeaValidationCubit>(
     () => IdeaValidationCubit(),
+  );
+
+  sl.registerFactory<UsersBloc>(
+    () => UsersBloc(
+      sl(), sl(), sl()
+    ),
   );
 }

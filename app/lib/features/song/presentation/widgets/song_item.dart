@@ -16,12 +16,6 @@ class SongItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 7.5),
       child: Card(
-        margin: const EdgeInsets.all(0),
-        color: Palette.lightCard,
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
         child: ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           title: Row(
@@ -32,10 +26,7 @@ class SongItem extends StatelessWidget {
                 child: Text(
                   song.title,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Palette.dark,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.titleMedium
                 ),
               ),
               Row(
@@ -44,7 +35,7 @@ class SongItem extends StatelessWidget {
                     onPressed: () {
                       GoRouter.of(context).pushNamed("update-song", pathParameters: {'id': song.id.toString()});
                     },
-                    icon: const Icon(Icons.edit, color: Palette.dark),
+                    icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.onSurface),
                   ),
                   /*IconButton(
                     onPressed: () {},

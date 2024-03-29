@@ -25,16 +25,7 @@ class User(BaseModel):
   
 
 class UserUpdate(BaseModel):
-    username: str = Field(description="Jméno uživatele", examples=["Pepa Dlouhý"])
-    password: str = Field(description="Heslo uživatele", examples=["d4w8as4d5wa4d68was5d4a6dwa9sd9"])
+    username: str | None = Field(description="Jméno uživatele", examples=["Pepa Dlouhý"])
+    password: str | None = Field(description="Heslo uživatele", examples=["d4w8as4d5wa4d68was5d4a6dwa9sd9"])
         
     model_config = ConfigDict(from_attributes=True)
-
-class UserSuccessResponse(BaseModel):
-    
-    user_id: int = Field(description="ID uživatele", examples=[1,8])
-    message: str = Field(description="Zpráva", examples=["Uživatel byl úspěšně aktualizován"])
-    rows_affacted: int = Field(description="Počet ovlivněných řádků", examples=[1])
-    
-    model_config = ConfigDict(from_attributes=True)
-    

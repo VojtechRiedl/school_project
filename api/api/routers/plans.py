@@ -13,34 +13,39 @@ def read_plans(db: Session = Depends(get_db)):
 
 @router.get("/{id}", response_model=Plan, summary="Get an plan by id")
 def read_plan(id: int = Path(..., title="ID plánu"), db: Session = Depends(get_db)):
-    plan = crud.get_plan(db, id)
+    plan = crud.read_plan(db, id)
+    
+    
     if plan is None:
         raise HTTPException(status_code=404, detail="Plan not found")
     return plan
 
 
-@router.post("/create", response_model=PlanCreate, summary="Create an plan")
-def create_plan(plan: PlanCreate, db: Session = Depends(get_db)):
+@router.post("/create", response_model=Plan, summary="Create an plan")
+def create_plan(plan_create: PlanCreate, db: Session = Depends(get_db)):
+    if plan_create is None:
+        raise HTTPException(status_code=400, detail="Bad request")
+        
+    return crud.create_plan(db, plan_create)
+
+
+@router.patch("/update/{id}", response_model=Plan, summary="Update an plan by id")
+def update_plan(plan: PlanUpdate, id: int = Path(..., title="ID plánu"), db: Session = Depends(get_db)):
+    if plan is None:
+        raise HTTPException(status_code=400, detail="Bad request")
+    
+    plan = crud.update_plan(db, id, plan)
+    
+    if plan is None:
+        raise HTTPException(status_code=404, detail="Idea not found")
+    
+    return plan
+
+@router.delete("/delete/{id}", response_model=Plan, summary="Delete an plan by id")
+def delete_plan(id: int = Path(..., title="ID plánu"), db: Session = Depends(get_db)):
+    plan = crud.delete_plan(db, id)
+    
     if plan is None:
         raise HTTPException(status_code=404, detail="Plan not found")
     
-    return crud.create_plan(db, plan)
-
-
-@router.patch("/update/{id}", response_model=PlanSuccessResponse, summary="Update an plan by id")
-def update_plan(plan: PlanUpdate, id: int = Path(..., title="ID plánu"), db: Session = Depends(get_db)):
-    response = crud.update_plan(db, id, plan)
-    
-    if response.rows_affacted == 0:
-        raise HTTPException(status_code=404, detail="Idea not found")
-    
-    return response
-
-@router.delete("/delete/{id}", response_model=PlanSuccessResponse, summary="Delete an plan by id")
-def delete_plan(id: int = Path(..., title="ID plánu"), db: Session = Depends(get_db)):
-    response = crud.delete_plan(db, id)
-    
-    if response.rows_affacted == 0:
-        raise HTTPException(status_code=404, detail="Idea not found")
-    
-    return response
+    return plan

@@ -22,11 +22,17 @@ def read_user(db: Session = Depends(get_db), user_id: int = Path(..., title="ID 
     return response
 
 @router.patch("/update/{user_id}", response_model=User, summary="Update an user")
-def update_user(user: UserUpdate, db: Session = Depends(get_db), user_id: int = Path(..., title="ID of the user")):
-    if user is None:
+def update_user(user_update: UserUpdate, db: Session = Depends(get_db), user_id: int = Path(..., title="ID of the user")):
+    if user_update is None:
         raise HTTPException(status_code=400, detail="Bad request")
     
-    response = crud.update_user(db, user_id, user)
+    user = crud.get_user(db, user_id)
+    
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    response = crud.update_user(db, user_id, user_update)
+    
     if response is None:
         raise HTTPException(status_code=404, detail="User not found")
     

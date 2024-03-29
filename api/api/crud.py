@@ -77,28 +77,20 @@ def get_user(db: Session, user_id: int):
         )
     return None
 
-def update_user(db: Session, user_id: int, user: UserUpdate):
-    user = db.query(models.Users).filter(models.Users.username == user.username).first()
+def update_user(db: Session, user_id: int, user_update: UserUpdate):
     
-    if user is None:
-        return None
-    
-    updated_user = db.query(models.Users).filter(models.Users.id == user_id).first()
-    
-    if updated_user is None:
-        return None
+    if user_update.username is not None:
+        user = db.query(models.Users).filter(models.Users.username == user_update.username).first()
+        if user is not None:
+            return None
+        db.query(models.Users).filter(models.Users.id == user_id).update({models.Users.username: user_update.username}) 
 
-    updated_user.username = user.username
-    updated_user.password = user.password
-    
+    elif user_update.password is not None:
+        db.query(models.Users).filter(models.Users.id == user_id).update({models.Users.password: user_update.password}) 
+        
     db.commit()
-    db.refresh(updated_user)
-    return User(
-        id=updated_user.id,
-        username=updated_user.username,
-        created=updated_user.created,
-        last_login=updated_user.last_login,
-    )
+    
+    return get_user(db, user_id)
 
 def read_ideas(db: Session): 
     ideas = db.query(models.Ideas).all()
@@ -166,60 +158,42 @@ def delete_idea(db: Session, idea_id: int):
 
 def get_plans(db: Session):
     plans = db.query(models.Plans).all()
-    response_plans = []
+    
     if plans:
-        for plan in plans:
-            response_plans.append(Plan(
-                plan_id=plan.plan_id,
-                name=plan.name,
-                plan_date=plan.date,
-                description=plan.description,
-                user=plan.users.username,
-            ))
-        return response_plans
-    return response_plans
+        return plans
+    
+    return []
 
-def get_plan(db: Session, plan_id: int):
-    plan = db.query(models.Plans).filter(models.Plans.plan_id == plan_id).first()
+def read_plan(db: Session, plan_id: int):
+    plan = db.query(models.Plans).filter(models.Plans.id == plan_id).first()
     if plan:
-        return Plan(
-            plan_id=plan.plan_id,
-            name=plan.name,
-            plan_date=plan.date,
-            description=plan.description,
-            user=plan.users.username,
-        )
+        return plan
     return None 
 
 def create_plan(db: Session, idea_create: PlanCreate):
-    db_plan = models.Plans(
-        name=idea_create.name,
-        date=idea_create.plan_date,
-        description=idea_create.description,
-        user_id=idea_create.user_id
-    )
+    db_plan = models.Plans(**idea_create.model_dump())
     db.add(db_plan)
     db.commit()
     db.refresh(db_plan)
-    return idea_create
+        
+    return db_plan
 
 def update_plan(db: Session, plan_id: int, plan: PlanUpdate):
-    updated_plan = db.query(models.Plans).filter(models.Plans.plan_id == plan_id).update({models.Plans.name: plan.name, models.Plans.date: plan.plan_date, models.Plans.description: plan.description})
+    db.query(models.Plans).filter(models.Plans.id == plan_id).update({models.Plans.title: plan.title, models.Plans.date: plan.date, models.Plans.description: plan.description})
     db.commit()
-    return PlanSuccessResponse(
-        plan_id=plan_id,
-        rows_affacted=updated_plan,
-        message="Nápad byl úspěšně aktualizován",
-    ) 
+    
+    return read_plan(db, plan_id)
 
 def delete_plan(db: Session, plan_id: int):
-    deleted_idea = db.query(models.Plans).filter(models.Plans.plan_id == plan_id).delete()
+    plan = read_plan(db, plan_id)
+    
+    if plan is None:
+        return None
+
+    db.query(models.Plans).filter(models.Plans.id == plan_id).delete()
     db.commit()
-    return PlanSuccessResponse(
-        plan_id=plan_id,
-        rows_affacted=deleted_idea,
-        message="Nápad byl úspěšně smazán",
-    )
+
+    return plan
 
 def get_songs(db: Session):
     songs = db.query(models.Songs).all()

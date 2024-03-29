@@ -15,7 +15,7 @@ class Users(Base):
 
     ideas = relationship("Ideas", back_populates="user")
     votes = relationship("Votes", back_populates="user")
-    plans = relationship("Plans", back_populates="users")
+    plans = relationship("Plans", back_populates="user")
     songs = relationship("Songs", back_populates="users")
     favorite_songs = relationship("FavoriteSongs", back_populates="users")
 
@@ -48,20 +48,14 @@ class Ideas(Base):
 class Plans(Base):
     __tablename__ = "plans"
     
-    plan_id = Column(Integer, primary_key=True, index=True,autoincrement=True)
-    name = Column(String, nullable=False)
+    id = Column(Integer, primary_key=True, index=True,autoincrement=True)
+    title = Column(String, nullable=False)
     date = Column(DateTime, nullable=False)
     description = Column(Text, nullable=True)
-
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     
-    users = relationship("Users", back_populates="plans")
+    user = relationship("Users", back_populates="plans",lazy="joined")
     
-    def __init__(self, name, date, description, user_id):
-        self.name = name
-        self.date = date
-        self.description = description
-        self.user_id = user_id
 class Songs(Base):
     __tablename__ = "songs"
     

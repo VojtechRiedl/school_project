@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 class SongEntity extends Equatable{
   final int id;
   final String title;
+  final DateTime created;
   final bool hasVideo;
   final bool hasSound;
   final String ? youtubeUrl;
@@ -12,6 +13,7 @@ class SongEntity extends Equatable{
   const SongEntity({
     required this.id,
     required this.title,
+    required this.created,
     required this.hasVideo,
     required this.hasSound,
     this.youtubeUrl,
@@ -20,6 +22,6 @@ class SongEntity extends Equatable{
   });
 
   @override
-  List<Object> get props => [id, title, youtubeUrl!, text!, poster, hasVideo, hasSound];
+  List<Object> get props => [id, title,created, youtubeUrl!, text!, poster, hasVideo, hasSound];
 
 }

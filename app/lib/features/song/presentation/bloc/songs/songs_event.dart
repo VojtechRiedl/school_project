@@ -1,3 +1,4 @@
+import 'package:band_app/features/song/data/models/song.dart';
 import 'package:band_app/features/song/domain/entites/song.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
@@ -19,7 +20,7 @@ class LoadSongs extends SongsEvent {
 
 class SearchSongs extends SongsEvent {
   final String query;
-  final List<SongEntity> suggestions;
+  final List<SongModel> suggestions;
 
   const SearchSongs(this.query, this.suggestions);
 

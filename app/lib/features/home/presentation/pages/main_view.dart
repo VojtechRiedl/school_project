@@ -7,6 +7,7 @@ import 'package:band_app/features/home/presentation/pages/home_view.dart';
 import 'package:band_app/features/home/presentation/widgets/default_scaffold.dart';
 import 'package:band_app/features/ideas/presentation/pages/ideas_view.dart';
 import 'package:band_app/features/plans/presentation/pages/plans_view.dart';
+import 'package:band_app/features/settings/presentation/pages/settings_view.dart';
 import 'package:band_app/features/song/presentation/pages/songs_view.dart';
 import 'package:band_app/features/user/presentation/pages/users_view.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class _MainViewState extends State<MainView> {
             child: DefaultScaffold(
               pageController: _pageController,
                 index: state.currentPage,
-                title: const Text("Art Of The Crooked", style: TextStyle(color: Palette.lightTextColor, fontSize: 20, fontWeight: FontWeight.bold)),
+                title: const Text("Art Of The Crooked", style: TextStyle(color: Palette.light, fontSize: 20, fontWeight: FontWeight.bold)),
                 body: PageView(
                   controller: _pageController,
                   onPageChanged: (int index) {
@@ -52,7 +53,7 @@ class _MainViewState extends State<MainView> {
                     SongsView(),
                     HomeView(),
                     PlansView(),
-                    UsersView(),
+                    SettingsView(),
                   ],
                 )
             ),

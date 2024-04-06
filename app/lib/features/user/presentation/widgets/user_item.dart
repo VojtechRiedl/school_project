@@ -10,10 +10,8 @@ class UserItem extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 0.5,
-      color: Palette.secondLight,
       child: ListTile(
-        title: Text(user.username, textAlign: TextAlign.center,style: const TextStyle(color: Palette.dark, fontSize: 16), ),
+        title: Text(user.username, textAlign: TextAlign.center,style: const TextStyle( fontSize: 16), ),
         onTap: () {
           GoRouter.of(context).pushNamed("user", pathParameters: {'id': user.id.toString()});
         }

@@ -44,7 +44,6 @@ class _UserViewState extends State<UserView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Palette.light,
       appBar: const MainAppBar(
         title: Text('Profil'),
       ),
@@ -56,8 +55,8 @@ class _UserViewState extends State<UserView> {
     return BlocConsumer<UsersBloc, UsersState>(
       builder: (BuildContext context, UsersState state) {
         if(state is UserLoadInProgress || state is UsersLoadInProgress || state is UsersLoadSuccess){
-          return const Center(
-            child: CircularProgressIndicator(color: Palette.dark),
+          return Center(
+            child: CircularProgressIndicator(color: Theme.of(context).colorScheme.onSurface),
           );
         }
         return Padding(
@@ -68,14 +67,14 @@ class _UserViewState extends State<UserView> {
             children: [
               Column(
                 children: [
-                  Text(state.user!.username, style: const TextStyle(fontSize: 40, color: Palette.darkTextColor, fontWeight: FontWeight.bold)),
-                  const Divider(color: Palette.dark, thickness: 2, height: 40),
+                  Text(state.user!.username, style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                  Divider(color: Theme.of(context).colorScheme.onSurface, thickness: 2, height: 40),
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Uživatelem od", style: TextStyle(color: Palette.dark,fontSize: 20, fontWeight: FontWeight.bold)),
-                      Text(DateFormat("yyyy-MM-dd").format(state.user!.createdAt),style: const TextStyle(color: Palette.dark,fontSize: 16)),
+                      const Text("Uživatelem od", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      Text(DateFormat("yyyy-MM-dd").format(state.user!.createdAt),style: const TextStyle(fontSize: 16)),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -83,8 +82,8 @@ class _UserViewState extends State<UserView> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Naposledy aktivní", style: TextStyle(color: Palette.dark,fontSize: 20, fontWeight: FontWeight.bold)),
-                      Text(DateFormat("yyyy-MM-dd").format(state.user!.lastLogin),style: const TextStyle(color: Palette.dark,fontSize: 16)),
+                      const Text("Naposledy aktivní", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      Text(DateFormat("yyyy-MM-dd").format(state.user!.lastLogin),style: const TextStyle(fontSize: 16)),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -92,25 +91,16 @@ class _UserViewState extends State<UserView> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Přidáno písniček", style: TextStyle(color: Palette.dark,fontSize: 20, fontWeight: FontWeight.bold)),
-                      Text("15",style: TextStyle(color: Palette.dark,fontSize: 16)),
+                      Text("Přidáno písniček", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      Text("15",style: TextStyle(fontSize: 16)),
                     ],
                   ),
 
                 ],
               ),
               state.user!.id == context.read<AuthorizationBloc>().state.user!.id ? ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Palette.dark),
-                  fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width - 40, 50)),
-                  shape: MaterialStateProperty.all(
-                      const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)
-                          ))),
-                ),
                 onPressed: (){
                   showModalBottomSheet(
-                    backgroundColor: Palette.secondLight,
                     elevation: 1,
                     isScrollControlled: true,
                     shape: const RoundedRectangleBorder(
@@ -124,7 +114,7 @@ class _UserViewState extends State<UserView> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Text("Upravit profil", style: TextStyle(fontSize: 24, color: Palette.darkTextColor, fontWeight: FontWeight.bold)),
+                              const Text("Upravit profil", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                               const SizedBox(height: 20),
                               Input(label: "Jméno", isObscured: false, controller: _usernameController),
                               const SizedBox(height: 20),
@@ -135,7 +125,7 @@ class _UserViewState extends State<UserView> {
                                     context.read<UsersBloc>().add(UserUpdated(state.user!.id, _usernameController.text, _passwordController.text));
                                     //Navigator.pop(context);
                                   },
-                                  child: const Text("Uložit", style: TextStyle(fontSize: 16, color: Palette.darkTextColor, fontWeight: FontWeight.bold))
+                                  child: Text("Uložit", style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface,fontWeight : FontWeight.bold))
                               )
                             ],
                           ),
@@ -143,7 +133,7 @@ class _UserViewState extends State<UserView> {
                       },
                   );
                 },
-                child: const Icon(Icons.edit, color: Palette.yellow, size: 32,),
+                child: const Icon(Icons.edit,  size: 32,),
               ) : const SizedBox(),
             ],
           ),

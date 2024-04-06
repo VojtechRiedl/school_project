@@ -17,6 +17,15 @@ import 'package:band_app/features/login/domain/repository/authorization_reposito
 import 'package:band_app/features/login/domain/usecases/login.dart';
 import 'package:band_app/features/login/domain/usecases/register.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_bloc.dart';
+import 'package:band_app/features/plans/data/data_sources/remote/plans_api_service.dart';
+import 'package:band_app/features/plans/data/repository/plan_repository_impl.dart';
+import 'package:band_app/features/plans/domain/repository/plan_repository.dart';
+import 'package:band_app/features/plans/domain/usecases/delete_plan.dart';
+import 'package:band_app/features/plans/domain/usecases/get_plan.dart';
+import 'package:band_app/features/plans/domain/usecases/get_plans.dart';
+import 'package:band_app/features/plans/domain/usecases/update_plan.dart';
+import 'package:band_app/features/plans/presentation/bloc/plans_bloc.dart';
+import 'package:band_app/features/plans/presentation/bloc/validation/validation_cubit.dart';
 import 'package:band_app/features/song/data/data_sources/remote/song_api_service.dart';
 import 'package:band_app/features/song/data/repository/song_repository_impl.dart';
 import 'package:band_app/features/song/domain/repository/song_repository.dart';
@@ -44,6 +53,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
+
+import 'features/plans/domain/usecases/create_plan.dart';
 
 final sl = GetIt.instance;
 
@@ -89,6 +100,13 @@ Future<void> initializeDependencies() async{
     ),
   );
 
+  sl.registerSingleton<PlansApiService>(
+    PlansApiService(
+      sl(),
+      baseUrl: Environment.apiUrl,
+    ),
+  );
+
   sl.registerSingleton<AuthorizationRepository>(
     AuthorizationRepositoryImpl(
       apiService: sl(),
@@ -109,6 +127,12 @@ Future<void> initializeDependencies() async{
 
   sl.registerSingleton<IdeaRepository>(
     IdeaRepositoryImpl(
+      sl(),
+    ),
+  );
+
+  sl.registerSingleton<PlanRepository>(
+    PlanRepositoryImpl(
       sl(),
     ),
   );
@@ -211,6 +235,38 @@ Future<void> initializeDependencies() async{
     ),
   );
 
+  sl.registerSingleton<GetPlansUseCase>(
+    GetPlansUseCase(
+      sl(),
+    ),
+  );
+
+  sl.registerSingleton<GetPlanUseCase>(
+    GetPlanUseCase(
+      sl(),
+    ),
+  );
+
+  sl.registerSingleton<CreatePlanUseCase>(
+    CreatePlanUseCase(
+      sl(),
+    ),
+  );
+
+  sl.registerSingleton<UpdatePlanUseCase>(
+    UpdatePlanUseCase(
+      sl(),
+    ),
+  );
+
+  sl.registerSingleton<DeletePlanUseCase>(
+    DeletePlanUseCase(
+      sl(),
+    ),
+  );
+
+
+
   //Blocs
 
   sl.registerFactory<NavigationCubit>(
@@ -277,5 +333,15 @@ Future<void> initializeDependencies() async{
     () => UsersBloc(
       sl(), sl(), sl()
     ),
+  );
+
+  sl.registerFactory<PlansBloc>(
+    () => PlansBloc(
+      sl(), sl(), sl(), sl(), sl()
+    ),
+  );
+
+  sl.registerFactory<ValidationCubit>(
+    () => ValidationCubit(),
   );
 }

@@ -5,7 +5,9 @@ import 'package:band_app/features/home/presentation/bloc/internet/internet_state
 import 'package:band_app/features/home/presentation/bloc/navigation/navigation_cubit.dart';
 import 'package:band_app/features/ideas/presentation/bloc/ideas/ideas_bloc.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_bloc.dart';
+import 'package:band_app/features/login/presentation/bloc/authorization/authorization_event.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_state.dart';
+import 'package:band_app/features/plans/presentation/bloc/plans_bloc.dart';
 import 'package:band_app/features/song/presentation/bloc/songs/songs_bloc.dart';
 import 'package:band_app/features/user/presentation/bloc/users_bloc.dart';
 import 'package:band_app/injection_container.dart';
@@ -38,6 +40,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<IdeasBloc>(
           create: (_) => sl<IdeasBloc>(),
         ),
+        BlocProvider<PlansBloc>(
+          create: (_) => sl<PlansBloc>(),
+        ),
         BlocProvider<UsersBloc>(
           create: (_) => sl<UsersBloc>(),
         ),
@@ -56,7 +61,6 @@ class MyApp extends StatelessWidget {
 
             },
           ),
-
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
@@ -114,6 +118,7 @@ class MyApp extends StatelessWidget {
             ),
 
             bottomAppBarTheme: const BottomAppBarTheme(
+              color: Palette.light,
               elevation: 5,
             ),
 
@@ -152,6 +157,17 @@ class MyApp extends StatelessWidget {
               activeTrackColor: Palette.activeTrackColor,
               inactiveTrackColor: Palette.inactiveTrackColor,
               allowedInteraction: SliderInteraction.tapAndSlide
+            ),
+
+            datePickerTheme: const DatePickerThemeData(
+              backgroundColor: Palette.light,
+              dividerColor: Palette.dark,
+              headerHelpStyle: TextStyle(color: Palette.dark, fontSize: 20, fontWeight: FontWeight.bold),
+              dayStyle: TextStyle(color: Palette.dark, fontSize: 16),
+              headerBackgroundColor: Palette.secondLight,
+              headerForegroundColor: Palette.dark,
+              headerHeadlineStyle: TextStyle(color: Palette.dark, fontSize: 20, fontWeight: FontWeight.bold),
+
             )
 
           ),
@@ -224,7 +240,7 @@ class MyApp extends StatelessWidget {
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Palette.yellow),
                 foregroundColor: MaterialStateProperty.all<Color>(Palette.dark),
-                textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(fontSize: 16)),
+                textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 shape: MaterialStateProperty.all<OutlinedBorder>(const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5)))),
                 fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width - 40, 60)),
               ),
@@ -254,7 +270,30 @@ class MyApp extends StatelessWidget {
                   activeTrackColor: Palette.activeTrackColor,
                   inactiveTrackColor: Palette.inactiveTrackColor,
                   allowedInteraction: SliderInteraction.tapAndSlide
+              ),
+
+              datePickerTheme: const DatePickerThemeData(
+                backgroundColor: Palette.secondDark,
+                dividerColor: Palette.light,
+                headerBackgroundColor: Palette.dark,
+                headerHelpStyle: TextStyle(color: Palette.dark, fontSize: 20, fontWeight: FontWeight.bold),
+                dayStyle: TextStyle(color: Palette.light, fontSize: 16),
               )
+
+              /*builder: (BuildContext context, Widget ? child) {
+        return Theme(
+        data: ThemeData.light().copyWith(
+        colorScheme: const ColorScheme.light(
+        primary: Palette.dark,
+        onPrimary: Palette.light,
+        surface: Palette.light,
+        onSurface: Palette.dark,
+        ),
+        dialogBackgroundColor: Palette.light,
+        ),
+        child: child ?? const SizedBox(),
+        );
+        },*/
           ),
           themeMode: ThemeMode.system,
         ),

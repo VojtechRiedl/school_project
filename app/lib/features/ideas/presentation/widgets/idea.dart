@@ -33,7 +33,6 @@ class IdeaWidget extends StatelessWidget {
         }
       },
       child: Card(
-        color: Palette.secondLight,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,

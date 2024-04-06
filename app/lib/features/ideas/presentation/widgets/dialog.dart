@@ -25,7 +25,7 @@ Future<T?> showGenericDialog<T>({
                   Navigator.of(context).pop();
                 }
               },
-              child: Text(optionTitle));
+              child: Text(optionTitle, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)));
         }).toList(),
       );
     },

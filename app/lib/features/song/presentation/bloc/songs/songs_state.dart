@@ -3,7 +3,7 @@ import 'package:band_app/features/song/domain/entites/song.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class SongsState extends Equatable {
-  final List<SongEntity> songs;
+  final List<SongModel> songs;
   const SongsState({this.songs = const []});
 
   @override
@@ -21,7 +21,7 @@ class SongsLoaded extends SongsState {
 
 class SongsSearched extends SongsState {
   final String query;
-  final List<SongEntity> suggestions;
+  final List<SongModel> suggestions;
 
   const SongsSearched(this.query, this.suggestions, songs) : super(songs: songs);
 

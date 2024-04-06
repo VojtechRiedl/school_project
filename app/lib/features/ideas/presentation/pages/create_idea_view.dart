@@ -7,7 +7,6 @@ import 'package:band_app/features/ideas/presentation/bloc/ideas/ideas_event.dart
 import 'package:band_app/features/ideas/presentation/widgets/date_input.dart';
 import 'package:band_app/features/ideas/presentation/widgets/idea_input.dart';
 import 'package:band_app/features/login/presentation/bloc/authorization/authorization_bloc.dart';
-import 'package:band_app/features/login/presentation/bloc/authorization/authorization_state.dart';
 import 'package:band_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,7 +47,6 @@ class _CreateIdeaViewState extends State<CreateIdeaView> {
       create: (context) => sl<IdeaValidationCubit>(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Palette.light,
         appBar: const MainAppBar(
 
           title: Text('Nápady'),
@@ -86,18 +84,11 @@ class _CreateIdeaViewState extends State<CreateIdeaView> {
                   ],
                 ),
                 ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Palette.dark),
-                    fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width - 40, 50)),
-                    shape: MaterialStateProperty.all(
-                        const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)
-                            ))),
-                  ),
+
                   onPressed: (){
                     context.read<IdeaValidationCubit>().validate(titleController.text, descriptionController.text, DateTime.parse(deadlineController.text));
                   },
-                  child: const Text('Přidat', style: TextStyle(color: Palette.yellow, fontSize: 16, fontWeight: FontWeight.bold)),
+                  child: const Text('Přidat', style: TextStyle( fontSize: 16, fontWeight: FontWeight.bold)),
                 ),
               ],
             )

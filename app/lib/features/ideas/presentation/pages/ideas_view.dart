@@ -1,4 +1,3 @@
-import 'package:band_app/core/constants/palette.dart';
 import 'package:band_app/features/ideas/presentation/bloc/ideas/ideas_bloc.dart';
 import 'package:band_app/features/ideas/presentation/bloc/ideas/ideas_event.dart';
 import 'package:band_app/features/ideas/presentation/bloc/ideas/ideas_state.dart';
@@ -24,7 +23,14 @@ class _IdeasViewState extends State<IdeasView> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildBody(context);
+    return RefreshIndicator(
+      color: Theme.of(context).colorScheme.onSurface,
+      onRefresh: () async {
+        context.read<IdeasBloc>().add(const IdeasLoaded());
+        return Future.delayed(const Duration(seconds: 2));
+      },
+      child: _buildBody(context),
+    );
   }
 
   Widget _buildBody(BuildContext context) {

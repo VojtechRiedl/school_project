@@ -24,7 +24,7 @@ class NavigationItem extends StatelessWidget{
       icon:  Icon(
           isSelected ? selectedIcon : unselectedIcon,
           size: 24,
-          color: isSelected ? Theme.of(context).colorScheme.surface : Theme.of(context).colorScheme.onSurface
+          color: isSelected ? Theme.of(context).colorScheme.surface : Palette.light,
       ),
     );
   }

@@ -27,6 +27,17 @@ class _PlansViewState extends State<PlansView> {
 
   @override
   Widget build(BuildContext context) {
+    return RefreshIndicator(
+        color: Theme.of(context).colorScheme.onSurface,
+    onRefresh: () async {
+        context.read<PlansBloc>().add(const PlansFetched());
+        return Future.delayed(const Duration(seconds: 2));
+    },
+    child: _buildBody(context),
+    );
+  }
+
+  Widget _buildBody(BuildContext context){
     return BlocConsumer<PlansBloc, PlansState>(
       builder: (BuildContext context, PlansState state) {
         if(state is PlansInitial){

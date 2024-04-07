@@ -21,6 +21,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDependencies();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark,
+    systemNavigationBarColor: Palette.secondDark,
+    systemNavigationBarIconBrightness: Brightness.dark,
+  ));
   runApp(const MyApp());
 }
 
@@ -110,6 +117,7 @@ class MyApp extends StatelessWidget {
 
             appBarTheme: const AppBarTheme(
               elevation: 5,
+              shadowColor: Palette.dark,
               backgroundColor: Palette.dark,
               foregroundColor: Palette.light,
               titleTextStyle: TextStyle(color: Palette.light, fontSize: 20, fontWeight: FontWeight.bold),
@@ -118,7 +126,7 @@ class MyApp extends StatelessWidget {
             ),
 
             bottomAppBarTheme: const BottomAppBarTheme(
-              color: Palette.light,
+              color: Palette.dark,
               elevation: 5,
             ),
 
@@ -223,6 +231,7 @@ class MyApp extends StatelessWidget {
 
             appBarTheme: const AppBarTheme(
               elevation: 5,
+              shadowColor: Palette.secondDark,
               backgroundColor: Palette.dark,
               foregroundColor: Palette.light,
               titleTextStyle: TextStyle(color: Palette.light, fontSize: 20, fontWeight: FontWeight.bold),
@@ -232,6 +241,7 @@ class MyApp extends StatelessWidget {
 
             bottomAppBarTheme: const BottomAppBarTheme(
               color: Palette.dark,
+              shadowColor: Palette.secondDark,
               elevation: 5,
 
             ),

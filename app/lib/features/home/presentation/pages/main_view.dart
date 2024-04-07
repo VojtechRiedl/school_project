@@ -48,12 +48,12 @@ class _MainViewState extends State<MainView> {
                   onPageChanged: (int index) {
                     context.read<NavigationCubit>().changePage(index);
                   },
-                  children: const [
-                    IdeasView(),
-                    SongsView(),
-                    HomeView(),
-                    PlansView(),
-                    SettingsView(),
+                  children: [
+                    const IdeasView(),
+                    const SongsView(),
+                    HomeView(pageController: _pageController),
+                    const PlansView(),
+                    const SettingsView(),
                   ],
                 )
             ),

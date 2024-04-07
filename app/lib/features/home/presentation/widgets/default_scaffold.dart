@@ -16,7 +16,6 @@ class DefaultScaffold extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      //backgroundColor: Palette.light,
       appBar: MainAppBar(title: title),
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.only(

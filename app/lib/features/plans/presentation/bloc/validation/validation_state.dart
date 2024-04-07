@@ -31,5 +31,5 @@ class ValidationFailure extends ValidationState {
   const ValidationFailure(this.message);
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [message, DateTime.now()];
 }

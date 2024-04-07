@@ -54,9 +54,6 @@ final router = GoRouter(
         },
       redirect: (context, state) {
           return context.read<AuthorizationBloc>().state is AuthorizationLogoutSuccess ? "/login" : null;
-          //return null;
-          //return context.read<LoginBloc>().state is LoginSuccess || context.read<RegisterBloc>().state is RegisterSuccess ? null : '/login';
-        //return context.read<LoginBloc>().state is LoginSuccess || context.read<RegisterBloc>().state is RegisterSuccess ? "/login" : null; //TODO vratit zpět
       },
       routes:[
         GoRoute(
@@ -231,27 +228,6 @@ final router = GoRouter(
           },
         ),
       ]
-    ),
-    GoRoute(
-      name: 'plans',
-      path: '/plans',
-      pageBuilder: (BuildContext context, GoRouterState state) {
-        return CustomTransitionPage<void>(
-          key: state.pageKey,
-          child: const PlansView(),
-          transitionDuration: const Duration(milliseconds: 500),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
-              child: child,
-            );
-          },
-        );
-      },
-    ),
-    GoRoute(
-      path: '/settings',
-      builder: (context, state) => const HomeView(),
     ),
     GoRoute(
       name: 'connection-lost',

@@ -27,10 +27,18 @@ class _SongsViewState extends State<SongsView> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildBody();
+    return RefreshIndicator(
+        color: Theme.of(context).colorScheme.onSurface,
+        onRefresh: () async {
+          context.read<SongsBloc>().add(const LoadSongs());
+          return Future.delayed(const Duration(seconds: 2));
+
+        },
+        child: _buildBody(),
+    );
   }
 
-  _buildBody() {
+  Widget _buildBody() {
     return BlocConsumer<SongsBloc, SongsState>(
         listener: (BuildContext context, SongsState state) {
           if (state is SongCreated){

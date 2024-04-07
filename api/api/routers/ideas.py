@@ -9,11 +9,11 @@ router = APIRouter(prefix="/ideas", tags=["Ideas"])
 
 @router.get("/", response_model=list[Idea], summary="Get all ideas")
 def read_ideas(db: Session = Depends(get_db)):    
-    return crud.read_ideas(db)
+    return crud.get_ideas(db)
 
 @router.get("/{id}", response_model=Idea, summary="Get an idea by id")
 def read_idea(id: int = Path(..., title="ID idei"), db: Session = Depends(get_db)):
-    idea = crud.read_idea(db, id)
+    idea = crud.get_idea(db, id)
     
     if idea is None:
         raise HTTPException(status_code=404, detail="Idea not found")

@@ -13,7 +13,7 @@ def read_plans(db: Session = Depends(get_db)):
 
 @router.get("/{id}", response_model=Plan, summary="Get an plan by id")
 def read_plan(id: int = Path(..., title="ID plánu"), db: Session = Depends(get_db)):
-    plan = crud.read_plan(db, id)
+    plan = crud.get_plan(db, id)
     
     
     if plan is None:

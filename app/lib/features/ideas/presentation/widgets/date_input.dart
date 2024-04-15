@@ -20,6 +20,7 @@ class _DateInputState extends State<DateInput> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextField(
+        style: Theme.of(context).textTheme.bodyMedium,
         readOnly: true,
           controller: widget.controller,
           decoration: InputDecoration(

@@ -22,24 +22,6 @@ class ConnectionLostView extends StatelessWidget {
                   Icon(Icons.wifi_off, size: 128, color: Palette.dark),
                   Text('Připojení ztraceno', style: TextStyle(fontSize: 24, color: Palette.dark)),
                   SizedBox(height: 20),
-                  /*ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Palette.dark),
-                    ),
-                    onPressed: () {
-                      context.read<InternetCubit>().checkActualConnection();
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.refresh),
-                          Text('Pokusit se znovu'),
-                        ],
-                      ),
-                    ),
-                  ),*/
                 ],
               ),
             ),

@@ -22,6 +22,6 @@ class SongEntity extends Equatable{
   });
 
   @override
-  List<Object> get props => [id, title,created, youtubeUrl!, text!, poster, hasVideo, hasSound];
+  List<Object?> get props => [id, title,created, youtubeUrl, text, poster, hasVideo, hasSound];
 
 }

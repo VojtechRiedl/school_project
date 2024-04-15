@@ -37,10 +37,6 @@ class SongItem extends StatelessWidget {
                     },
                     icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.onSurface),
                   ),
-                  /*IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.bookmark, color: Palette.dark),
-                  ),*/
                 ],
               ),
             ],

@@ -38,7 +38,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    _usernameController.text = "admin";
+    _usernameController.text = "Admin";
     _passwordController.text = "admin123";
     return MultiBlocListener(
       listeners: [

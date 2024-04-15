@@ -54,9 +54,9 @@ class _PlanViewState extends State<PlanView> {
                         Text(state.plan!.title, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
                         Text(DateFormat("dd.MM.yyyy").format(state.plan!.date), style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
                         const SizedBox(height: 20),
-                        Text(state.plan!.description ?? "", style: Theme.of(context).textTheme.bodyMedium),
+                        Text(state.plan!.description ?? "", style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 16)),
                         Divider(color: Theme.of(context).colorScheme.onSurface, height: 20, thickness: 1),
-                        Text(state.plan!.user.username, textAlign: TextAlign.end,)
+                        Text(state.plan!.user.username, textAlign: TextAlign.end,style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)
                       ],
                     ),
                   ),

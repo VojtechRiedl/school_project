@@ -39,10 +39,11 @@ class IdeaWidget extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                //mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text(idea.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  Text(idea.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),overflow: TextOverflow.ellipsis,),
                   Text(DateFormat("yyyy-MM-dd").format(idea.deadline).toString(), style: const TextStyle(fontSize: 14)),
                 ],
               ),

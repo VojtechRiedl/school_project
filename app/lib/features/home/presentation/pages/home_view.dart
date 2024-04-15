@@ -47,20 +47,27 @@ class _HomeViewState extends State<HomeView> {
 
         return Future.delayed(const Duration(seconds: 2));
       },
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              loadSongs(context),
-              const SizedBox(height: 10),
-              loadPlans(context),
-              const SizedBox(height: 10),
-              loadIdeas(context),
-            ],
-          ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //mainAxisSize: MainAxisSize.max,
+          children: [
+            Text("Vítej ${context.read<AuthorizationBloc>().state.user!.username}!",  style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),textAlign: TextAlign.start,),
+            const SizedBox(height: 20),
+            Flexible(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  loadSongs(context),
+                  const Spacer(flex: 1),
+                  loadPlans(context),
+                  const Spacer(flex: 1),
+                ],
+              ),
+            ),
+            loadIdeas(context),
+          ],
         ),
       ),
     );
@@ -79,7 +86,10 @@ class _HomeViewState extends State<HomeView> {
           );
 
           if(state.plans[date] == null){
-            return const CircularProgressIndicator();
+            return Card(
+                color: Theme.of(context).colorScheme.primary,
+                child: ListTile(title: Text("Nebyly nalezeny žádné plány na dnešní den", style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 14))));
+
           }
           return PlanWidget(title: "Plány na den", plans: state.plans[date]!.toList(), date: date);
         }else{
@@ -97,7 +107,15 @@ class _HomeViewState extends State<HomeView> {
           List<SongModel> songs = state.songs.where((element) => element.created.copyWith().add(const Duration(days: 2)).isAfter(DateTime.now())).toList();
 
           if(songs.isEmpty){
-            return const SizedBox();
+            return Card(
+                color: Theme.of(context).colorScheme.primary,
+                child: ListTile(title: Text("Žádné nové písničky nebyly přidány", style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 14))));
+
+
+            return Container(
+                height: 200,
+                alignment: Alignment.center,
+                child: const Text("Žádné nové písničky nebyly přidány"));
           }
 
           return RecentlyAddSongWidget(songs: songs);
@@ -125,8 +143,8 @@ class _HomeViewState extends State<HomeView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Počet neodhlasovaných anket",
-                      style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 16), textAlign: TextAlign.center,),
-                    Text("${state.ideas.where((element) => element.votes.where((element) => element.author.id == user.id).isEmpty).length}", style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 16),)
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 14), textAlign: TextAlign.center,),
+                    Text("${state.ideas.where((element) => element.votes.where((element) => element.author.id == user.id).isEmpty).length}", style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 14),)
                   ],
                 ),
               onTap: (){

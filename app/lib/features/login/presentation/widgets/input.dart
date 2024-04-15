@@ -20,6 +20,7 @@ class _InputState extends State<Input> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      style: Theme.of(context).textTheme.bodyMedium,
       cursorColor: Theme.of(context).colorScheme.outline,
       maxLines: 1,
       controller: widget.controller,

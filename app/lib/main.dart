@@ -21,12 +21,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDependencies();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  //SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.dark,
-    systemNavigationBarColor: Palette.secondDark,
-    systemNavigationBarIconBrightness: Brightness.dark,
+    //statusBarColor: Colors.transparent,
+    //statusBarIconBrightness: Brightness.dark,
+    systemNavigationBarColor: Palette.dark,
+    systemNavigationBarIconBrightness: Brightness.light,
   ));
   runApp(const MyApp());
 }

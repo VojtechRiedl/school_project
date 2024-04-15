@@ -24,6 +24,7 @@ class PlanInput extends StatelessWidget{
       child: SizedBox(
         height: multiLine ? 180 : null,
         child: TextField(
+          style: Theme.of(context).textTheme.bodyMedium,
             controller: controller,
             minLines: multiLine ? 10 : 1,
             maxLines: multiLine ? null : 1,
@@ -32,7 +33,7 @@ class PlanInput extends StatelessWidget{
               labelText: multiLine ? null : label,
               hintText: multiLine ? label : null,
               focusedBorder:  OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                 borderSide: BorderSide(
                   color: Theme.of(context).colorScheme.outline,
                   width: 2,

@@ -50,7 +50,7 @@ class _PlanCreateViewState extends State<PlanCreateView> {
         resizeToAvoidBottomInset: false,
         appBar: const MainAppBar(
 
-          title: Text('Nápady'),
+          title: Text('Plány'),
         ),
         body:_buildBody(context),
       ),

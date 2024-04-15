@@ -17,7 +17,6 @@ class MusicPlayer extends StatelessWidget{
       create: (context) => sl<MusicBloc>()..add(MusicLoaded(url: url)),
       child: SizedBox(
         height: 150,
-        //color: Palette.yellow,
         child: BlocBuilder<MusicBloc, MusicState>(
           builder: (context, state) {
             if(state is MusicInitial){
@@ -66,68 +65,6 @@ class MusicPlayer extends StatelessWidget{
               ]
             );
 
-
-            return Card(
-                color: Palette.fifth,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      Slider(
-                        allowedInteraction: SliderInteraction.tapAndSlide,
-                        activeColor: Palette.first,
-                        inactiveColor: Palette.third,
-                        secondaryActiveColor: Palette.second,
-                        value: state.position.inSeconds.toDouble(),
-                        min: 0,
-                        max: state.duration.inSeconds.toDouble(),
-                        onChanged: (double value) async {
-                          final position = Duration(seconds: value.toInt());
-                          /*await audioPlayer.seek(position);
-
-                          await audioPlayer.resume();*/
-                        },
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            formatTime(state.position),
-                            style: const TextStyle(
-                              color: Palette.second,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          IconButton(
-                              color: Palette.first,
-                              onPressed: () async{
-                                /*if(state == PlayerState.playing) {
-                                  await audioPlayer.pause();
-                                }else if(state == PlayerState.paused) {
-                                  await audioPlayer.resume();
-                                }else if(state == PlayerState.completed){
-                                  await audioPlayer.seek(Duration.zero);
-                                  await audioPlayer.resume();
-                                }*/
-
-                              },
-                              icon: Icon(Icons.play_arrow)
-                          )
-                          ,
-                          Text(
-                            formatTime(state.duration),
-                            style: const TextStyle(
-                              color: Palette.second,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-
-                  ),
-                )
-            );
           },
         ),
       ),
